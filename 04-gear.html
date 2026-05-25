@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRG · Módulo 04 — Gear</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Crimson Pro',Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 40% 30%,rgba(129,199,132,0.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(201,168,76,0.05) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(129,199,132,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+  .container{max-width:860px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;}
+  .nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;transition:opacity 0.2s;}
+  .nav-back:hover{opacity:1;}
+  .page-header{padding:20px 0 30px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:30px;}
+  .module-badge{display:inline-block;background:rgba(129,199,132,0.1);border:1px solid var(--green);border-radius:4px;padding:3px 10px;font-family:'Cinzel',serif;font-size:10px;color:var(--green);letter-spacing:0.1em;margin-bottom:10px;}
+  .page-title{font-family:'Cinzel',serif;font-size:clamp(22px,5vw,38px);font-weight:900;color:var(--gold);letter-spacing:0.1em;text-shadow:0 0 30px rgba(201,168,76,0.4);}
+  .page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+  .section-header{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
+  .section-icon{font-size:24px;}
+  .section-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+  .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+
+  .stat-priority{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:16px;background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:8px;margin-bottom:20px;}
+  .stat-num{font-family:'Cinzel',serif;font-size:11px;font-weight:700;background:var(--gold);color:var(--blue-deep);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-arrow{color:var(--gold);opacity:0.5;font-size:18px;}
+  .stat-name{font-family:'Cinzel',serif;font-size:13px;padding:4px 10px;border-radius:4px;white-space:nowrap;}
+  .s-weapon{background:rgba(239,83,80,0.2);color:#ffcdd2;border:1px solid rgba(239,83,80,0.5);}
+  .s-crit{background:rgba(255,167,38,0.2);color:#ffcc80;border:1px solid rgba(255,167,38,0.5);}
+  .s-dh{background:rgba(201,168,76,0.2);color:var(--gold-light);border:1px solid rgba(201,168,76,0.5);}
+  .s-det{background:rgba(79,195,247,0.2);color:#b3e5fc;border:1px solid rgba(79,195,247,0.5);}
+  .s-sks{background:rgba(129,199,132,0.2);color:#c8e6c9;border:1px solid rgba(129,199,132,0.5);}
+
+  .gear-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .gear-table th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.08em;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2);}
+  .gear-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;font-size:13px;}
+  .gear-table tr:hover td{background:rgba(201,168,76,0.04);}
+  .gear-card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:20px;margin-bottom:16px;position:relative;}
+  .gear-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;}
+  .gear-card.g1::before{background:#81c784;}
+  .gear-card.g2::before{background:var(--cyan);}
+  .gear-card.g3::before{background:var(--gold);}
+  .gear-card.g4::before{background:#b39ddb;}
+  .gear-lvl{font-family:'Cinzel',serif;font-size:11px;padding:3px 10px;border-radius:3px;display:inline-block;margin-bottom:10px;}
+  .gear-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--text-main);margin-bottom:10px;}
+  .source-list{list-style:none;}
+  .source-list li{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5;}
+  .source-list li:last-child{border-bottom:none;}
+  .src-icon{font-size:16px;flex-shrink:0;width:22px;text-align:center;}
+  .ilvl-badge{display:inline-block;font-family:'Cinzel',serif;font-size:10px;padding:1px 7px;border-radius:2px;margin-left:6px;vertical-align:middle;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);}
+  .key-rule{background:rgba(239,83,80,0.08);border:1px solid rgba(239,83,80,0.3);border-radius:6px;padding:14px 16px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+  .key-text{font-size:14px;line-height:1.6;color:#ffcdd2;}
+  .tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:14px 16px;margin:12px 0;display:flex;gap:12px;align-items:flex-start;}
+  .tip-text{font-size:14px;line-height:1.6;color:#b3e5fc;}
+  footer{text-align:center;padding:40px 20px 20px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;}
+  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+  @media(max-width:600px){.stat-priority{gap:6px;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 04</div>
+    <h1 class="page-title">🛡️ Gear & Equipamiento</h1>
+    <p class="page-sub">Cuándo actualizar, qué stats priorizar y dónde conseguir equipo en cada etapa del leveling.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <span class="section-title">Prioridad de Stats (Patch 7.5)</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="stat-priority">
+    <div class="stat-num">1</div>
+    <span class="stat-name s-weapon">⚔️ Weapon Damage</span>
+    <span class="stat-arrow">›</span>
+    <div class="stat-num">2</div>
+    <span class="stat-name s-crit">✨ Critical Hit</span>
+    <span class="stat-arrow">›</span>
+    <div class="stat-num">3</div>
+    <span class="stat-name s-dh">🎯 Direct Hit</span>
+    <span class="stat-arrow">›</span>
+    <div class="stat-num">4</div>
+    <span class="stat-name s-det">🔷 Determination</span>
+    <span class="stat-arrow">›</span>
+    <div class="stat-num">5</div>
+    <span class="stat-name s-sks">⏱ Skill Speed</span>
+  </div>
+
+  <div class="key-rule">
+    <span style="font-size:20px;flex-shrink:0">🔑</span>
+    <span class="key-text"><strong>Regla número uno:</strong> El Weapon Damage del arma impacta tu daño más que cualquier otro stat combinado. Si tienes que elegir entre mejorar el arma o todo lo demás — mejora el arma primero, siempre.</span>
+  </div>
+
+  <div class="tip-box">
+    <span style="font-size:18px;flex-shrink:0">💡</span>
+    <span class="tip-text"><strong>Skill Speed (SkS):</strong> Reduce el GCD (tiempo entre ataques). En leveling, es el stat de menor impacto. No lo busques activamente — si viene en el gear de mayor iLvl, bien, pero no sacrifiques otros stats por él.</span>
+  </div>
+
+  <!-- GEAR POR ETAPA -->
+  <div class="section-header">
+    <span class="section-icon">🗡️</span>
+    <span class="section-title">Fuentes de Gear por Etapa</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="gear-card g1">
+    <span class="gear-lvl" style="background:rgba(129,199,132,0.15);border:1px solid #81c784;color:#c8e6c9">Lv 1–50</span>
+    <div class="gear-title">A Realm Reborn</div>
+    <ul class="source-list">
+      <li><span class="src-icon">🏪</span><div><strong>Market Board</strong> — La opción más fácil. Busca equipo "of Maiming" del nivel más cercano al tuyo. Suele ser barato en niveles bajos.</div></li>
+      <li><span class="src-icon">🗡️</span><div><strong>Quest rewards</strong> — Las job quests de Lv45 dan el <strong>Drachen Armor set</strong>. Úsalo sin dudarlo.</div></li>
+      <li><span class="src-icon">🏰</span><div><strong>Dungeons del nivel</strong> — Cada dungeon dropea gear de su rango. No necesitas comprar si corres los dungeons del nivel.</div></li>
+      <li><span class="src-icon">🪙</span><div><strong>Tomestones of Poetics (Lv50)</strong> <span class="ilvl-badge">iLvl 90</span> — En Mor Dhona (Revenant's Toll). Gear decente para pasar a Heavensward.</div></li>
+    </ul>
+  </div>
+
+  <div class="gear-card g2">
+    <span class="gear-lvl" style="background:rgba(79,195,247,0.15);border:1px solid var(--cyan);color:#b3e5fc">Lv 50–60</span>
+    <div class="gear-title">Heavensward</div>
+    <ul class="source-list">
+      <li><span class="src-icon">🪙</span><div><strong>Tomestones of Poetics (Lv60)</strong> <span class="ilvl-badge">iLvl 210</span> — En Idyllshire. Job quest Lv60 también da armor coffer (iLvl210).</div></li>
+      <li><span class="src-icon">🏰</span><div><strong>Dungeons de Heavensward</strong> — The Aery, Vault, etc. Suficiente para pasar el rango.</div></li>
+      <li><span class="src-icon">🏪</span><div><strong>Market Board</strong> — Si necesitas actualizar rápido entre dungeons, gear de Lv55-58 suele estar barato.</div></li>
+    </ul>
+  </div>
+
+  <div class="gear-card g3">
+    <span class="gear-lvl" style="background:rgba(201,168,76,0.15);border:1px solid var(--gold);color:var(--gold-light)">Lv 60–80</span>
+    <div class="gear-title">Stormblood → Shadowbringers</div>
+    <ul class="source-list">
+      <li><span class="src-icon">🪙</span><div><strong>Tomestones of Poetics</strong> — Rhalgr's Reach (Lv70) y Eulmore (Lv80). Siempre la referencia más accesible del cap de cada expansión.</div></li>
+      <li><span class="src-icon">🏰</span><div><strong>Dungeons de cada expansión</strong> — Continúa siendo suficiente para leveling. No te quedes con el mismo set más de 10 niveles.</div></li>
+      <li><span class="src-icon">🏪</span><div><strong>Market Board</strong> — Para gaps entre Poetics. Busca siempre "of Maiming" con el mayor iLvl posible.</div></li>
+    </ul>
+  </div>
+
+  <div class="gear-card g4">
+    <span class="gear-lvl" style="background:rgba(179,157,219,0.15);border:1px solid #b39ddb;color:#ede7f6">Lv 90–100 · Endgame</span>
+    <div class="gear-title">Dawntrail Endgame (Patch 7.5)</div>
+    <ul class="source-list">
+      <li><span class="src-icon">🪙</span><div><strong>Tomestones of Causality / Comedy</strong> <span class="ilvl-badge">iLvl 710+</span> — Sistema de Tomestones de Dawntrail. Gear sólido para entrar a content de endgame.</div></li>
+      <li><span class="src-icon">🔥</span><div><strong>Raid Normal (Arcadion)</strong> — Dropea coffers de equipo semanalmente. Buena fuente hasta que entres a Savage.</div></li>
+      <li><span class="src-icon">⭐</span><div><strong>Savage Raids</strong> — El mejor gear disponible. No relevante aún, pero el objetivo final si te metes a endgame serio.</div></li>
+      <li><span class="src-icon">🛒</span><div><strong>Crafted gear</strong> — Al inicio de cada patch, el gear crafteable suele ser competitivo. Market Board o guild de crafters.</div></li>
+    </ul>
+  </div>
+
+  <!-- REGLA GENERAL -->
+  <div class="section-header">
+    <span class="section-icon">⚡</span>
+    <span class="section-title">Regla General de Gear</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="gear-card" style="border-color:rgba(201,168,76,0.5)">
+    <div class="gear-title" style="color:var(--gold)">La regla del iLvl</div>
+    <table class="gear-table">
+      <thead><tr><th>Situación</th><th>Qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td>Equipo con <strong>10+ iLvl de diferencia</strong></td><td>Actualiza. La diferencia en daño es perceptible.</td></tr>
+        <tr><td>Stats "peores" pero <strong>iLvl mayor</strong></td><td>Equipa el de mayor iLvl. El iLvl siempre gana en leveling.</td></tr>
+        <tr><td><strong>Arma vs Armor</strong></td><td>Prioriza el arma sobre cualquier pieza de armor.</td></tr>
+        <tr><td>Llegaste a un <strong>cap de expansión (50/60/70/80)</strong></td><td>Canjea Tomestones of Poetics antes de seguir subiendo.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🛡️</div>
+    Módulo 04 · Gear · Patch 7.5<br>
+    <a href="index.html" style="color:var(--gold);text-decoration:none;margin-top:6px;display:inline-block">← Volver al Hub</a>
+  </footer>
+</div>
+</body>
+</html>

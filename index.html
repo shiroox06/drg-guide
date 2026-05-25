@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragoon — Guía Completa</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --blue-deep: #0d1f3c;
+    --blue-mid: #162d50;
+    --cyan: #4fc3f7;
+    --text-main: #e8dfc8;
+    --text-muted: #a09880;
+    --card-bg: rgba(22, 45, 80, 0.85);
+    --border-glow: rgba(201, 168, 76, 0.4);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--blue-deep);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(76,195,247,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(124,77,255,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(201,168,76,0.05) 0%, transparent 40%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(201,168,76,0.12) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 20px 60px; position: relative; z-index: 1; }
+
+  .hero { text-align: center; padding: 60px 20px 40px; }
+  .hero-emblem { font-size: 72px; display: block; margin-bottom: 10px; filter: drop-shadow(0 0 24px rgba(201,168,76,0.7)); animation: float 4s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .hero h1 { font-family:'Cinzel',serif; font-size:clamp(32px,7vw,58px); font-weight:900; color:var(--gold); letter-spacing:0.12em; text-shadow:0 0 40px rgba(201,168,76,0.5),0 2px 4px rgba(0,0,0,0.8); }
+  .hero-sub { font-size:14px; color:var(--text-muted); letter-spacing:0.3em; text-transform:uppercase; margin-top:10px; }
+  .version-chip { display:inline-block; margin-top:14px; background:rgba(79,195,247,0.12); border:1px solid var(--cyan); border-radius:20px; padding:4px 16px; font-family:'Cinzel',serif; font-size:11px; color:var(--cyan); letter-spacing:0.08em; }
+  .divider { display:flex; align-items:center; gap:16px; margin:28px auto; max-width:400px; }
+  .divider::before,.divider::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+  .divider span { color:var(--gold); font-size:20px; }
+
+  /* MODULE GRID */
+  .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-top:12px; }
+
+  .module-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    padding: 22px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  }
+  .module-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .module-card:hover { border-color:var(--gold); transform:translateY(-3px); box-shadow:0 8px 32px rgba(201,168,76,0.15); }
+  .module-card:hover::before { width: 6px; }
+
+  .module-card.cyan::before { background: var(--cyan); }
+  .module-card.cyan { border-color:rgba(79,195,247,0.3); }
+  .module-card.cyan:hover { border-color:var(--cyan); }
+
+  .module-card.purple::before { background: #b39ddb; }
+  .module-card.purple { border-color:rgba(179,157,219,0.3); }
+  .module-card.purple:hover { border-color:#b39ddb; }
+
+  .module-card.green::before { background: #81c784; }
+  .module-card.green { border-color:rgba(129,199,132,0.3); }
+  .module-card.green:hover { border-color:#81c784; }
+
+  .module-card.red::before { background: #ef9a9a; }
+  .module-card.red { border-color:rgba(239,154,154,0.3); }
+  .module-card.red:hover { border-color:#ef9a9a; }
+
+  .module-card.orange::before { background: #ffcc80; }
+  .module-card.orange { border-color:rgba(255,204,128,0.3); }
+  .module-card.orange:hover { border-color:#ffcc80; }
+
+  .module-icon { font-size:36px; margin-bottom:12px; display:block; filter:drop-shadow(0 0 8px rgba(201,168,76,0.4)); }
+  .module-num { font-family:'Cinzel',serif; font-size:10px; color:var(--text-muted); letter-spacing:0.1em; margin-bottom:6px; }
+  .module-title { font-family:'Cinzel',serif; font-size:16px; font-weight:700; color:var(--text-main); margin-bottom:8px; }
+  .module-desc { font-size:13px; color:var(--text-muted); line-height:1.6; }
+  .module-tags { margin-top:12px; display:flex; flex-wrap:wrap; gap:6px; }
+  .mtag { font-size:10px; font-family:'Cinzel',serif; padding:2px 8px; border-radius:3px; letter-spacing:0.04em; }
+  .mtag-gold { background:rgba(201,168,76,0.15); border:1px solid rgba(201,168,76,0.4); color:var(--gold-light); }
+  .mtag-cyan { background:rgba(79,195,247,0.15); border:1px solid rgba(79,195,247,0.4); color:#b3e5fc; }
+  .mtag-purple { background:rgba(179,157,219,0.15); border:1px solid rgba(179,157,219,0.4); color:#ede7f6; }
+
+  /* STATUS BAR */
+  .status-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
+  .status-chip { background:rgba(201,168,76,0.1); border:1px solid var(--gold); border-radius:4px; padding:5px 12px; font-family:'Cinzel',serif; font-size:11px; color:var(--gold-light); letter-spacing:0.06em; display:flex; align-items:center; gap:6px; }
+  .status-chip.active { background:rgba(79,195,247,0.1); border-color:var(--cyan); color:#b3e5fc; }
+
+  .section-header { display:flex; align-items:center; gap:14px; margin:40px 0 20px; }
+  .section-icon { font-size:26px; }
+  .section-title { font-family:'Cinzel',serif; font-size:16px; font-weight:700; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
+  .section-line { flex:1; height:1px; background:linear-gradient(90deg,var(--gold),transparent); opacity:0.4; }
+
+  .tip-box { background:rgba(79,195,247,0.06); border:1px solid rgba(79,195,247,0.3); border-radius:6px; padding:14px 16px; margin:20px 0; display:flex; gap:12px; align-items:flex-start; }
+  .tip-text { font-size:14px; line-height:1.6; color:#b3e5fc; }
+
+  footer { text-align:center; padding:40px 20px 20px; font-size:11px; color:var(--text-muted); letter-spacing:0.1em; border-top:1px solid rgba(201,168,76,0.15); margin-top:40px; }
+
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--blue-deep); }
+  ::-webkit-scrollbar-thumb { background:var(--gold); border-radius:3px; }
+
+  @media(max-width:600px){ .module-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <span class="hero-emblem">🐉</span>
+    <h1>DRAGOON</h1>
+    <div class="hero-sub">Guía Completa Modular · FFXIV Dawntrail</div>
+    <span class="version-chip">📅 Actualizado · Patch 7.5 · Mayo 2026</span>
+    <div class="divider"><span>⚔</span></div>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-chip active">📍 Tu nivel: 26</div>
+    <div class="status-chip">📜 MSQ: Lv20</div>
+    <div class="status-chip">⚔ Clase: Lancer</div>
+    <div class="status-chip">🎯 6 módulos disponibles</div>
+  </div>
+
+  <div class="tip-box">
+    <span style="font-size:20px;flex-shrink:0">🧭</span>
+    <span class="tip-text">Cada módulo es independiente. Puedes abrirlos en cualquier orden. Se recomienda empezar por <strong>01 · Progresión</strong> si es tu primera vez, o ir directo al módulo que necesites.</span>
+  </div>
+
+  <div class="section-header">
+    <span class="section-icon">📚</span>
+    <span class="section-title">Módulos de la Guía</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="module-grid">
+
+    <a href="01-progresion.html" class="module-card">
+      <span class="module-icon">🗺️</span>
+      <div class="module-num">MÓDULO 01</div>
+      <div class="module-title">Progresión & Skills</div>
+      <div class="module-desc">Timeline de tu camino actual, quests de conversión, lista completa de habilidades por nivel y glosario de términos.</div>
+      <div class="module-tags">
+        <span class="mtag mtag-gold">Skills</span>
+        <span class="mtag mtag-gold">Job Quests</span>
+        <span class="mtag mtag-gold">Glosario</span>
+      </div>
+    </a>
+
+    <a href="02-leveling.html" class="module-card cyan">
+      <span class="module-icon">⚡</span>
+      <div class="module-num">MÓDULO 02</div>
+      <div class="module-title">Leveling Eficiente</div>
+      <div class="module-desc">Mejores actividades por rango de nivel. Duty Roulette, Palace of the Dead, FATEs, Beast Tribes y buffs de EXP apilables.</div>
+      <div class="module-tags">
+        <span class="mtag mtag-cyan">Lv1–30</span>
+        <span class="mtag mtag-cyan">Lv30–60</span>
+        <span class="mtag mtag-cyan">Lv60–100</span>
+      </div>
+    </a>
+
+    <a href="03-rotacion.html" class="module-card purple">
+      <span class="module-icon">🔄</span>
+      <div class="module-num">MÓDULO 03</div>
+      <div class="module-title">Rotaciones por Etapa</div>
+      <div class="module-desc">Cómo evoluciona tu rotación desde Lv26 hasta Lv100. Diagramas de combos, burst windows y uso del Dragon Gauge.</div>
+      <div class="module-tags">
+        <span class="mtag mtag-purple">Single Target</span>
+        <span class="mtag mtag-purple">AoE</span>
+        <span class="mtag mtag-purple">Burst Window</span>
+      </div>
+    </a>
+
+    <a href="04-gear.html" class="module-card green">
+      <span class="module-icon">🛡️</span>
+      <div class="module-num">MÓDULO 04</div>
+      <div class="module-title">Gear & Equipamiento</div>
+      <div class="module-desc">Cuándo y cómo actualizar equipo en cada etapa. Tomestones, Market Board, stats prioritarios y armas por expansión.</div>
+      <div class="module-tags">
+        <span class="mtag mtag-gold">Tomestones</span>
+        <span class="mtag mtag-gold">iLvl</span>
+        <span class="mtag mtag-gold">Stats</span>
+      </div>
+    </a>
+
+    <a href="05-role-actions.html" class="module-card red">
+      <span class="module-icon">🎭</span>
+      <div class="module-num">MÓDULO 05</div>
+      <div class="module-title">Role Actions</div>
+      <div class="module-desc">Habilidades compartidas con todos los Melee DPS. Feint, True North, Bloodbath, Second Wind — cuándo y cómo usarlas.</div>
+      <div class="module-tags">
+        <span class="mtag mtag-cyan">Feint</span>
+        <span class="mtag mtag-cyan">True North</span>
+        <span class="mtag mtag-cyan">Mitigation</span>
+      </div>
+    </a>
+
+    <a href="06-errores.html" class="module-card orange">
+      <span class="module-icon">⚠️</span>
+      <div class="module-num">MÓDULO 06</div>
+      <div class="module-title">Errores Comunes</div>
+      <div class="module-desc">Los 10 errores que más DPS cuestan en Dragoon. Dungeon checklist pre-pull y consejos de posicionamiento en raids.</div>
+      <div class="module-tags">
+        <span class="mtag mtag-gold">DPS Loss</span>
+        <span class="mtag mtag-gold">Posicionamiento</span>
+        <span class="mtag mtag-gold">Checklist</span>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>
+    <div style="font-size:28px;margin-bottom:8px">🐉</div>
+    FFXIV Dragoon · Guía Modular · Patch 7.5 Dawntrail<br>
+    Fuentes: icy-veins.com/ffxiv · thebalanceffxiv.com · consolegameswiki.com
+  </footer>
+
+</div>
+</body>
+</html>

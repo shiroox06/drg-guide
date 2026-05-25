@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRG · Módulo 06 — Errores Comunes</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Crimson Pro',Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(255,152,0,0.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(201,168,76,0.05) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(255,204,128,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+  .container{max-width:860px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;}
+  .nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;transition:opacity 0.2s;}
+  .nav-back:hover{opacity:1;}
+  .page-header{padding:20px 0 30px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:30px;}
+  .module-badge{display:inline-block;background:rgba(255,204,128,0.1);border:1px solid var(--orange);border-radius:4px;padding:3px 10px;font-family:'Cinzel',serif;font-size:10px;color:var(--orange);letter-spacing:0.1em;margin-bottom:10px;}
+  .page-title{font-family:'Cinzel',serif;font-size:clamp(22px,5vw,38px);font-weight:900;color:var(--gold);letter-spacing:0.1em;text-shadow:0 0 30px rgba(201,168,76,0.4);}
+  .page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+  .section-header{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
+  .section-icon{font-size:24px;}
+  .section-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+  .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+
+  .error-card{background:var(--card-bg);border:1px solid rgba(255,152,0,0.3);border-radius:8px;padding:20px;margin-bottom:14px;display:grid;grid-template-columns:48px 1fr;gap:16px;align-items:start;position:relative;overflow:hidden;transition:border-color 0.3s;}
+  .error-card:hover{border-color:rgba(255,152,0,0.6);}
+  .error-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:rgba(255,152,0,0.7);}
+  .err-num{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:rgba(255,152,0,0.5);text-align:center;padding-top:4px;}
+  .err-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--orange);margin-bottom:8px;}
+  .err-body{font-size:14px;line-height:1.7;}
+  .err-wrong{background:rgba(239,83,80,0.1);border:1px solid rgba(239,83,80,0.3);border-radius:4px;padding:8px 12px;margin-top:8px;font-size:13px;color:#ffcdd2;}
+  .err-right{background:rgba(102,187,106,0.1);border:1px solid rgba(102,187,106,0.3);border-radius:4px;padding:8px 12px;margin-top:6px;font-size:13px;color:#c8e6c9;}
+  .err-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.06em;margin-bottom:3px;display:block;}
+
+  /* CHECKLIST */
+  .checklist{background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:20px;}
+  .cl-title{font-family:'Cinzel',serif;font-size:14px;color:var(--cyan);letter-spacing:0.08em;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .cl-section{margin-bottom:16px;}
+  .cl-section-title{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:0.08em;margin-bottom:8px;text-transform:uppercase;}
+  .cl-item{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5;}
+  .cl-item:last-child{border-bottom:none;}
+  .cl-box{width:16px;height:16px;border:1px solid var(--gold);border-radius:3px;flex-shrink:0;margin-top:2px;background:rgba(201,168,76,0.05);}
+
+  /* POSITION DIAGRAM */
+  .pos-diagram{background:rgba(13,31,60,0.7);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:20px;text-align:center;}
+  .pos-boss{width:80px;height:80px;border-radius:50%;background:rgba(239,83,80,0.3);border:2px solid #ef9a9a;display:inline-flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;}
+  .pos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:8px;max-width:280px;margin:0 auto;}
+  .pos-cell{height:60px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'Cinzel',serif;text-align:center;padding:4px;}
+  .pos-front{background:rgba(239,83,80,0.1);border:1px solid rgba(239,83,80,0.3);color:#ffcdd2;}
+  .pos-side{background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);}
+  .pos-rear{background:rgba(102,187,106,0.15);border:1px solid rgba(102,187,106,0.4);color:#c8e6c9;}
+  .pos-boss-center{background:rgba(239,83,80,0.3);border:1px solid #ef9a9a;font-size:20px;display:flex;align-items:center;justify-content:center;}
+  .pos-legend{display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+  .pos-leg-item{display:flex;align-items:center;gap:6px;font-size:12px;}
+  .pos-dot{width:10px;height:10px;border-radius:50%;}
+
+  .tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:14px 16px;margin:12px 0;display:flex;gap:12px;align-items:flex-start;}
+  .tip-text{font-size:14px;line-height:1.6;color:#b3e5fc;}
+  footer{text-align:center;padding:40px 20px 20px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;}
+  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+  @media(max-width:600px){.error-card{grid-template-columns:1fr;}.err-num{display:none;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 06</div>
+    <h1 class="page-title">⚠️ Errores Comunes</h1>
+    <p class="page-sub">Los errores que más DPS cuestan en Dragoon, cómo evitarlos, y un checklist pre-dungeon para no olvidar nada.</p>
+  </div>
+
+  <div class="section-header">
+    <span class="section-icon">💀</span>
+    <span class="section-title">Top 10 Errores que Cuestan DPS</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">01</div>
+    <div>
+      <div class="err-title">Dejar caer Power Surge</div>
+      <div class="err-body">Power Surge (buff de Disembowel) dura 30 segundos. Si se cae, pierdes <strong>10% de TODO tu daño</strong> hasta reaplicarlo. Es el error más costoso y el más común en niveles medios.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Hacer 3 combos de Full Thrust seguidos sin refrescar Disembowel</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Alternar combos regularmente y vigilar el buff en tu status bar</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">02</div>
+    <div>
+      <div class="err-title">Usar Life Surge en habilidades débiles</div>
+      <div class="err-body">Life Surge garantiza crítico en tu <em>siguiente</em> weaponskill. Usarlo en True Thrust o Vorpal Thrust en lugar de Full Thrust/Heavens' Thrust desperdicia el crítico garantizado en un hit de menor potencia.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Life Surge → True Thrust (230 potencia)</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Life Surge → Heavens' Thrust (el finisher más fuerte disponible)</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">03</div>
+    <div>
+      <div class="err-title">Guardar los oGCDs "para el momento perfecto"</div>
+      <div class="err-body">Jump, Geirskogul, Dragonfire Dive, Lance Charge — todos tienen cooldowns fijos. Guardarlos significa que habrá momentos del fight donde estén disponibles y no los uses. DPS perdido es DPS perdido.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> "Guardo el Jump para cuando el boss esté vulnerable"</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Úsalos en cuanto estén disponibles. La excepción es alinear con Battle Litany al inicio del fight.</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">04</div>
+    <div>
+      <div class="err-title">Usar AoE en menos de 3 enemigos</div>
+      <div class="err-body">Doom Spike y el combo AoE hacen <em>menos daño</em> que el single-target si hay solo 1–2 objetivos. El breakeven real es <strong>3 enemigos</strong> — con 2 o menos, el combo ST siempre gana.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Spam Doom Spike en packs de 2 mobs</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> AoE rotation solo con 3+ enemigos agrupados</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">05</div>
+    <div>
+      <div class="err-title">Romper el combo por posición o movimiento</div>
+      <div class="err-body">Si te mueves o el boss gira antes de terminar el combo, pierdes el bonus de potencia. Planifica tu posición <em>antes</em> de empezar el combo, no en medio de él.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Iniciar combo, boss se mueve, terminas el finisher desde un ángulo incorrecto</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Usa True North si anticipas que perderás posición durante el combo</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">06</div>
+    <div>
+      <div class="err-title">No hacer las Job Quests a tiempo</div>
+      <div class="err-body">Cada job quest desbloquea habilidades. Si estás en Lv45 sin Doom Spike (Lv40 quest) estás operando con un kit incompleto. Las job quests no se auto-completan.</div>
+      <div class="err-wrong"><span class="err-label">❌ SÍNTOMA:</span> "¿Por qué no tengo Jump siendo Lv35 Dragoon?"</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Habla con Alberic en Coerthas al llegar a cada nivel de quest (30, 35, 40, 45, 50, 52, 56, 58, 60)</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">07</div>
+    <div>
+      <div class="err-title">Ignorar el gear durante el leveling</div>
+      <div class="err-body">Subir niveles con equipo 20 iLvl por debajo reduce tu daño significativamente. El arma especialmente — un arma desactualizada es el mayor multiplicador negativo de DPS.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Llegar a Lv50 con el arma de Lv35 porque "ya casi termino el leveling"</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Actualiza arma cada 10 niveles mínimo. Tomestones en cada cap de expansión.</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">08</div>
+    <div>
+      <div class="err-title">Battle Litany fuera de sync con el grupo</div>
+      <div class="err-body">Battle Litany es un raid buff — su valor no es solo para ti. Tirarlo cuando el tank está haciendo el pull o en mitad de una mecánica donde el grupo no está atacando desperdicia la ventana.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Battle Litany apenas ves al boss, antes de que el tank tenga aggro</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> ~3–5s después del pull del tank, cuando el grupo ya está atacando. Coordina en raids serios.</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">09</div>
+    <div>
+      <div class="err-title">Stardiver fuera de Life of the Dragon</div>
+      <div class="err-body">Técnicamente el juego no te deja usarlo fuera de la fase — pero el error real es entrar a Life of the Dragon y no usarlo dentro de la ventana de 20s, desperdiciando el uso.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Entras a Life of the Dragon, te distraes con una mecánica y la fase termina sin usar Stardiver</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Al activar Geirskogul, prioriza inmediatamente: Nastrond (x3) → Stardiver → Starcross</div>
+    </div>
+  </div>
+
+  <div class="error-card">
+    <div class="err-num">10</div>
+    <div>
+      <div class="err-title">No usar Feint y True North por "no ser healer/tank"</div>
+      <div class="err-body">Los Role Actions de DPS tienen utilidad real. Feint mitiga daño del boss para el grupo. True North mantiene tus positionals durante mecánicas difíciles. Son parte de tu kit — úsalos.</div>
+      <div class="err-wrong"><span class="err-label">❌ MAL:</span> Tener Feint en cooldown disponible durante un tankbuster</div>
+      <div class="err-right"><span class="err-label">✅ BIEN:</span> Ver módulo 05 de Role Actions para saber cuándo usar cada uno</div>
+    </div>
+  </div>
+
+  <!-- POSITIONALS -->
+  <div class="section-header">
+    <span class="section-icon">🧭</span>
+    <span class="section-title">Posicionamiento (Positionals)</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="pos-diagram">
+    <div class="pos-grid">
+      <div class="pos-cell pos-front">FRENTE<br><span style="font-size:9px;opacity:0.6">No bonus</span></div>
+      <div class="pos-cell pos-front">FRENTE<br><span style="font-size:9px;opacity:0.6">No bonus</span></div>
+      <div class="pos-cell pos-front">FRENTE<br><span style="font-size:9px;opacity:0.6">No bonus</span></div>
+      <div class="pos-cell pos-side">FLANCO<br><span style="font-size:9px">Chaos Thrust</span></div>
+      <div class="pos-boss-center">🐉</div>
+      <div class="pos-cell pos-side">FLANCO<br><span style="font-size:9px">Chaos Thrust</span></div>
+      <div class="pos-cell pos-rear">TRASERO<br><span style="font-size:9px">Full Thrust</span></div>
+      <div class="pos-cell pos-rear">TRASERO<br><span style="font-size:9px">Full Thrust</span></div>
+      <div class="pos-cell pos-rear">TRASERO<br><span style="font-size:9px">Full Thrust</span></div>
+    </div>
+    <div class="pos-legend">
+      <div class="pos-leg-item"><div class="pos-dot" style="background:#ef9a9a"></div><span>Frente — sin bonus</span></div>
+      <div class="pos-leg-item"><div class="pos-dot" style="background:var(--gold)"></div><span>Flanco — Chaos Thrust combo</span></div>
+      <div class="pos-leg-item"><div class="pos-dot" style="background:#81c784"></div><span>Trasero — Full Thrust combo</span></div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:14px">
+    <span style="font-size:18px;flex-shrink:0">💡</span>
+    <span class="tip-text">En la práctica: ponerse detrás del boss para ambos combos es la posición más cómoda. Full Thrust pide trasero, Chaos Thrust pide flanco — si no puedes alternar, True North resuelve el problema.</span>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section-header">
+    <span class="section-icon">📋</span>
+    <span class="section-title">Checklist Pre-Dungeon / Pre-Raid</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="checklist">
+    <div class="cl-title">📋 ANTES DE ENTRAR A CUALQUIER DUTY</div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">⚙️ Setup</div>
+      <div class="cl-item"><div class="cl-box"></div><span><strong>Job stone equipado</strong> — suena obvio, pero pasa</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span><strong>Gear actualizado</strong> — arma en particular, no más de 10 iLvl por debajo de la zona</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span><strong>Comida activa</strong> — cualquier meal da +3% EXP y bonus de stats</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span><strong>Hotbar organizada</strong> — Life Surge, Jump y Battle Litany accesibles sin buscarlos</span></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">⚔️ Al iniciar el pull</div>
+      <div class="cl-item"><div class="cl-box"></div><span>Espera 1–2 GCDs del tank antes de atacar para que establezca aggro</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span>Inicia con el combo de Disembowel para activar Power Surge desde el inicio</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span>En pulls de dungeon (múltiples mobs), cambia a AoE rotation si hay 3+</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span>Tira Battle Litany ~3s después del pull (no antes, no al final)</span></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">🐉 En boss fights</div>
+      <div class="cl-item"><div class="cl-box"></div><span>Identifica si el boss tiene knockbacks — ten Arm's Length listo</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span>Nota el patrón de mecánicas para saber cuándo usar Feint (antes de tankbuster)</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span>Mantén posición: trasero para Full Thrust, flanco para Chaos Thrust</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span>No pierdas GCDs moviéndote innecesariamente — si debes moverte, usa Piercing Talon</span></div>
+      <div class="cl-item"><div class="cl-box"></div><span>Si caíste en HP antes de un daño masivo, usa Second Wind preventivamente</span></div>
+    </div>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">⚠️</div>
+    Módulo 06 · Errores Comunes · Patch 7.5<br>
+    <a href="index.html" style="color:var(--gold);text-decoration:none;margin-top:6px;display:inline-block">← Volver al Hub</a>
+  </footer>
+</div>
+</body>
+</html>

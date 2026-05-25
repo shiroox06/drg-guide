@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRG · Módulo 05 — Role Actions</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--red:#ef9a9a;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Crimson Pro',Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(239,154,154,0.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(201,168,76,0.05) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(239,154,154,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+  .container{max-width:860px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;}
+  .nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;transition:opacity 0.2s;}
+  .nav-back:hover{opacity:1;}
+  .page-header{padding:20px 0 30px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:30px;}
+  .module-badge{display:inline-block;background:rgba(239,154,154,0.1);border:1px solid var(--red);border-radius:4px;padding:3px 10px;font-family:'Cinzel',serif;font-size:10px;color:var(--red);letter-spacing:0.1em;margin-bottom:10px;}
+  .page-title{font-family:'Cinzel',serif;font-size:clamp(22px,5vw,38px);font-weight:900;color:var(--gold);letter-spacing:0.1em;text-shadow:0 0 30px rgba(201,168,76,0.4);}
+  .page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+  .section-header{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
+  .section-icon{font-size:24px;}
+  .section-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+  .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+
+  .role-card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:22px;margin-bottom:16px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;transition:border-color 0.3s,box-shadow 0.3s;}
+  .role-card:hover{border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,0.1);}
+  .role-icon{font-size:42px;text-align:center;filter:drop-shadow(0 0 10px rgba(201,168,76,0.4));}
+  .role-info{}
+  .role-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+  .role-name{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--text-main);}
+  .role-lvl{font-family:'Cinzel',serif;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);}
+  .role-cd{font-family:'Cinzel',serif;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.4);color:#b3e5fc;}
+  .role-desc{font-size:14px;line-height:1.7;color:var(--text-main);margin-bottom:10px;}
+  .usage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .usage-item{background:rgba(13,31,60,0.6);border-radius:4px;padding:8px 10px;font-size:12px;line-height:1.5;}
+  .usage-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.06em;margin-bottom:3px;}
+  .do{color:#a5d6a7;}.dont{color:#ef9a9a;}
+  .rating{display:flex;align-items:center;gap:6px;margin-top:10px;}
+  .rating-label{font-family:'Cinzel',serif;font-size:10px;color:var(--text-muted);letter-spacing:0.06em;}
+  .stars{color:var(--gold);font-size:14px;letter-spacing:2px;}
+  .tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:14px 16px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+  .tip-text{font-size:14px;line-height:1.6;color:#b3e5fc;}
+  footer{text-align:center;padding:40px 20px 20px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;}
+  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+  @media(max-width:600px){.role-card{grid-template-columns:1fr;}.usage-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 05</div>
+    <h1 class="page-title">🎭 Role Actions</h1>
+    <p class="page-sub">Habilidades compartidas con todos los Melee DPS. La mayoría de jugadores las ignora — úsalas bien y marcan diferencia real.</p>
+  </div>
+
+  <div class="tip-box">
+    <span style="font-size:18px;flex-shrink:0">ℹ️</span>
+    <span class="tip-text">Las Role Actions son <strong>oGCDs</strong> — no consumen tu GCD y se usan entre tus ataques normales. No esperan "el momento perfecto": tienen CDs específicos y deben usarse cuando estén disponibles y haya razón para hacerlo.</span>
+  </div>
+
+  <div class="section-header">
+    <span class="section-icon">🎭</span>
+    <span class="section-title">Todas las Role Actions del Melee DPS</span>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- FEINT -->
+  <div class="role-card">
+    <div class="role-icon">🛡️</div>
+    <div class="role-info">
+      <div class="role-header">
+        <span class="role-name">Feint</span>
+        <span class="role-lvl">Lv 22</span>
+        <span class="role-cd">90s CD · 15s duración</span>
+      </div>
+      <div class="role-desc">Reduce el Physical Damage del objetivo en 10% y su Magic Damage en 5% durante 15 segundos. Esencialmente <strong>mitigation para el tank y el grupo</strong> durante ataques del boss.</div>
+      <div class="usage-grid">
+        <div class="usage-item">
+          <div class="usage-label do">✅ USAR EN:</div>
+          Antes de un tankbuster o raidwide del boss. El tank te lo agradece.
+        </div>
+        <div class="usage-item">
+          <div class="usage-label dont">❌ NO USAR EN:</div>
+          Adds/mobs pequeños o cuando el boss está en fase sin atacar físicamente.
+        </div>
+      </div>
+      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★★★</span></div>
+    </div>
+  </div>
+
+  <!-- TRUE NORTH -->
+  <div class="role-card">
+    <div class="role-icon">🧭</div>
+    <div class="role-info">
+      <div class="role-header">
+        <span class="role-name">True North</span>
+        <span class="role-lvl">Lv 50</span>
+        <span class="role-cd">45s CD · 10s · 2 cargas</span>
+      </div>
+      <div class="role-desc">Elimina los requerimientos de posición (positionals) durante 10 segundos. Todas tus skills actúan como si estuvieras en la posición correcta <strong>sin importar dónde estés</strong>.</div>
+      <div class="usage-grid">
+        <div class="usage-item">
+          <div class="usage-label do">✅ USAR EN:</div>
+          Mecánicas que te forcen a alejarte del flanco/trasero del boss. Movimientos de boss imprevisibles.
+        </div>
+        <div class="usage-item">
+          <div class="usage-label dont">❌ NO USAR EN:</div>
+          Si puedes mantener posición. No lo desperdicies de relleno — guárdalo para emergencias.
+        </div>
+      </div>
+      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★★☆</span></div>
+    </div>
+  </div>
+
+  <!-- SECOND WIND -->
+  <div class="role-card">
+    <div class="role-icon">💚</div>
+    <div class="role-info">
+      <div class="role-header">
+        <span class="role-name">Second Wind</span>
+        <span class="role-lvl">Lv 8</span>
+        <span class="role-cd">120s CD · Instantáneo</span>
+      </div>
+      <div class="role-desc">Restaura tu HP — 800 de potencia de cura (actualizado en Patch 7.x). Autocura personal. Especialmente útil en solo y cuando el healer está ocupado.</div>
+      <div class="usage-grid">
+        <div class="usage-item">
+          <div class="usage-label do">✅ USAR EN:</div>
+          Questing solo, cuando bajaste HP antes de un mechanic de daño, o si el healer murió.
+        </div>
+        <div class="usage-item">
+          <div class="usage-label dont">❌ NO ES SUSTITUTO:</div>
+          No reemplaza al healer — solo compra tiempo o cubre emergencias puntuales.
+        </div>
+      </div>
+      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★☆☆</span></div>
+    </div>
+  </div>
+
+  <!-- BLOODBATH -->
+  <div class="role-card">
+    <div class="role-icon">🩸</div>
+    <div class="role-info">
+      <div class="role-header">
+        <span class="role-name">Bloodbath</span>
+        <span class="role-lvl">Lv 12</span>
+        <span class="role-cd">90s CD · 20s duración</span>
+      </div>
+      <div class="role-desc">Absorbe una porción del daño que haces como HP durante 20 segundos. Con el alto daño del Dragoon, cura una cantidad decente durante el burst window.</div>
+      <div class="usage-grid">
+        <div class="usage-item">
+          <div class="usage-label do">✅ USAR EN:</div>
+          Durante tu burst window para maximizar la cura. En pulls de dungeon con múltiples enemigos.
+        </div>
+        <div class="usage-item">
+          <div class="usage-label dont">❌ MENOS ÚTIL EN:</div>
+          Ataques de un solo objetivo fuera de burst. El valor total es moderado.
+        </div>
+      </div>
+      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★☆☆☆</span></div>
+    </div>
+  </div>
+
+  <!-- ARM'S LENGTH -->
+  <div class="role-card">
+    <div class="role-icon">✋</div>
+    <div class="role-info">
+      <div class="role-header">
+        <span class="role-name">Arm's Length</span>
+        <span class="role-lvl">Lv 32</span>
+        <span class="role-cd">120s CD · 6s</span>
+      </div>
+      <div class="role-desc">Cancela la mayoría de efectos de knockback y draw-in durante 6 segundos. También aplica Heavy al enemigo que te golpee durante su efecto.</div>
+      <div class="usage-grid">
+        <div class="usage-item">
+          <div class="usage-label do">✅ USAR EN:</div>
+          Mecánicas de knockback de bosses donde necesitas mantener posición. Algunos dungeons específicos.
+        </div>
+        <div class="usage-item">
+          <div class="usage-label dont">❌ NO CANCELA:</div>
+          Knockbacks "absolutos" marcados por el juego. Aprende cuáles en cada fight.
+        </div>
+      </div>
+      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★☆☆</span></div>
+    </div>
+  </div>
+
+  <!-- LEG SWEEP -->
+  <div class="role-card">
+    <div class="role-icon">🦵</div>
+    <div class="role-info">
+      <div class="role-header">
+        <span class="role-name">Leg Sweep</span>
+        <span class="role-lvl">Lv 10</span>
+        <span class="role-cd">40s CD · Stun 3s</span>
+      </div>
+      <div class="role-desc">Stun de 3 segundos al objetivo. Tiene diminishing returns — si se usa repetidamente el mismo boss, la duración se reduce hasta ser inmune.</div>
+      <div class="usage-grid">
+        <div class="usage-item">
+          <div class="usage-label do">✅ USAR EN:</div>
+          Adds en dungeons que sean stuneables. Mobs de questing que interrumpir un cast es importante.
+        </div>
+        <div class="usage-item">
+          <div class="usage-label dont">❌ NO FUNCIONA EN:</div>
+          Bosses principales. Casi nulo en raids — déjalo al tank.
+        </div>
+      </div>
+      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★☆☆☆☆</span></div>
+    </div>
+  </div>
+
+  <!-- RESUMEN RÁPIDO -->
+  <div class="section-header">
+    <span class="section-icon">⚡</span>
+    <span class="section-title">Resumen de Uso Real</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:20px;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr>
+          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Skill</th>
+          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Solo</th>
+          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Dungeon</th>
+          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Raid</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">🛡️ Feint</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Raramente</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Pulls grandes</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Prioritario</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">🧭 True North</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">No</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Si boss se mueve</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Mecánicas</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">💚 Second Wind</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Muy útil</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Emergencias</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Pre-mecánica</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">🩸 Bloodbath</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Útil</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">En pulls AoE</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Durante burst</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">✋ Arm's Length</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Raramente</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Knockback mecánicas</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Situacional</td></tr>
+        <tr><td style="padding:8px 12px">🦵 Leg Sweep</td><td style="padding:8px 12px">Stuneable mobs</td><td style="padding:8px 12px">Adds stuneables</td><td style="padding:8px 12px;color:#ef9a9a">❌ Inútil</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🎭</div>
+    Módulo 05 · Role Actions · Patch 7.5<br>
+    <a href="index.html" style="color:var(--gold);text-decoration:none;margin-top:6px;display:inline-block">← Volver al Hub</a>
+  </footer>
+</div>
+</body>
+</html>
