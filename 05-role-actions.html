@@ -2,259 +2,453 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DRG · Módulo 05 — Role Actions</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 05 — Habilidades & Role Actions</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--red:#ef9a9a;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Crimson Pro',Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(239,154,154,0.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(201,168,76,0.05) 0%,transparent 50%);pointer-events:none;z-index:0;}
-  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(239,154,154,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
-  .container{max-width:860px;margin:0 auto;padding:0 20px 100px;position:relative;z-index:1;}
-  .nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;transition:opacity 0.2s;}
-  .nav-back:hover{opacity:1;}
-  .page-header{padding:20px 0 30px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:30px;}
-  .module-badge{display:inline-block;background:rgba(239,154,154,0.1);border:1px solid var(--red);border-radius:4px;padding:3px 10px;font-family:'Cinzel',serif;font-size:10px;color:var(--red);letter-spacing:0.1em;margin-bottom:10px;}
-  .page-title{font-family:'Cinzel',serif;font-size:clamp(22px,5vw,38px);font-weight:900;color:var(--gold);letter-spacing:0.1em;text-shadow:0 0 30px rgba(201,168,76,0.4);}
-  .page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
-  .section-header{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
-  .section-icon{font-size:24px;}
-  .section-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
-  .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--red:#ef9a9a;--purple:#b39ddb;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(239,154,154,0.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(201,168,76,0.05) 0%,transparent 50%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(239,154,154,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(239,154,154,0.1);border:1px solid var(--red);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--red);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
 
-  .role-card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:22px;margin-bottom:16px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;transition:border-color 0.3s,box-shadow 0.3s;}
-  .role-card:hover{border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,0.1);}
-  .role-icon{font-size:42px;text-align:center;filter:drop-shadow(0 0 10px rgba(201,168,76,0.4));}
-  .role-info{}
-  .role-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
-  .role-name{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--text-main);}
-  .role-lvl{font-family:'Cinzel',serif;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);}
-  .role-cd{font-family:'Cinzel',serif;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.4);color:#b3e5fc;}
-  .role-desc{font-size:14px;line-height:1.7;color:var(--text-main);margin-bottom:10px;}
-  .usage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .usage-item{background:rgba(13,31,60,0.6);border-radius:4px;padding:8px 10px;font-size:12px;line-height:1.5;}
-  .usage-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.06em;margin-bottom:3px;}
-  .do{color:#a5d6a7;}.dont{color:#ef9a9a;}
-  .rating{display:flex;align-items:center;gap:6px;margin-top:10px;}
-  .rating-label{font-family:'Cinzel',serif;font-size:10px;color:var(--text-muted);letter-spacing:0.06em;}
-  .stars{color:var(--gold);font-size:14px;letter-spacing:2px;}
-  .tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:14px 16px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
-  .tip-text{font-size:14px;line-height:1.6;color:#b3e5fc;}
-  footer{text-align:center;padding:40px 20px 20px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;}
-  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
-  @media(max-width:600px){.role-card{grid-template-columns:1fr;}.usage-grid{grid-template-columns:1fr;}}
+/* LEVEL FILTER */
+.filter-bar{background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.filter-label{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;flex-shrink:0;}
+.filter-slider{flex:1;min-width:160px;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;}
+.filter-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cyan);cursor:pointer;border:2px solid var(--blue-deep);box-shadow:0 0 8px rgba(79,195,247,0.5);}
+.filter-lvl{font-family:"Cinzel",serif;font-size:15px;font-weight:700;color:var(--cyan);min-width:40px;text-align:right;}
+.filter-btn{background:rgba(201,168,76,0.15);border:1px solid var(--gold);border-radius:4px;padding:5px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);cursor:pointer;letter-spacing:0.06em;}
 
+/* LEGEND */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;font-family:"Cinzel",serif;letter-spacing:0.04em;}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+
+/* SKILL CARDS */
+.skill-card{border-radius:8px;padding:18px;margin-bottom:12px;display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:start;transition:all 0.3s;position:relative;overflow:hidden;}
+.skill-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
+
+/* States */
+.skill-card.state-have{background:var(--card-bg);border:1px solid rgba(129,199,132,0.4);}
+.skill-card.state-have::before{background:var(--green);}
+.skill-card.state-next{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.5);}
+.skill-card.state-next::before{background:var(--gold);animation:pulse-gold 2s infinite;}
+.skill-card.state-locked{background:rgba(13,31,60,0.5);border:1px solid rgba(255,255,255,0.08);opacity:0.45;}
+.skill-card.state-locked::before{background:#555;}
+@keyframes pulse-gold{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.sk-icon{font-size:36px;text-align:center;filter:drop-shadow(0 0 8px rgba(201,168,76,0.3));}
+.sk-icon.dimmed{filter:grayscale(1);opacity:0.5;}
+.sk-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.sk-name{font-family:"Cinzel",serif;font-size:15px;font-weight:700;}
+.sk-state-have .sk-name{color:var(--green);}
+.sk-state-next .sk-name{color:var(--gold);}
+.sk-state-locked .sk-name{color:var(--text-muted);}
+.sk-lvl{font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;white-space:nowrap;}
+.sk-cd{font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.3);color:#b3e5fc;}
+.sk-type{font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;}
+.sk-type-role{background:rgba(239,154,154,0.15);border:1px solid rgba(239,154,154,0.4);color:#ffcdd2;}
+.sk-type-drg{background:rgba(179,157,219,0.15);border:1px solid rgba(179,157,219,0.4);color:#ede7f6;}
+.sk-desc{font-size:14px;line-height:1.6;color:var(--text-main);margin-bottom:8px;}
+.sk-how{font-size:13px;line-height:1.5;padding:8px 12px;border-radius:5px;margin-top:4px;}
+.sk-how.have{background:rgba(129,199,132,0.1);border:1px solid rgba(129,199,132,0.3);color:#c8e6c9;}
+.sk-how.unlock{background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.35);color:var(--gold-light);}
+.sk-how.locked{background:rgba(13,31,60,0.5);border:1px solid rgba(255,255,255,0.06);color:var(--text-muted);}
+.sk-usage{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.sk-usage-item{background:rgba(13,31,60,0.6);border-radius:4px;padding:7px 10px;font-size:12px;line-height:1.4;}
+.sk-usage-lbl{font-family:"Cinzel",serif;font-size:9px;letter-spacing:0.06em;margin-bottom:3px;display:block;}
+.state-badge{display:inline-flex;align-items:center;gap:4px;font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:auto;}
+.sb-have{background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;}
+.sb-next{background:rgba(201,168,76,0.2);border:1px solid var(--gold);color:var(--gold-light);}
+.sb-locked{background:rgba(80,80,80,0.2);border:1px solid #555;color:#888;}
+
+/* bottom nav */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
-.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;-webkit-tap-highlight-color:transparent;text-align:center;}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
 .nav-btn:active{background:rgba(201,168,76,0.15);}
 .nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
 
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.skill-card{grid-template-columns:1fr;}.sk-usage{grid-template-columns:1fr;}.sk-icon{display:none;}}
 </style>
 </head>
 <body>
 <div class="container">
   <a href="index.html" class="nav-back">← Volver al Hub</a>
-
   <div class="page-header">
     <div class="module-badge">MÓDULO 05</div>
-    <h1 class="page-title">🎭 Role Actions</h1>
-    <p class="page-sub">Habilidades compartidas con todos los Melee DPS. La mayoría de jugadores las ignora — úsalas bien y marcan diferencia real.</p>
+    <h1 class="page-title">🎭 Habilidades de Soporte & Role Actions</h1>
+    <p class="page-sub">oGCDs propios del Dragoon + Role Actions compartidas con Melee DPS. Filtradas según tu nivel actual.</p>
   </div>
 
-  <div class="tip-box">
-    <span style="font-size:18px;flex-shrink:0">ℹ️</span>
-    <span class="tip-text">Las Role Actions son <strong>oGCDs</strong> — no consumen tu GCD y se usan entre tus ataques normales. No esperan "el momento perfecto": tienen CDs específicos y deben usarse cuando estén disponibles y haya razón para hacerlo.</span>
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <span class="filter-label">🎚️ TU NIVEL:</span>
+    <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="32">
+    <span class="filter-lvl" id="filterDisplay">Lv32</span>
+    <button class="filter-btn" onclick="applyFilter(100)">VER TODO</button>
   </div>
 
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div><span style="color:#c8e6c9">Disponible</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--gold);animation:pulse-gold 2s infinite"></div><span style="color:var(--gold-light)">Próxima a desbloquear</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#555"></div><span style="color:var(--text-muted)">Bloqueada</span></div>
+  </div>
+
+  <!-- DRAGOON oGCDs -->
+  <div class="section-header">
+    <span class="section-icon">🐉</span>
+    <span class="section-title">Habilidades Propias del Dragoon</span>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- Life Surge -->
+  <div class="skill-card" data-lvl="6">
+    <div class="sk-icon">💚</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Life Surge</span>
+        <span class="sk-lvl" style="background:rgba(129,199,132,0.15);border:1px solid var(--green);color:#c8e6c9">Lv 6</span>
+        <span class="sk-cd">40s CD · 2 cargas</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge sb-have" id="badge-lifesurge">✅ Tienes</span>
+      </div>
+      <div class="sk-desc">Garantiza crítico en tu próxima weaponskill. Con 2 cargas disponibles, no lo guardes para "el momento perfecto".</div>
+      <div class="sk-how have" id="how-lifesurge">✅ Ya disponible — úsalo antes de Full Thrust / Heavens' Thrust</div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ USAR EN:</span>El finisher de mayor potencia de tu combo activo.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">❌ NO EN:</span>True Thrust o Vorpal Thrust — potencia baja desperdicia el crítico.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jump -->
+  <div class="skill-card" data-lvl="30" data-quest="Quest: Eye of the Dragon — Ywain, Old Gridania (Lv30)">
+    <div class="sk-icon">🦘</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Jump → High Jump (Lv74)</span>
+        <span class="sk-lvl" style="background:rgba(179,157,219,0.15);border:1px solid var(--purple);color:#ede7f6">Lv 30</span>
+        <span class="sk-cd">30s CD</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge" id="badge-jump">🔒 Bloqueada</span>
+      </div>
+      <div class="sk-desc">Salta al objetivo causando daño. Genera Gaze stack para el Dragon Gauge (Lv60+). En Lv74 se upgradea automáticamente a High Jump con mayor potencia.</div>
+      <div class="sk-how locked" id="how-jump">🔒 Se desbloquea en Lv30 completando la quest de conversión</div>
+    </div>
+  </div>
+
+  <!-- Elusive Jump -->
+  <div class="skill-card" data-lvl="35" data-quest="Quest: Lance of Fury — Alberic, Coerthas (Lv35)">
+    <div class="sk-icon">↩️</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Elusive Jump</span>
+        <span class="sk-lvl" style="background:rgba(179,157,219,0.15);border:1px solid var(--purple);color:#ede7f6">Lv 35</span>
+        <span class="sk-cd">30s CD</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge" id="badge-elusive">🔒 Bloqueada</span>
+      </div>
+      <div class="sk-desc">Salta hacia atrás ~15 yalms. Herramienta de posicionamiento y escape de mecánicas. No genera Gaze.</div>
+      <div class="sk-how locked" id="how-elusive">🔒 Quest: Lance of Fury — habla con Alberic en Coerthas cuando llegues a Lv35</div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ USAR EN:</span>Escapar AoEs del boss. Reposicionarte rápido sin gastar el GCD.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">⚠️ OJO:</span>Te aleja del boss — asegúrate de no salir del rango de melee.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Winged Glide -->
+  <div class="skill-card" data-lvl="45" data-quest="Quest: Fatal Seduction — Alberic, Coerthas (Lv45)">
+    <div class="sk-icon">🌪️</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Winged Glide</span>
+        <span class="sk-lvl" style="background:rgba(179,157,219,0.15);border:1px solid var(--purple);color:#ede7f6">Lv 45</span>
+        <span class="sk-cd">60s CD · 2 cargas</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge" id="badge-glide">🔒 Bloqueada</span>
+      </div>
+      <div class="sk-desc">Dash hacia el objetivo. Gap closer principal. 2 cargas — puedes usarlo dos veces seguidas para cubrir distancias largas.</div>
+      <div class="sk-how locked" id="how-glide">🔒 Quest: Fatal Seduction — Alberic en Coerthas, Lv45</div>
+    </div>
+  </div>
+
+  <!-- Dragonfire Dive -->
+  <div class="skill-card" data-lvl="50" data-quest="Quest: Into the Dragon's Maw — Alberic, Coerthas (Lv50)">
+    <div class="sk-icon">🔥</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Dragonfire Dive</span>
+        <span class="sk-lvl" style="background:rgba(239,83,80,0.15);border:1px solid #ef9a9a;color:#ffcdd2">Lv 50</span>
+        <span class="sk-cd">120s CD</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge" id="badge-dfd">🔒 Bloqueada</span>
+      </div>
+      <div class="sk-desc">AoE circular de alto impacto centrada en el objetivo. Entra al burst window cada 2 minutos. En Dawntrail recibió un upgrade de potencia.</div>
+      <div class="sk-how locked" id="how-dfd">🔒 Quest: Into the Dragon's Maw — Alberic en Coerthas, Lv50</div>
+    </div>
+  </div>
+
+  <!-- Battle Litany -->
+  <div class="skill-card" data-lvl="52" data-quest="Quest: Days of Azure — Alberic, Coerthas (Lv52)">
+    <div class="sk-icon">✨</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Battle Litany</span>
+        <span class="sk-lvl" style="background:rgba(255,167,38,0.15);border:1px solid var(--orange);color:#ffe082">Lv 52</span>
+        <span class="sk-cd">120s CD · 20s duración</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge" id="badge-litany">🔒 Bloqueada</span>
+      </div>
+      <div class="sk-desc"><strong>Raid Buff</strong> — +10% Critical Hit Rate para todo el grupo durante 20s. Es lo que hace al Dragoon valioso en party content. Sincronízalo con el burst del grupo.</div>
+      <div class="sk-how locked" id="how-litany">🔒 Quest: Days of Azure — Alberic en Coerthas, Lv52</div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ TIMING:</span>3–5s después del pull del tank, cuando el grupo ya ataca.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">❌ NO:</span>Al inicio antes de que el tank tenga aggro.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lance Charge -->
+  <div class="skill-card" data-lvl="64">
+    <div class="sk-icon">⚡</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Lance Charge</span>
+        <span class="sk-lvl" style="background:rgba(179,157,219,0.15);border:1px solid var(--purple);color:#ede7f6">Lv 64</span>
+        <span class="sk-cd">60s CD · 20s duración</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge" id="badge-lance">🔒 Bloqueada</span>
+      </div>
+      <div class="sk-desc">+10% daño personal durante 20s. Se desbloquea automáticamente al llegar a Lv64, sin quest. Úsalo en cuanto esté disponible y alinéalo con tu burst window.</div>
+      <div class="sk-how locked" id="how-lance">🔒 Automático al llegar a Lv64 — sin quest requerida</div>
+    </div>
+  </div>
+
+  <!-- Mirage Dive -->
+  <div class="skill-card" data-lvl="68">
+    <div class="sk-icon">👁️</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Mirage Dive</span>
+        <span class="sk-lvl" style="background:rgba(179,157,219,0.15);border:1px solid var(--purple);color:#ede7f6">Lv 68</span>
+        <span class="sk-cd">1s CD (usable tras High Jump)</span>
+        <span class="sk-type sk-type-drg">DRG</span>
+        <span class="state-badge" id="badge-mirage">🔒 Bloqueada</span>
+      </div>
+      <div class="sk-desc">Solo usable después de High Jump. Llena el Gaze Gauge. Con 2 stacks de Gaze, Geirskogul activa Life of the Dragon en lugar de solo Blood.</div>
+      <div class="sk-how locked" id="how-mirage">🔒 Automático al llegar a Lv68 — sin quest requerida</div>
+    </div>
+  </div>
+
+  <!-- ROLE ACTIONS -->
   <div class="section-header">
     <span class="section-icon">🎭</span>
-    <span class="section-title">Todas las Role Actions del Melee DPS</span>
+    <span class="section-title">Role Actions — Melee DPS</span>
     <div class="section-line"></div>
   </div>
 
-  <!-- FEINT -->
-  <div class="role-card">
-    <div class="role-icon">🛡️</div>
-    <div class="role-info">
-      <div class="role-header">
-        <span class="role-name">Feint</span>
-        <span class="role-lvl">Lv 22</span>
-        <span class="role-cd">90s CD · 15s duración</span>
+  <!-- Leg Sweep -->
+  <div class="skill-card" data-lvl="10">
+    <div class="sk-icon">🦵</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Leg Sweep</span>
+        <span class="sk-lvl" style="background:rgba(239,154,154,0.15);border:1px solid var(--red);color:#ffcdd2">Lv 10</span>
+        <span class="sk-cd">40s CD · Stun 3s</span>
+        <span class="sk-type sk-type-role">ROLE</span>
+        <span class="state-badge" id="badge-legsweep">🔒 Bloqueada</span>
       </div>
-      <div class="role-desc">Reduce el Physical Damage del objetivo en 10% y su Magic Damage en 5% durante 15 segundos. Esencialmente <strong>mitigation para el tank y el grupo</strong> durante ataques del boss.</div>
-      <div class="usage-grid">
-        <div class="usage-item">
-          <div class="usage-label do">✅ USAR EN:</div>
-          Antes de un tankbuster o raidwide del boss. El tank te lo agradece.
-        </div>
-        <div class="usage-item">
-          <div class="usage-label dont">❌ NO USAR EN:</div>
-          Adds/mobs pequeños o cuando el boss está en fase sin atacar físicamente.
-        </div>
+      <div class="sk-desc">Stun al objetivo por 3 segundos. Tiene diminishing returns en el mismo objetivo. Casi inútil en bosses, útil en adds de dungeons.</div>
+      <div class="sk-how locked" id="how-legsweep">🔒 Automático al llegar a Lv10</div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ USAR EN:</span>Adds stuneables en dungeons. Interrumpir un cast peligroso.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">❌ INÚTIL EN:</span>Bosses principales. No lo intentes.</div>
       </div>
-      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★★★</span></div>
     </div>
   </div>
 
-  <!-- TRUE NORTH -->
-  <div class="role-card">
-    <div class="role-icon">🧭</div>
-    <div class="role-info">
-      <div class="role-header">
-        <span class="role-name">True North</span>
-        <span class="role-lvl">Lv 50</span>
-        <span class="role-cd">45s CD · 10s · 2 cargas</span>
+  <!-- Bloodbath -->
+  <div class="skill-card" data-lvl="12">
+    <div class="sk-icon">🩸</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Bloodbath</span>
+        <span class="sk-lvl" style="background:rgba(239,154,154,0.15);border:1px solid var(--red);color:#ffcdd2">Lv 12</span>
+        <span class="sk-cd">90s CD · 20s duración</span>
+        <span class="sk-type sk-type-role">ROLE</span>
+        <span class="state-badge" id="badge-bloodbath">🔒 Bloqueada</span>
       </div>
-      <div class="role-desc">Elimina los requerimientos de posición (positionals) durante 10 segundos. Todas tus skills actúan como si estuvieras en la posición correcta <strong>sin importar dónde estés</strong>.</div>
-      <div class="usage-grid">
-        <div class="usage-item">
-          <div class="usage-label do">✅ USAR EN:</div>
-          Mecánicas que te forcen a alejarte del flanco/trasero del boss. Movimientos de boss imprevisibles.
-        </div>
-        <div class="usage-item">
-          <div class="usage-label dont">❌ NO USAR EN:</div>
-          Si puedes mantener posición. No lo desperdicies de relleno — guárdalo para emergencias.
-        </div>
-      </div>
-      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★★☆</span></div>
+      <div class="sk-desc">Absorbe HP proporcional al daño que haces durante 20s. Con el daño del Dragoon cura una cantidad decente. Úsalo durante el burst window para maximizar la cura.</div>
+      <div class="sk-how locked" id="how-bloodbath">🔒 Automático al llegar a Lv12</div>
     </div>
   </div>
 
-  <!-- SECOND WIND -->
-  <div class="role-card">
-    <div class="role-icon">💚</div>
-    <div class="role-info">
-      <div class="role-header">
-        <span class="role-name">Second Wind</span>
-        <span class="role-lvl">Lv 8</span>
-        <span class="role-cd">120s CD · Instantáneo</span>
+  <!-- Second Wind -->
+  <div class="skill-card" data-lvl="8">
+    <div class="sk-icon">💚</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Second Wind</span>
+        <span class="sk-lvl" style="background:rgba(239,154,154,0.15);border:1px solid var(--red);color:#ffcdd2">Lv 8</span>
+        <span class="sk-cd">120s CD</span>
+        <span class="sk-type sk-type-role">ROLE</span>
+        <span class="state-badge" id="badge-secondwind">🔒 Bloqueada</span>
       </div>
-      <div class="role-desc">Restaura tu HP — 800 de potencia de cura (actualizado en Patch 7.x). Autocura personal. Especialmente útil en solo y cuando el healer está ocupado.</div>
-      <div class="usage-grid">
-        <div class="usage-item">
-          <div class="usage-label do">✅ USAR EN:</div>
-          Questing solo, cuando bajaste HP antes de un mechanic de daño, o si el healer murió.
-        </div>
-        <div class="usage-item">
-          <div class="usage-label dont">❌ NO ES SUSTITUTO:</div>
-          No reemplaza al healer — solo compra tiempo o cubre emergencias puntuales.
-        </div>
-      </div>
-      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★☆☆</span></div>
+      <div class="sk-desc">Autocura — 800 de potencia (mejorado en Patch 7.x). Útil en solo, questing y como emergencia en raids cuando bajaste HP antes de un mechanic de daño masivo.</div>
+      <div class="sk-how locked" id="how-secondwind">🔒 Automático al llegar a Lv8</div>
     </div>
   </div>
 
-  <!-- BLOODBATH -->
-  <div class="role-card">
-    <div class="role-icon">🩸</div>
-    <div class="role-info">
-      <div class="role-header">
-        <span class="role-name">Bloodbath</span>
-        <span class="role-lvl">Lv 12</span>
-        <span class="role-cd">90s CD · 20s duración</span>
+  <!-- Arm's Length -->
+  <div class="skill-card" data-lvl="32">
+    <div class="sk-icon">✋</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Arm's Length</span>
+        <span class="sk-lvl" style="background:rgba(239,154,154,0.15);border:1px solid var(--red);color:#ffcdd2">Lv 32</span>
+        <span class="sk-cd">120s CD · 6s</span>
+        <span class="sk-type sk-type-role">ROLE</span>
+        <span class="state-badge" id="badge-arms">🔒 Bloqueada</span>
       </div>
-      <div class="role-desc">Absorbe una porción del daño que haces como HP durante 20 segundos. Con el alto daño del Dragoon, cura una cantidad decente durante el burst window.</div>
-      <div class="usage-grid">
-        <div class="usage-item">
-          <div class="usage-label do">✅ USAR EN:</div>
-          Durante tu burst window para maximizar la cura. En pulls de dungeon con múltiples enemigos.
-        </div>
-        <div class="usage-item">
-          <div class="usage-label dont">❌ MENOS ÚTIL EN:</div>
-          Ataques de un solo objetivo fuera de burst. El valor total es moderado.
-        </div>
+      <div class="sk-desc">Cancela knockbacks y draw-in durante 6s. No cancela knockbacks "absolutos" — aprende cuáles en cada fight. También aplica Heavy al enemigo que te golpee.</div>
+      <div class="sk-how locked" id="how-arms">🔒 Automático al llegar a Lv32</div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ USAR EN:</span>Mecánicas de knockback donde necesitas mantener posición melee.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">❌ NO CANCELA:</span>Knockbacks marcados con ícono especial — esos son absolutos.</div>
       </div>
-      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★☆☆☆</span></div>
     </div>
   </div>
 
-  <!-- ARM'S LENGTH -->
-  <div class="role-card">
-    <div class="role-icon">✋</div>
-    <div class="role-info">
-      <div class="role-header">
-        <span class="role-name">Arm's Length</span>
-        <span class="role-lvl">Lv 32</span>
-        <span class="role-cd">120s CD · 6s</span>
+  <!-- Feint -->
+  <div class="skill-card" data-lvl="22">
+    <div class="sk-icon">🛡️</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">Feint</span>
+        <span class="sk-lvl" style="background:rgba(239,154,154,0.15);border:1px solid var(--red);color:#ffcdd2">Lv 22</span>
+        <span class="sk-cd">90s CD · 15s duración</span>
+        <span class="sk-type sk-type-role">ROLE</span>
+        <span class="state-badge" id="badge-feint">🔒 Bloqueada</span>
       </div>
-      <div class="role-desc">Cancela la mayoría de efectos de knockback y draw-in durante 6 segundos. También aplica Heavy al enemigo que te golpee durante su efecto.</div>
-      <div class="usage-grid">
-        <div class="usage-item">
-          <div class="usage-label do">✅ USAR EN:</div>
-          Mecánicas de knockback de bosses donde necesitas mantener posición. Algunos dungeons específicos.
-        </div>
-        <div class="usage-item">
-          <div class="usage-label dont">❌ NO CANCELA:</div>
-          Knockbacks "absolutos" marcados por el juego. Aprende cuáles en cada fight.
-        </div>
+      <div class="sk-desc">Reduce el Physical Damage del boss en 10% y Magic Damage en 5% por 15s. <strong>Mitigation para todo el grupo</strong>. La role action más valiosa del Dragoon en raids.</div>
+      <div class="sk-how locked" id="how-feint">🔒 Automático al llegar a Lv22</div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ USAR EN:</span>Justo antes de un tankbuster o raidwide del boss.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">❌ NO DESPERDICIES:</span>En adds pequeños o fases sin daño físico del boss.</div>
       </div>
-      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★★★☆☆</span></div>
     </div>
   </div>
 
-  <!-- LEG SWEEP -->
-  <div class="role-card">
-    <div class="role-icon">🦵</div>
-    <div class="role-info">
-      <div class="role-header">
-        <span class="role-name">Leg Sweep</span>
-        <span class="role-lvl">Lv 10</span>
-        <span class="role-cd">40s CD · Stun 3s</span>
+  <!-- True North -->
+  <div class="skill-card" data-lvl="50">
+    <div class="sk-icon">🧭</div>
+    <div>
+      <div class="sk-header">
+        <span class="sk-name">True North</span>
+        <span class="sk-lvl" style="background:rgba(239,154,154,0.15);border:1px solid var(--red);color:#ffcdd2">Lv 50</span>
+        <span class="sk-cd">45s CD · 10s · 2 cargas</span>
+        <span class="sk-type sk-type-role">ROLE</span>
+        <span class="state-badge" id="badge-truenorth">🔒 Bloqueada</span>
       </div>
-      <div class="role-desc">Stun de 3 segundos al objetivo. Tiene diminishing returns — si se usa repetidamente el mismo boss, la duración se reduce hasta ser inmune.</div>
-      <div class="usage-grid">
-        <div class="usage-item">
-          <div class="usage-label do">✅ USAR EN:</div>
-          Adds en dungeons que sean stuneables. Mobs de questing que interrumpir un cast es importante.
-        </div>
-        <div class="usage-item">
-          <div class="usage-label dont">❌ NO FUNCIONA EN:</div>
-          Bosses principales. Casi nulo en raids — déjalo al tank.
-        </div>
+      <div class="sk-desc">Elimina requerimientos de posición (positionals) por 10s. Todas tus skills aplican el bonus de daño sin importar desde dónde ataques. 2 cargas disponibles.</div>
+      <div class="sk-how locked" id="how-truenorth">🔒 Automático al llegar a Lv50</div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ GUARDAR PARA:</span>Mecánicas que fuercen a moverte del flanco/trasero del boss.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">❌ NO DESPERDICIES:</span>En combate normal donde puedes mantener posición.</div>
       </div>
-      <div class="rating"><span class="rating-label">IMPACTO EN RAIDS:</span><span class="stars">★☆☆☆☆</span></div>
     </div>
-  </div>
-
-  <!-- RESUMEN RÁPIDO -->
-  <div class="section-header">
-    <span class="section-icon">⚡</span>
-    <span class="section-title">Resumen de Uso Real</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div style="background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:20px;">
-    <table style="width:100%;border-collapse:collapse;font-size:13px;">
-      <thead>
-        <tr>
-          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Skill</th>
-          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Solo</th>
-          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Dungeon</th>
-          <th style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Raid</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">🛡️ Feint</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Raramente</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Pulls grandes</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Prioritario</td></tr>
-        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">🧭 True North</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">No</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Si boss se mueve</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Mecánicas</td></tr>
-        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">💚 Second Wind</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Muy útil</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Emergencias</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Pre-mecánica</td></tr>
-        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">🩸 Bloodbath</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#a5d6a7">⭐ Útil</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">En pulls AoE</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Durante burst</td></tr>
-        <tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">✋ Arm's Length</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Raramente</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Knockback mecánicas</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">Situacional</td></tr>
-        <tr><td style="padding:8px 12px">🦵 Leg Sweep</td><td style="padding:8px 12px">Stuneable mobs</td><td style="padding:8px 12px">Adds stuneables</td><td style="padding:8px 12px;color:#ef9a9a">❌ Inútil</td></tr>
-      </tbody>
-    </table>
   </div>
 
   <footer>
     <div style="font-size:22px;margin-bottom:6px">🎭</div>
-    Módulo 05 · Role Actions · Patch 7.5<br>
-    <a href="index.html" style="color:var(--gold);text-decoration:none;margin-top:6px;display:inline-block">← Volver al Hub</a>
+    Módulo 05 · Habilidades & Role Actions · Patch 7.5
   </footer>
 </div>
+
 <nav class="bottom-nav">
   <a href="04-gear.html" class="nav-btn">◀ Anterior</a>
   <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
   <a href="06-errores.html" class="nav-btn">Siguiente ▶</a>
 </nav>
+
+<script>
+var SKILLS = {
+  "lifesurge":6,"jump":30,"elusive":35,"glide":45,"dfd":50,
+  "litany":52,"lance":64,"mirage":68,
+  "legsweep":10,"bloodbath":12,"secondwind":8,"arms":32,
+  "feint":22,"truenorth":50
+};
+var QUESTS = {
+  "jump":"Quest: Eye of the Dragon — Ywain, Old Gridania (Lv30)",
+  "elusive":"Quest: Lance of Fury — Alberic, Coerthas (Lv35)",
+  "glide":"Quest: Fatal Seduction — Alberic, Coerthas (Lv45)",
+  "dfd":"Quest: Into the Dragons Maw — Alberic, Coerthas (Lv50)",
+  "litany":"Quest: Days of Azure — Alberic, Coerthas (Lv52)"
+};
+var AUTO = {
+  "legsweep":"Automatico Lv10","bloodbath":"Automatico Lv12",
+  "secondwind":"Automatico Lv8","arms":"Automatico Lv32",
+  "feint":"Automatico Lv22","truenorth":"Automatico Lv50",
+  "lance":"Automatico Lv64","mirage":"Automatico Lv68",
+  "lifesurge":"Automatico Lv6"
+};
+function applyFilter(lvl) {
+  lvl = parseInt(lvl);
+  document.getElementById("filterSlider").value = lvl;
+  document.getElementById("filterDisplay").textContent = "Lv" + lvl;
+  Object.keys(SKILLS).forEach(function(id) {
+    var reqLvl = SKILLS[id];
+    var badge = document.getElementById("badge-" + id);
+    var howEl = document.getElementById("how-" + id);
+    if (!badge) return;
+    var card = badge.closest(".skill-card");
+    if (!card) return;
+    var base = card.className.replace(/state-[a-z]+/g, "").trim();
+    var diff = reqLvl - lvl;
+    if (lvl >= reqLvl) {
+      card.className = base + " state-have";
+      badge.className = "state-badge sb-have";
+      badge.textContent = "Tienes";
+      if (howEl) { howEl.className = "sk-how have"; howEl.textContent = "Ya disponible"; }
+    } else if (diff <= 5) {
+      card.className = base + " state-next";
+      badge.className = "state-badge sb-next";
+      badge.textContent = "Pronto Lv" + reqLvl;
+      if (howEl) {
+        howEl.className = "sk-how unlock";
+        howEl.textContent = "Desbloqueo: " + (QUESTS[id] || AUTO[id] || "Lv" + reqLvl);
+      }
+    } else {
+      card.className = base + " state-locked";
+      badge.className = "state-badge sb-locked";
+      badge.textContent = "Lv" + reqLvl;
+      if (howEl) {
+        howEl.className = "sk-how locked";
+        howEl.textContent = "Bloqueado: " + (QUESTS[id] || AUTO[id] || "Lv" + reqLvl);
+      }
+    }
+  });
+}
+document.getElementById("filterSlider").addEventListener("input", function() { applyFilter(this.value); });
+var saved = sessionStorage.getItem("drg_lvl");
+applyFilter(saved ? parseInt(saved) : 32);
+</script>
 </body>
 </html>
