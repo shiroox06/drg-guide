@@ -115,8 +115,8 @@ footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted
 
   <div class="filter-bar">
     <span class="filter-label">🎚️ TU NIVEL:</span>
-    <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="32">
-    <span class="filter-lvl" id="filterDisplay">Lv32</span>
+    <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="1">
+    <span class="filter-lvl" id="filterDisplay">Lv1</span>
     <button class="filter-btn" onclick="applyFilter(100)">VER TODO</button>
   </div>
 
@@ -189,7 +189,7 @@ footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted
       <span class="gear-badge" id="gbadge1">—</span>
     </div>
     <div class="now-box" id="gnow1" style="display:none">
-      <div class="now-title">📍 QUE HACER AHORA (Lv32)</div>
+      <div class="now-title" id="gearNowTitle">📍 QUE HACER AHORA</div>
       <div class="now-item"><span class="now-icon">⚔</span><span>Arma: busca una lanza iLvl 40–50 en el Market Board. Busca "Maiming" o "of Slaying" en el nombre.</span></div>
       <div class="now-item"><span class="now-icon">🏰</span><span>Corre Copperbell Mines (Lv17) y Halatali (Lv20) — los drops te duran hasta Lv40.</span></div>
       <div class="now-item"><span class="now-icon">🎁</span><span>La quest de job Lv45 ("Double Dragoon") te da el Drachen Armor set gratis — no compres armor antes de eso.</span></div>
@@ -359,7 +359,7 @@ function applyFilter(lvl) {
       card.className = base + " g-current";
       badge.className = "gear-badge gb-current";
       badge.textContent = "Tu etapa";
-      if (nowBox) nowBox.style.display = "block";
+      if (nowBox) { nowBox.style.display = "block"; var t = nowBox.querySelector('[id=gearNowTitle]'); if(t) t.textContent = '📍 QUE HACER AHORA (Lv'+lvl+')'; }
     } else if (lvl > c.max) {
       card.className = base + " g-done";
       badge.className = "gear-badge gb-done";
@@ -376,7 +376,7 @@ function applyFilter(lvl) {
 
 document.getElementById("filterSlider").addEventListener("input", function() { applyFilter(this.value); });
 var saved = sessionStorage.getItem("drg_lvl");
-applyFilter(saved ? parseInt(saved) : 32);
+applyFilter(saved ? parseInt(saved) : 1);
 </script>
 </body>
 </html>

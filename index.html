@@ -109,46 +109,99 @@ footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted
   <div class="tracker-grid">
     <div class="tracker-field">
       <label>NIVEL DE PERSONAJE</label>
-      <div class="lvl-display" id="lvlDisplay">32</div>
-      <input type="range" class="lvl-slider" id="lvlSlider" min="1" max="100" value="32">
+      <div class="lvl-display" id="lvlDisplay">1</div>
+      <input type="range" class="lvl-slider" id="lvlSlider" min="1" max="100" value="1">
     </div>
     <div class="tracker-field">
       <label>ÚLTIMA MSQ COMPLETADA</label>
       <select class="msq-select" id="msqSelect">
-        <option value="0">— Selecciona —</option>
-        <option value="10">A Realm Reborn inicio</option>
-        <option value="20" selected>Sylph-management ✅</option>
-        <option value="30">The Company You Keep</option>
-        <option value="35">Ultima Weapon</option>
-        <option value="50">Through the Maelstrom (Lv50)</option>
-        <option value="53">Before the Dawn (HW unlock)</option>
-        <option value="60">Heavensward completa</option>
-        <option value="63">Stormblood unlock</option>
-        <option value="70">Stormblood completa</option>
-        <option value="73">Shadowbringers unlock</option>
-        <option value="80">Shadowbringers completa</option>
-        <option value="83">Endwalker unlock</option>
-        <option value="90">Endwalker completa</option>
-        <option value="93">Dawntrail unlock</option>
-        <option value="100">Dawntrail completa</option>
+        <option value="0" selected>— Selecciona —</option>
+        <!-- A REALM REBORN -->
+        <optgroup label="⚔ A Realm Reborn">
+          <option value="1">Lv1 — The Ul'dah Envoys / primeras quests</option>
+          <option value="5">Lv5 — Coming to Gridania</option>
+          <option value="10">Lv10 — The Gridanian Envoy</option>
+          <option value="15">Lv15 — The Lancer's Guild (Gridania)</option>
+          <option value="17">Lv17 — Sastasha desbloqueado</option>
+          <option value="20">Lv20 — Sylph-management</option>
+          <option value="24">Lv24 — A Bad Bladder</option>
+          <option value="28">Lv28 — Haukke Manor desbloqueado</option>
+          <option value="30">Lv30 — Proof of Might (Lancer Lv30)</option>
+          <option value="32">Lv32 — A Hero in the Making</option>
+          <option value="35">Lv35 — Lord of the Inferno (Ifrit)</option>
+          <option value="38">Lv38 — Lord of Crags (Titan desbloqueado)</option>
+          <option value="41">Lv41 — The Navel desbloqueado</option>
+          <option value="44">Lv44 — The Howling Eye (Garuda)</option>
+          <option value="47">Lv47 — The Praetorium desbloqueado</option>
+          <option value="50">Lv50 — Ultima Weapon / ARR completa</option>
+        </optgroup>
+        <!-- POST-ARR -->
+        <optgroup label="📜 Post-ARR (Lv50 patches)">
+          <option value="51">Lv50 — Through the Maelstrom (2.1)</option>
+          <option value="52">Lv50 — Defenders of Eorzea (2.3)</option>
+          <option value="53">Lv50 — Before the Dawn (2.5) — HW unlock</option>
+        </optgroup>
+        <!-- HEAVENSWARD -->
+        <optgroup label="🏔 Heavensward">
+          <option value="55">Lv55 — As Goes Light, So Goes Darkness</option>
+          <option value="57">Lv57 — Heavensward inicio (Lv53+)</option>
+          <option value="60">Lv60 — Heavensward completa</option>
+        </optgroup>
+        <!-- POST-HW -->
+        <optgroup label="📜 Post-Heavensward">
+          <option value="61">Lv60 — Revenge of the Horde (3.3) — SB unlock</option>
+        </optgroup>
+        <!-- STORMBLOOD -->
+        <optgroup label="🌊 Stormblood">
+          <option value="63">Lv63 — Stormblood inicio (Lv60+)</option>
+          <option value="67">Lv67 — The Far Edge of Fate</option>
+          <option value="70">Lv70 — Stormblood completa</option>
+        </optgroup>
+        <!-- POST-SB -->
+        <optgroup label="📜 Post-Stormblood">
+          <option value="71">Lv70 — Shadowbringers unlock (4.5)</option>
+        </optgroup>
+        <!-- SHADOWBRINGERS -->
+        <optgroup label="🌑 Shadowbringers">
+          <option value="73">Lv73 — Shadowbringers inicio (Lv70+)</option>
+          <option value="77">Lv77 — Death Unto Dawn</option>
+          <option value="80">Lv80 — Shadowbringers completa</option>
+        </optgroup>
+        <!-- POST-ShB -->
+        <optgroup label="📜 Post-Shadowbringers">
+          <option value="81">Lv80 — Endwalker unlock (5.5)</option>
+        </optgroup>
+        <!-- ENDWALKER -->
+        <optgroup label="🌌 Endwalker">
+          <option value="83">Lv83 — Endwalker inicio (Lv80+)</option>
+          <option value="87">Lv87 — Endwalker mid</option>
+          <option value="90">Lv90 — Endwalker completa</option>
+        </optgroup>
+        <!-- POST-EW -->
+        <optgroup label="📜 Post-Endwalker">
+          <option value="91">Lv90 — Dawntrail unlock (6.5)</option>
+        </optgroup>
+        <!-- DAWNTRAIL -->
+        <optgroup label="🌅 Dawntrail">
+          <option value="93">Lv93 — Dawntrail inicio (Lv90+)</option>
+          <option value="97">Lv97 — Dawntrail mid</option>
+          <option value="100">Lv100 — Dawntrail completa</option>
+        </optgroup>
       </select>
     </div>
   </div>
   <div class="progress-bar-wrap">
     <div class="progress-bar-label">
       <span>Progreso hacia Lv100</span>
-      <span id="pctLabel">32%</span>
+      <span id="pctLabel">1%</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:32%"></div></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:1%"></div></div>
   </div>
 </div>
 
 <!-- STATUS -->
 <div class="status-bar" id="statusBar">
-  <div class="status-chip active">⚔ Lancer → Dragoon ✅</div>
-  <div class="status-chip done">📜 Eye of the Dragon ✅</div>
-  <div class="status-chip done">📜 Sylph-management ✅</div>
-  <div class="status-chip" id="chipJob">🎯 Nivel: <span id="chipLvl">32</span></div>
+  <div class="status-chip" id="chipJob">🎯 Nivel: <span id="chipLvl">1</span></div>
 </div>
 
 <!-- PRÓXIMO PASO -->

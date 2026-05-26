@@ -2,329 +2,512 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>DRG · Módulo 02 — Leveling</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Crimson Pro',Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(76,195,247,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(124,77,255,0.08) 0%,transparent 50%);pointer-events:none;z-index:0;}
-  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.12) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.4;}
-  .container{max-width:860px;margin:0 auto;padding:0 20px 100px;position:relative;z-index:1;}
-  .nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;transition:opacity 0.2s;}
-  .nav-back:hover{opacity:1;}
-  .page-header{padding:20px 0 30px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:30px;}
-  .module-badge{display:inline-block;background:rgba(79,195,247,0.1);border:1px solid var(--cyan);border-radius:4px;padding:3px 10px;font-family:'Cinzel',serif;font-size:10px;color:var(--cyan);letter-spacing:0.1em;margin-bottom:10px;}
-  .page-title{font-family:'Cinzel',serif;font-size:clamp(22px,5vw,38px);font-weight:900;color:var(--gold);letter-spacing:0.1em;text-shadow:0 0 30px rgba(201,168,76,0.4);}
-  .page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
-  .section-header{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
-  .section-icon{font-size:24px;}
-  .section-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
-  .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
-  .tier-card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden;}
-  .tier-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;}
-  .tier-card.t1::before{background:linear-gradient(180deg,#81c784,#4caf50);}
-  .tier-card.t2::before{background:linear-gradient(180deg,var(--cyan),#0288d1);}
-  .tier-card.t3::before{background:linear-gradient(180deg,var(--gold),#e65100);}
-  .tier-card.t4::before{background:linear-gradient(180deg,#b39ddb,#7c4dff);}
-  .tier-card.t5::before{background:linear-gradient(180deg,#f48fb1,#e91e63);}
-  .tier-header{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
-  .tier-range{font-family:'Cinzel',serif;font-size:13px;font-weight:700;background:rgba(0,0,0,0.3);border-radius:4px;padding:4px 12px;white-space:nowrap;}
-  .tier-title{font-family:'Cinzel',serif;font-size:16px;color:var(--text-main);font-weight:700;}
-  .activity-list{list-style:none;margin-top:8px;}
-  .activity-list li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;line-height:1.5;}
-  .activity-list li:last-child{border-bottom:none;}
-  .act-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center;}
-  .priority{display:inline-block;font-size:10px;font-family:'Cinzel',serif;padding:1px 7px;border-radius:2px;margin-left:6px;vertical-align:middle;}
-  .p-s{background:rgba(239,83,80,0.2);color:#ef9a9a;border:1px solid rgba(239,83,80,0.4);}
-  .p-a{background:rgba(255,167,38,0.2);color:#ffcc80;border:1px solid rgba(255,167,38,0.4);}
-  .p-b{background:rgba(102,187,106,0.2);color:#a5d6a7;border:1px solid rgba(102,187,106,0.4);}
-  .buff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:8px;}
-  .buff-item{background:rgba(13,31,60,0.7);border:1px solid rgba(201,168,76,0.2);border-radius:6px;padding:12px;}
-  .buff-name{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
-  .buff-desc{font-size:12px;color:var(--text-muted);line-height:1.5;}
-  .tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:14px 16px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
-  .tip-text{font-size:14px;line-height:1.6;color:#b3e5fc;}
-  .warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:14px 16px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
-  .warn-text{font-size:14px;line-height:1.6;color:#ffe082;}
-  .daily-routine{background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:20px;margin-top:12px;}
-  .dr-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:0.08em;margin-bottom:14px;}
-  .dr-step{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
-  .dr-step:last-child{border-bottom:none;}
-  .dr-num{background:var(--gold);color:var(--blue-deep);font-family:'Cinzel',serif;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-  .dr-text{font-size:14px;line-height:1.5;}
-  .dr-exp{font-size:12px;color:#a5d6a7;display:block;margin-top:2px;}
-  footer{text-align:center;padding:40px 20px 20px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;}
-  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
-  @media(max-width:600px){.buff-grid{grid-template-columns:1fr;}}
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(76,195,247,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(124,77,255,0.08) 0%,transparent 50%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.12) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.4;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(79,195,247,0.1);border:1px solid var(--cyan);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--cyan);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
 
+/* FILTER */
+.filter-bar{background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.filter-label{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;flex-shrink:0;}
+.filter-slider{flex:1;min-width:160px;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;}
+.filter-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cyan);cursor:pointer;border:2px solid var(--blue-deep);box-shadow:0 0 8px rgba(79,195,247,0.5);}
+.filter-lvl{font-family:"Cinzel",serif;font-size:15px;font-weight:700;color:var(--cyan);min-width:44px;text-align:right;}
+.filter-btn{background:rgba(201,168,76,0.15);border:1px solid var(--gold);border-radius:4px;padding:5px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);cursor:pointer;letter-spacing:0.06em;}
+
+/* LEGEND */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;font-family:"Cinzel",serif;}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+
+/* TIER CARDS */
+.tier-card{border-radius:8px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;transition:all 0.4s;}
+.tier-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
+.tier-card.t-current{background:var(--card-bg);border:1px solid rgba(79,195,247,0.4);box-shadow:0 0 20px rgba(79,195,247,0.07);}
+.tier-card.t-current::before{background:var(--cyan);animation:pulse-bar 2s infinite;}
+.tier-card.t-done{background:rgba(13,31,60,0.5);border:1px solid rgba(129,199,132,0.2);opacity:0.65;}
+.tier-card.t-done::before{background:var(--green);}
+.tier-card.t-locked{background:rgba(13,31,60,0.3);border:1px solid rgba(255,255,255,0.05);opacity:0.3;pointer-events:none;}
+.tier-card.t-locked::before{background:#444;}
+@keyframes pulse-bar{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.tier-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.tier-range{font-family:"Cinzel",serif;font-size:11px;padding:3px 10px;border-radius:4px;white-space:nowrap;letter-spacing:0.06em;}
+.tier-title{font-family:"Cinzel",serif;font-size:15px;font-weight:700;color:var(--text-main);flex:1;}
+.tier-badge{font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:10px;}
+.tb-current{background:rgba(79,195,247,0.2);border:1px solid var(--cyan);color:#b3e5fc;}
+.tb-done{background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;}
+.tb-locked{background:rgba(80,80,80,0.2);border:1px solid #555;color:#777;}
+
+/* NOW BOX */
+.now-box{background:rgba(79,195,247,0.07);border:1px solid rgba(79,195,247,0.35);border-radius:6px;padding:12px 14px;margin-bottom:14px;}
+.now-title{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;margin-bottom:8px;}
+
+/* ACTIVITY LIST */
+.activity-list{list-style:none;}
+.activity-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5;}
+.activity-list li:last-child{border-bottom:none;}
+.act-icon{font-size:17px;flex-shrink:0;width:22px;text-align:center;margin-top:1px;}
+.priority{display:inline-block;font-size:10px;font-family:"Cinzel",serif;padding:1px 6px;border-radius:2px;margin-left:5px;vertical-align:middle;}
+.p-s{background:rgba(239,83,80,0.2);color:#ef9a9a;border:1px solid rgba(239,83,80,0.4);}
+.p-a{background:rgba(255,167,38,0.2);color:#ffcc80;border:1px solid rgba(255,167,38,0.4);}
+.p-b{background:rgba(102,187,106,0.2);color:#a5d6a7;border:1px solid rgba(102,187,106,0.4);}
+.p-c{background:rgba(150,150,150,0.2);color:#bbb;border:1px solid rgba(150,150,150,0.3);}
+
+/* ROULETTE TABLE */
+.rou-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+.rou-table th{font-family:"Cinzel",serif;font-size:11px;letter-spacing:0.06em;color:var(--gold);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2);}
+.rou-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:middle;font-size:13px;}
+.rou-table tr.available td{opacity:1;}
+.rou-table tr.locked-rou td{opacity:0.3;}
+.rou-avail{font-family:"Cinzel",serif;font-size:10px;padding:2px 7px;border-radius:3px;}
+.ra-yes{background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;}
+.ra-no{background:rgba(80,80,80,0.2);border:1px solid #555;color:#777;}
+
+/* BUFF GRID */
+.buff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:8px;}
+.buff-item{background:rgba(13,31,60,0.7);border:1px solid rgba(201,168,76,0.2);border-radius:6px;padding:12px;}
+.buff-name{font-family:"Cinzel",serif;font-size:12px;color:var(--gold);margin-bottom:4px;}
+.buff-desc{font-size:12px;color:var(--text-muted);line-height:1.5;}
+.buff-val{display:inline-block;font-family:"Cinzel",serif;font-size:11px;font-weight:700;color:var(--cyan);margin-right:4px;}
+
+/* DAILY ROUTINE */
+.routine-box{background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:18px;}
+.routine-title{font-family:"Cinzel",serif;font-size:12px;color:var(--gold);letter-spacing:0.08em;margin-bottom:14px;}
+.routine-step{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.routine-step:last-child{border-bottom:none;}
+.rs-num{background:var(--gold);color:var(--blue-deep);font-family:"Cinzel",serif;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.rs-text{font-size:13px;line-height:1.5;}
+.rs-exp{font-size:11px;color:#a5d6a7;display:block;margin-top:2px;}
+
+/* PS5 BOX */
+.ps5-box{background:rgba(0,61,127,0.3);border:1px solid rgba(79,195,247,0.4);border-radius:8px;padding:16px;margin-bottom:16px;}
+.ps5-title{font-family:"Cinzel",serif;font-size:12px;color:var(--cyan);letter-spacing:0.08em;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.ps5-item{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid rgba(79,195,247,0.1);font-size:13px;line-height:1.5;}
+.ps5-item:last-child{border-bottom:none;}
+.ps5-icon{font-size:16px;flex-shrink:0;}
+
+/* TIP/WARN */
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-text{font-size:13px;line-height:1.6;color:#ffe082;}
+
+/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
-.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;-webkit-tap-highlight-color:transparent;text-align:center;}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
 .nav-btn:active{background:rgba(201,168,76,0.15);}
 .nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
 
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.buff-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
 <div class="container">
   <a href="index.html" class="nav-back">← Volver al Hub</a>
-
   <div class="page-header">
     <div class="module-badge">MÓDULO 02</div>
     <h1 class="page-title">⚡ Leveling Eficiente</h1>
-    <p class="page-sub">Las mejores actividades por rango de nivel para subir Dragoon lo más rápido posible. Actualizado al Patch 7.5.</p>
+    <p class="page-sub">Actividades por rango de nivel, roulettes disponibles según tu progreso, buffs de EXP y rutina diaria adaptada. Patch 7.5.</p>
   </div>
 
-  <!-- BUFFS ACUMULABLES -->
+  <div class="filter-bar">
+    <span class="filter-label">🎚️ TU NIVEL:</span>
+    <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="1">
+    <span class="filter-lvl" id="filterDisplay">Lv1</span>
+    <button class="filter-btn" onclick="applyFilter(100)">VER TODO</button>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--cyan)"></div><span style="color:#b3e5fc">Tu rango actual</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div><span style="color:#c8e6c9">Ya superado</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#444"></div><span style="color:var(--text-muted)">Bloqueado</span></div>
+  </div>
+
+  <!-- PS5 SECTION -->
+  <div class="section-header">
+    <span class="section-icon">🎮</span>
+    <span class="section-title">Notas para PS5</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="ps5-box">
+    <div class="ps5-title">🎮 JUGANDO EN PS5 — Lo que cambia</div>
+    <div class="ps5-item"><span class="ps5-icon">⏱️</span><span><strong>Colas de DPS son largas</strong> — 10–25 min en dungeons normales. Palace of the Dead y Heaven-on-High no tienen cola de matchmaking: entras directo. Priorízalos cuando no quieras esperar.</span></div>
+    <div class="ps5-item"><span class="ps5-icon">🎯</span><span><strong>Duty Finder vs. Duty Support</strong> — Duty Support te permite entrar con NPCs en cualquier dungeon del MSQ sin esperar cola. EXP algo menor pero sin tiempos de espera.</span></div>
+    <div class="ps5-item"><span class="ps5-icon">📋</span><span><strong>Challenge Log</strong> — Está en el menú Challenges (Duty > Challenge Log). Revísalo cada semana — da EXP bonus por metas simples como completar 3 dungeons o 5 FATEs.</span></div>
+    <div class="ps5-item"><span class="ps5-icon">🌙</span><span><strong>Rested EXP</strong> — Antes de apagar la PS5, deja al personaje en un Inn (posada). La barra de Rested EXP se acumula mientras el juego está cerrado.</span></div>
+    <div class="ps5-item"><span class="ps5-icon">🔄</span><span><strong>Roulette reset diario</strong> — A las 12:00 AM hora del servidor (JST). El juego te muestra la hora local en Settings. Planifica tu sesión justo después del reset para sacarle máximo partido.</span></div>
+  </div>
+
+  <!-- BUFFS -->
   <div class="section-header">
     <span class="section-icon">✨</span>
-    <span class="section-title">Buffs de EXP — Apílalos Siempre</span>
+    <span class="section-title">Buffs de EXP — Apilar Siempre</span>
     <div class="section-line"></div>
   </div>
 
   <div class="buff-grid">
     <div class="buff-item">
       <div class="buff-name">🍖 Meal / Comida</div>
-      <div class="buff-desc">+3% EXP por 30 min. Cualquier comida sirve. Prioridad máxima — costo mínimo.</div>
+      <div class="buff-desc"><span class="buff-val">+3%</span>EXP por 30 min. Cualquier comida sirve. Costo mínimo en Market Board.</div>
     </div>
     <div class="buff-item">
       <div class="buff-name">😴 Rested EXP</div>
-      <div class="buff-desc">+50% EXP en combate. Se acumula durmiendo en inns o ciudades (ícono de luna). Úsalo antes de grindear.</div>
+      <div class="buff-desc"><span class="buff-val">+50%</span>EXP en combate. Se acumula en Inns o ciudades. Deja el personaje en Inn al cerrar.</div>
     </div>
     <div class="buff-item">
       <div class="buff-name">⚔ Armoury Bonus</div>
-      <div class="buff-desc">+100% EXP hasta Lv80 si tienes OTRO job al mismo nivel o mayor. Pasivo automático.</div>
+      <div class="buff-desc"><span class="buff-val">+100%</span>hasta Lv80 si tienes otro job al mismo nivel o mayor. Pasivo automático.</div>
     </div>
     <div class="buff-item">
       <div class="buff-name">🏰 FC Heat of Battle</div>
-      <div class="buff-desc">Free Company action +10-15% EXP en combate. Requiere estar en una Free Company activa.</div>
+      <div class="buff-desc"><span class="buff-val">+10–15%</span>EXP en combate. Requiere Free Company activa con el buff activo.</div>
     </div>
     <div class="buff-item">
       <div class="buff-name">🎫 Road to 100</div>
-      <div class="buff-desc">Buff de servidores nuevos o "preferred". +100% EXP total. Si estás en uno, es enorme.</div>
+      <div class="buff-desc"><span class="buff-val">+100%</span>EXP total. Solo en servidores "Preferred". Si estás en uno, es enorme.</div>
     </div>
     <div class="buff-item">
-      <div class="buff-name">🌟 Amaro Mount</div>
-      <div class="buff-desc">+3% EXP extra. Requiere completar una expansión, no relevante ahora pero útil a futuro.</div>
+      <div class="buff-name">📖 MSQ Bonus</div>
+      <div class="buff-desc"><span class="buff-val">Variable</span>Las quests del MSQ dan EXP masiva, especialmente las de expansión. No saltes ninguna.</div>
     </div>
   </div>
 
   <div class="tip-box">
-    <span style="font-size:18px;flex-shrink:0">💡</span>
-    <span class="tip-text"><strong>Stack ideal:</strong> Meal + Rested EXP + Armoury Bonus + FC buff. Con todo activo puedes estar sacando 250%+ EXP por actividad. Lo más fácil de mantener es la comida — siempre antes de la cola.</span>
+    <span style="font-size:16px;flex-shrink:0">💡</span>
+    <span class="tip-text"><strong>Stack ideal:</strong> Meal + Rested EXP + Armoury Bonus. Con los tres activos puedes estar sacando 250%+ EXP. La comida es lo más fácil — siempre antes de cualquier actividad.</span>
+  </div>
+
+  <!-- ROULETTES DISPONIBLES -->
+  <div class="section-header">
+    <span class="section-icon">🔄</span>
+    <span class="section-title">Duty Roulettes Disponibles</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:16px;margin-bottom:16px;">
+    <table class="rou-table" id="rouTable">
+      <thead>
+        <tr><th>Roulette</th><th>Req.</th><th>Estado</th><th>EXP bonus aprox.</th></tr>
+      </thead>
+      <tbody id="rouTableBody"></tbody>
+    </table>
+    <div class="tip-box" style="margin-top:12px">
+      <span style="font-size:16px;flex-shrink:0">⚡</span>
+      <span class="tip-text">Haz <strong>todas las disponibles</strong> cada día. Cada roulette tiene su propio bonus diario independiente. La de Leveling es siempre la primera prioridad.</span>
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES POR RANGO -->
+  <div class="section-header">
+    <span class="section-icon">🗺️</span>
+    <span class="section-title">Actividades por Rango de Nivel</span>
+    <div class="section-line"></div>
   </div>
 
   <!-- LV 1-30 -->
-  <div class="section-header">
-    <span class="section-icon">🌱</span>
-    <span class="section-title">Niveles 1–30 · Lancer</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="tier-card t1">
+  <div class="tier-card" id="tier1" data-min="1" data-max="30">
     <div class="tier-header">
-      <span class="tier-range" style="color:#81c784">Lv 1–30</span>
-      <span class="tier-title">Objetivo: Convertirte en Dragoon</span>
+      <span class="tier-range" style="background:rgba(129,199,132,0.15);border:1px solid var(--green);color:#c8e6c9">Lv 1–30</span>
+      <span class="tier-title">A Realm Reborn — Fase Lancer</span>
+      <span class="tier-badge" id="tbadge1">—</span>
+    </div>
+    <div class="now-box" id="tnow1" style="display:none">
+      <div class="now-title">📍 RECOMENDACIÓN PARA TU NIVEL</div>
+      <div style="font-size:13px;line-height:1.6;">MSQ primero. Mientras esperas cola de Duty Roulette, entra a Palace of the Dead — no tiene matchmaking y da EXP constante. Objetivo: Lv30 para hacer Eye of the Dragon.</div>
     </div>
     <ul class="activity-list">
-      <li>
-        <span class="act-icon">📜</span>
-        <div><strong>MSQ (Main Scenario Quest)</strong> <span class="priority p-s">S · PRIORIDAD</span><br>Si es tu primer job, el MSQ es la fuente principal. Da EXP masiva y desbloquea zonas necesarias. No lo ignores.</div>
-      </li>
-      <li>
-        <span class="act-icon">🔄</span>
-        <div><strong>Duty Roulette: Leveling</strong> <span class="priority p-s">S · DIARIO</span><br>Primera prioridad diaria. Da un bono enorme de EXP una vez por día. Disponible desde Lv16 (Sastasha).</div>
-      </li>
-      <li>
-        <span class="act-icon">🏰</span>
-        <div><strong>Palace of the Dead (PotD) Pisos 1–50</strong> <span class="priority p-a">A</span><br>Abre en Lv17. No depende del equipo. Con grupo de 4 da 200–400k EXP/hora — el mejor grind sub-Lv60 del juego. Ideal para DPS con colas largas.</div>
-      </li>
-      <li>
-        <span class="act-icon">🌊</span>
-        <div><strong>FATEs en zonas de nivel</strong> <span class="priority p-b">B</span><br>Útil mientras esperas cola. Central Shroud / Central Thanalan son las zonas para Lv1–20. Busca trains de FATEs si hay gente.</div>
-      </li>
-      <li>
-        <span class="act-icon">📖</span>
-        <div><strong>Hunting Log de Lancer</strong> <span class="priority p-b">B · UNA VEZ</span><br>Lista de mobs a matar. Se completa una sola vez por clase. Da buena EXP acumulada en los primeros niveles.</div>
-      </li>
+      <li><span class="act-icon">📜</span><div><strong>MSQ</strong><span class="priority p-s">S</span> — Prioridad máxima. Da EXP masiva y desbloquea zonas necesarias.</div></li>
+      <li><span class="act-icon">🔄</span><div><strong>Duty Roulette: Leveling</strong><span class="priority p-s">S · DIARIO</span> — Bono enorme una vez por día. Disponible desde Lv16 (Sastasha).</div></li>
+      <li><span class="act-icon">🏰</span><div><strong>Palace of the Dead Pisos 1–50</strong><span class="priority p-a">A</span> — Sin cola de matchmaking en PS5. Entra directo, excelente EXP/hora para DPS.</div></li>
+      <li><span class="act-icon">🌊</span><div><strong>FATEs en zona de nivel</strong><span class="priority p-b">B</span> — Central Shroud / Central Thanalan. Útil mientras esperas roulette.</div></li>
+      <li><span class="act-icon">📖</span><div><strong>Hunting Log de Lancer</strong><span class="priority p-b">B · UNA VEZ</span> — Lista de mobs que se completa una sola vez. Buena EXP acumulada.</div></li>
     </ul>
-    <div class="warn-box" style="margin-top:12px">
-      <span style="font-size:18px;flex-shrink:0">⚠️</span>
-      <span class="warn-text">Como DPS tendrás colas de 10–20 min en dungeons. PotD es tu mejor alternativa — entra, grindea pisos mientras esperas la roulette.</span>
+    <div class="warn-box" style="margin-top:10px">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <span class="warn-text">Como DPS en PS5 las colas son 10–20 min. PotD es tu mejor alternativa — sin espera, sin depender de party.</span>
     </div>
   </div>
 
-  <!-- LV 30-60 -->
-  <div class="section-header">
-    <span class="section-icon">🐲</span>
-    <span class="section-title">Niveles 30–60 · Dragoon</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="tier-card t2">
+  <!-- LV 31-50 -->
+  <div class="tier-card" id="tier2" data-min="31" data-max="50">
     <div class="tier-header">
-      <span class="tier-range" style="color:var(--cyan)">Lv 30–60</span>
-      <span class="tier-title">A Realm Reborn → Heavensward</span>
+      <span class="tier-range" style="background:rgba(79,195,247,0.15);border:1px solid var(--cyan);color:#b3e5fc">Lv 31–50</span>
+      <span class="tier-title">A Realm Reborn — Dragoon</span>
+      <span class="tier-badge" id="tbadge2">—</span>
+    </div>
+    <div class="now-box" id="tnow2" style="display:none">
+      <div class="now-title">📍 RECOMENDACIÓN PARA TU NIVEL</div>
+      <div style="font-size:13px;line-height:1.6;">Estás aquí. MSQ continúa siendo prioritario — necesitas avanzarlo para desbloquear Heavensward. Roulette diaria + Palace of the Dead para rellenar el tiempo de espera.</div>
     </div>
     <ul class="activity-list">
-      <li>
-        <span class="act-icon">🔄</span>
-        <div><strong>Duty Roulette: Leveling + Low Level</strong> <span class="priority p-s">S · DIARIO</span><br>Sigue siendo tu prioridad número uno. El bono diario es desproporcionadamente alto vs el tiempo que toma.</div>
-      </li>
-      <li>
-        <span class="act-icon">🏰</span>
-        <div><strong>Palace of the Dead Pisos 51–60</strong> <span class="priority p-a">A</span><br>La zona de grind más eficiente de este rango. Aún funciona bien y no hay colas.</div>
-      </li>
-      <li>
-        <span class="act-icon">📜</span>
-        <div><strong>MSQ continuo</strong> <span class="priority p-s">S</span><br>Necesitas avanzar el MSQ para desbloquear Heavensward (Lv50+). Sin MSQ no puedes entrar a las zonas del rango siguiente.</div>
-      </li>
-      <li>
-        <span class="act-icon">🗡️</span>
-        <div><strong>Clan Hunts (Billboards de Caza)</strong> <span class="priority p-b">B</span><br>Disponible desde Lv17. Mata mobs específicos marcados en el mapa. Buena EXP de relleno entre roulettes.</div>
-      </li>
-      <li>
-        <span class="act-icon">📋</span>
-        <div><strong>Challenge Log semanal</strong> <span class="priority p-b">B · SEMANAL</span><br>Objetivos como "completar X dungeons" o "hacer X FATEs". Da EXP bonus al completarlos. Fácil de ignorar, no debería serlo.</div>
-      </li>
+      <li><span class="act-icon">📜</span><div><strong>MSQ</strong><span class="priority p-s">S</span> — Necesitas completarlo para desbloquear Heavensward (Lv50+). No lo ignores.</div></li>
+      <li><span class="act-icon">🔄</span><div><strong>Duty Roulette: Leveling + Low Level</strong><span class="priority p-s">S · DIARIO</span> — Ambas disponibles. Bono diario separado por cada una.</div></li>
+      <li><span class="act-icon">🏰</span><div><strong>Palace of the Dead Pisos 51–60</strong><span class="priority p-a">A</span> — La zona de grind más eficiente del rango. Sin cola, sin gear requerido.</div></li>
+      <li><span class="act-icon">🗡️</span><div><strong>Clan Hunts</strong><span class="priority p-b">B</span> — Billboards de caza en cada ciudad. Mata mobs marcados en el mapa.</div></li>
+      <li><span class="act-icon">📋</span><div><strong>Challenge Log semanal</strong><span class="priority p-b">B · SEMANAL</span> — Duty > Challenge Log. EXP bonus por metas simples.</div></li>
+    </ul>
+    <div class="tip-box" style="margin-top:10px">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span class="tip-text">Al llegar a Lv50 cap: canjea <strong>Tomestones of Poetics</strong> en Revenant Toll (Mor Dhona) antes de seguir. Te da gear iLvl90 para entrar bien a Heavensward.</span>
+    </div>
+  </div>
+
+  <!-- LV 51-60 -->
+  <div class="tier-card" id="tier3" data-min="51" data-max="60">
+    <div class="tier-header">
+      <span class="tier-range" style="background:rgba(201,168,76,0.15);border:1px solid var(--gold);color:var(--gold-light)">Lv 51–60</span>
+      <span class="tier-title">Heavensward</span>
+      <span class="tier-badge" id="tbadge3">—</span>
+    </div>
+    <div class="now-box" id="tnow3" style="display:none">
+      <div class="now-title">📍 RECOMENDACIÓN PARA TU NIVEL</div>
+      <div style="font-size:13px;line-height:1.6;">Roulettes primero cada día. PotD sigue siendo eficiente hasta Lv60. Completa las job quests de Alberic al llegar a cada nivel — desbloquean Battle Litany (Lv52) y Geirskogul (Lv60).</div>
+    </div>
+    <ul class="activity-list">
+      <li><span class="act-icon">🔄</span><div><strong>Roulette: Leveling + Low Level + Trials</strong><span class="priority p-s">S · DIARIO</span> — Trials disponible desde Lv50. Haz las 3 diariamente.</div></li>
+      <li><span class="act-icon">🏰</span><div><strong>Palace of the Dead Pisos 61–100</strong><span class="priority p-a">A</span> — Sigue siendo la opción más eficiente sin cola.</div></li>
+      <li><span class="act-icon">📜</span><div><strong>MSQ de Heavensward</strong><span class="priority p-s">S</span> — Necesitas completarlo para acceder a Stormblood.</div></li>
+      <li><span class="act-icon">🌿</span><div><strong>Beast Tribes: Vath / Moogle</strong><span class="priority p-b">B · DIARIO</span> — 3 quests por tribu por día. EXP de relleno fácil.</div></li>
     </ul>
   </div>
 
-  <!-- LV 60-80 -->
-  <div class="section-header">
-    <span class="section-icon">🔮</span>
-    <span class="section-title">Niveles 60–80 · Heavensward → Shadowbringers</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="tier-card t3">
+  <!-- LV 61-80 -->
+  <div class="tier-card" id="tier4" data-min="61" data-max="80">
     <div class="tier-header">
-      <span class="tier-range" style="color:var(--gold)">Lv 60–80</span>
-      <span class="tier-title">La zona más difícil para DPS</span>
+      <span class="tier-range" style="background:rgba(179,157,219,0.15);border:1px solid var(--purple);color:#ede7f6">Lv 61–80</span>
+      <span class="tier-title">Stormblood + Shadowbringers</span>
+      <span class="tier-badge" id="tbadge4">—</span>
+    </div>
+    <div class="now-box" id="tnow4" style="display:none">
+      <div class="now-title">📍 RECOMENDACIÓN PARA TU NIVEL</div>
+      <div style="font-size:13px;line-height:1.6;">Todas las roulettes disponibles cada día. Heaven-on-High reemplaza a PotD a partir de Lv61. Bozja (Lv71+) es excelente para el tramo final hacia Lv80.</div>
     </div>
     <ul class="activity-list">
-      <li>
-        <span class="act-icon">🔄</span>
-        <div><strong>Duty Roulette: Leveling + 50/60/70</strong> <span class="priority p-s">S · DIARIO</span><br>Ahora tienes más roulettes disponibles. Haz todas las que puedas por día — cada una da bono de EXP separado.</div>
-      </li>
-      <li>
-        <span class="act-icon">🏯</span>
-        <div><strong>Heaven-on-High (HoH) Pisos 21–30</strong> <span class="priority p-a">A · Lv61+</span><br>Equivalente de PotD para este rango. Disponible desde Ruby Sea (MSQ Stormblood). Excelente para DPS.</div>
-      </li>
-      <li>
-        <span class="act-icon">⚔</span>
-        <div><strong>Bozjan Southern Front</strong> <span class="priority p-a">A · Lv71+</span><br>Zona de campo de batalla. Excelente EXP Lv71–80 y das con un stream de contenido que no se siente como grind puro.</div>
-      </li>
-      <li>
-        <span class="act-icon">🌿</span>
-        <div><strong>Beast Tribe Quests</strong> <span class="priority p-b">B · DIARIO</span><br>3 quests por tribu por día. No son masivas pero suman. Namazu (Lv60), Pixie (Lv70) son las de este rango.</div>
-      </li>
+      <li><span class="act-icon">🔄</span><div><strong>Todas las Roulettes disponibles</strong><span class="priority p-s">S · DIARIO</span> — Leveling, Low Level, Alliance Raids, Trials, Normal Raids. Máximo diario.</div></li>
+      <li><span class="act-icon">🏯</span><div><strong>Heaven-on-High Pisos 21–30</strong><span class="priority p-a">A · Lv61+</span> — Deep dungeon para este rango. Sin cola, acceso directo desde Ruby Sea.</div></li>
+      <li><span class="act-icon">⚔</span><div><strong>Bozjan Southern Front</strong><span class="priority p-a">A · Lv71+</span> — Zona de campo de batalla. Excelente EXP Lv71–80, no se siente como grind puro.</div></li>
+      <li><span class="act-icon">🌿</span><div><strong>Beast Tribes: Namazu (Lv60) / Pixie (Lv70)</strong><span class="priority p-b">B · DIARIO</span> — 50–100k EXP por tribu por día.</div></li>
+      <li><span class="act-icon">📋</span><div><strong>Challenge Log</strong><span class="priority p-b">B · SEMANAL</span> — Revísalo cada semana sin excepción.</div></li>
     </ul>
-    <div class="tip-box" style="margin-top:12px">
-      <span style="font-size:18px;flex-shrink:0">💡</span>
-      <span class="tip-text">El rango 70–80 tiene fama de ser lento para DPS. Combina Bozja + roulettes diarias + HoH y el ritmo se mantiene aceptable.</span>
+    <div class="warn-box" style="margin-top:10px">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <span class="warn-text">El tramo 70–80 es el más lento para DPS en PS5. Combina Bozja + roulettes + HoH para mantener ritmo aceptable.</span>
     </div>
   </div>
 
-  <!-- LV 80-100 -->
-  <div class="section-header">
-    <span class="section-icon">🌟</span>
-    <span class="section-title">Niveles 80–100 · Endwalker → Dawntrail</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="tier-card t4">
+  <!-- LV 81-100 -->
+  <div class="tier-card" id="tier5" data-min="81" data-max="100">
     <div class="tier-header">
-      <span class="tier-range" style="color:#b39ddb">Lv 80–100</span>
-      <span class="tier-title">El sprint final</span>
+      <span class="tier-range" style="background:rgba(244,143,177,0.15);border:1px solid #f48fb1;color:#fce4ec">Lv 81–100</span>
+      <span class="tier-title">Endwalker + Dawntrail — Sprint final</span>
+      <span class="tier-badge" id="tbadge5">—</span>
+    </div>
+    <div class="now-box" id="tnow5" style="display:none">
+      <div class="now-title">📍 RECOMENDACIÓN PARA TU NIVEL</div>
+      <div style="font-size:13px;line-height:1.6;">MSQ de Dawntrail te lleva a Lv100 si lo sigues completo. Eureka Orthos es el deep dungeon de este rango. Todas las roulettes diarias sin excepción.</div>
     </div>
     <ul class="activity-list">
-      <li>
-        <span class="act-icon">🔄</span>
-        <div><strong>Todas las Duty Roulettes disponibles</strong> <span class="priority p-s">S · DIARIO</span><br>A este nivel tienes: Leveling, Alliance Raids, Normal Raids, Trials, Expert. Haz todas las que puedas cada día reset.</div>
-      </li>
-      <li>
-        <span class="act-icon">🏯</span>
-        <div><strong>Eureka Orthos Pisos 1–30</strong> <span class="priority p-a">A · Lv81+</span><br>Deep dungeon de Endwalker. El método más rápido para Lv81–90 en alt jobs. No requiere gear externo.</div>
-      </li>
-      <li>
-        <span class="act-icon">🌊</span>
-        <div><strong>Dungeons de Dawntrail (el más alto posible)</strong> <span class="priority p-a">A · Lv90+</span><br>Para Lv90–100 el dungeon más alto que puedas entrar da la mejor EXP. Corre en party o con Duty Support (NPCs).</div>
-      </li>
-      <li>
-        <span class="act-icon">🌿</span>
-        <div><strong>Beast Tribes de Endwalker/Dawntrail</strong> <span class="priority p-b">B · DIARIO</span><br>Loporrits (Lv80), Omicrons (Lv85), Pelupelu (Lv90+, Dawntrail). 50–150k EXP diaria por tribu.</div>
-      </li>
+      <li><span class="act-icon">📜</span><div><strong>MSQ de Dawntrail</strong><span class="priority p-s">S</span> — Si es tu primer job, el MSQ te lleva directamente a Lv100. Sigue la historia.</div></li>
+      <li><span class="act-icon">🔄</span><div><strong>Todas las Roulettes</strong><span class="priority p-s">S · DIARIO</span> — Leveling, Alliance, Normal Raids, Trials, Expert, Frontline. Máximo posible.</div></li>
+      <li><span class="act-icon">🏯</span><div><strong>Eureka Orthos Pisos 1–30</strong><span class="priority p-a">A · Lv81+</span> — Deep dungeon de Endwalker. Mejor método para Lv81–90 en alt jobs.</div></li>
+      <li><span class="act-icon">🏰</span><div><strong>Dungeons de Dawntrail (el más alto posible)</strong><span class="priority p-a">A · Lv90+</span> — Con Duty Support si no quieres esperar cola.</div></li>
+      <li><span class="act-icon">🌿</span><div><strong>Beast Tribes: Loporrits / Omicrons / Pelupelu</strong><span class="priority p-b">B · DIARIO</span> — 50–150k EXP por tribu.</div></li>
     </ul>
-    <div class="warn-box" style="margin-top:12px">
-      <span style="font-size:18px;flex-shrink:0">⚠️</span>
-      <span class="warn-text">Si es tu primer job llegando a 90, el MSQ de Dawntrail es la ruta más rápida a 100 — sigue la historia y estarás en cap antes de terminarla.</span>
+    <div class="tip-box" style="margin-top:10px">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span class="tip-text">Con Armoury Bonus activo (alt job) y roulettes diarias, el tramo 81–100 toma ~15–20h. Sin Armoury Bonus (primer job) el MSQ lo cubre completamente.</span>
     </div>
   </div>
 
   <!-- RUTINA DIARIA -->
   <div class="section-header">
     <span class="section-icon">📅</span>
-    <span class="section-title">Rutina Diaria Óptima (Cualquier nivel)</span>
+    <span class="section-title">Rutina Diaria</span>
     <div class="section-line"></div>
   </div>
 
-  <div class="daily-routine">
-    <div class="dr-title">🗓️ ORDEN RECOMENDADO CADA DÍA</div>
-    <div class="dr-step">
-      <div class="dr-num">1</div>
-      <div class="dr-text"><strong>Activa todos tus buffs</strong> — Meal + Rested EXP (si tienes). Antes de hacer cualquier cosa.
-        <span class="dr-exp">⚡ +50-100% EXP en todo lo que hagas</span>
-      </div>
-    </div>
-    <div class="dr-step">
-      <div class="dr-num">2</div>
-      <div class="dr-text"><strong>Duty Roulette: Leveling</strong> — Primera actividad del día, siempre.
-        <span class="dr-exp">⚡ ~500k–1.5M EXP con bono (varía por nivel)</span>
-      </div>
-    </div>
-    <div class="dr-step">
-      <div class="dr-num">3</div>
-      <div class="dr-text"><strong>Resto de Roulettes disponibles</strong> — Alliance Raids, Normal Raids, Trials según tu nivel.
-        <span class="dr-exp">⚡ 300k–700k+ EXP por roulette adicional</span>
-      </div>
-    </div>
-    <div class="dr-step">
-      <div class="dr-num">4</div>
-      <div class="dr-text"><strong>Beast Tribe Quests diarias</strong> — Rápidas, 5–10 min por tribu.
-        <span class="dr-exp">⚡ 50–150k EXP por tribu</span>
-      </div>
-    </div>
-    <div class="dr-step">
-      <div class="dr-num">5</div>
-      <div class="dr-text"><strong>MSQ / Deep Dungeon</strong> — Rellena el resto del tiempo con MSQ o PotD/HoH/Orthos según nivel.
-        <span class="dr-exp">⚡ Variable — pero constante</span>
-      </div>
-    </div>
-    <div class="dr-step">
-      <div class="dr-num">6</div>
-      <div class="dr-text"><strong>FATEs o Clan Hunts</strong> — Solo si tienes tiempo y la cola no aparece.
-        <span class="dr-exp">⚡ Relleno — útil pero no prioritario</span>
-      </div>
-    </div>
+  <div class="routine-box" id="routineBox">
+    <div class="routine-title">🗓️ ORDEN ÓPTIMO — <span id="routineTitle">Lv31–50</span></div>
+    <div id="routineSteps"></div>
   </div>
 
-  <div class="tip-box" style="margin-top:20px">
-    <span style="font-size:18px;flex-shrink:0">⏱️</span>
-    <span class="tip-text"><strong>Referencia de tiempo:</strong> Un job de Lv1 a 100 toma ~70–100h la primera vez (MSQ incluido). Alt jobs después de tener un job en cap: 20–35h con Armoury Bonus + roulettes. Con todos los buffs activos y rutina diaria: 15–25h.</span>
+  <div class="tip-box" style="margin-top:14px">
+    <span style="font-size:16px;flex-shrink:0">⏱️</span>
+    <span class="tip-text"><strong>Referencia de tiempo total:</strong> Primer job Lv1→100 con MSQ incluido: ~70–100h. Alt job con Armoury Bonus + roulettes diarias: ~20–30h. Con todos los buffs activos y rutina diaria: 15–20h.</span>
   </div>
 
   <footer>
     <div style="font-size:22px;margin-bottom:6px">⚡</div>
-    Módulo 02 · Leveling Eficiente · Patch 7.5<br>
-    <a href="index.html" style="color:var(--gold);text-decoration:none;margin-top:6px;display:inline-block">← Volver al Hub</a>
+    Módulo 02 · Leveling Eficiente · Patch 7.5
   </footer>
 </div>
+
 <nav class="bottom-nav">
   <a href="01-progresion.html" class="nav-btn">◀ Anterior</a>
   <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
   <a href="03-rotacion.html" class="nav-btn">Siguiente ▶</a>
 </nav>
+
+<script>
+var ROULETTES = [
+  {name:"Leveling",      req:16,  exp:"500k–1.5M",  desc:"Primera prioridad cada día"},
+  {name:"Low Level",     req:16,  exp:"300k–600k",   desc:"Disponible junto a Leveling"},
+  {name:"Trials",        req:50,  exp:"200k–400k",   desc:"Se desbloquea al completar la primera Trial"},
+  {name:"Normal Raids",  req:50,  exp:"200k–350k",   desc:"Requiere acceso a los raid normales del MSQ"},
+  {name:"Alliance Raids",req:50,  exp:"300k–500k",   desc:"Requiere Alliance Raids del MSQ"},
+  {name:"Expert",        req:90,  exp:"400k–700k",   desc:"Dungeons de cap de expansion actual"},
+  {name:"Frontline",     req:30,  exp:"150k–300k",   desc:"PvP — no requiere gear especifico"},
+  {name:"MSQ",           req:50,  exp:"500k–900k",   desc:"Roulette de las Main Scenario Dungeons"}
+];
+
+var ROUTINES = {
+  "1-30": [
+    {n:"1", text:"Activa Meal + Rested EXP antes de todo", exp:"Stack de buffs activo"},
+    {n:"2", text:"Duty Roulette: Leveling (si tienes acceso desde Lv16)", exp:"500k–1.5M EXP con bono"},
+    {n:"3", text:"Palace of the Dead Pisos 1–50 — sin cola, sin espera", exp:"200–400k EXP/hora"},
+    {n:"4", text:"FATEs en Central Shroud o Central Thanalan", exp:"Relleno entre actividades"},
+    {n:"5", text:"MSQ — avanza la historia principal", exp:"EXP masiva + desbloquea contenido"}
+  ],
+  "31-50": [
+    {n:"1", text:"Meal + Rested EXP — siempre antes de empezar", exp:"Stack de buffs activo"},
+    {n:"2", text:"Duty Roulette: Leveling — primera actividad del dia", exp:"500k–1.5M EXP con bono"},
+    {n:"3", text:"Duty Roulette: Low Level — bono separado", exp:"300k–600k EXP adicional"},
+    {n:"4", text:"Palace of the Dead Pisos 51–60 mientras esperas colas", exp:"EXP constante sin espera"},
+    {n:"5", text:"Challenge Log — Duty > Challenge Log, revisa metas de la semana", exp:"EXP bonus por metas simples"},
+    {n:"6", text:"MSQ — necesario para desbloquear Heavensward", exp:"EXP masiva + progreso de historia"}
+  ],
+  "51-60": [
+    {n:"1", text:"Meal + Rested EXP", exp:"Buffs activos"},
+    {n:"2", text:"Roulette: Leveling", exp:"500k–1.5M EXP"},
+    {n:"3", text:"Roulette: Low Level + Trials", exp:"300k–600k cada una"},
+    {n:"4", text:"Palace of the Dead Pisos 61–100", exp:"Sin cola, EXP constante"},
+    {n:"5", text:"Beast Tribes: Vath o Moogle (3 quests cada una)", exp:"50–80k EXP por tribu"},
+    {n:"6", text:"MSQ de Heavensward", exp:"Desbloquea Stormblood content"}
+  ],
+  "61-80": [
+    {n:"1", text:"Meal + Rested EXP", exp:"Buffs activos"},
+    {n:"2", text:"Todas las Roulettes disponibles", exp:"300k–700k+ cada una"},
+    {n:"3", text:"Heaven-on-High Pisos 21–30 (Lv61+)", exp:"Sin cola, excelente EXP"},
+    {n:"4", text:"Bozjan Southern Front (Lv71+)", exp:"EXP + contenido interesante"},
+    {n:"5", text:"Beast Tribes: Namazu (Lv60) o Pixie (Lv70)", exp:"50–100k por tribu"},
+    {n:"6", text:"Challenge Log semanal", exp:"EXP bonus por metas acumuladas"}
+  ],
+  "81-100": [
+    {n:"1", text:"Meal + Rested EXP", exp:"Buffs activos"},
+    {n:"2", text:"Todas las Roulettes disponibles", exp:"400k–900k+ cada una"},
+    {n:"3", text:"Eureka Orthos Pisos 1–30 (Lv81+)", exp:"Sin cola, mejor metodo 81–90"},
+    {n:"4", text:"Dungeon mas alto disponible con Duty Support", exp:"Sin espera de cola en PS5"},
+    {n:"5", text:"Beast Tribes: Loporrits / Omicrons / Pelupelu", exp:"50–150k por tribu"},
+    {n:"6", text:"MSQ de Dawntrail si aun no lo completaste", exp:"Lleva directo a Lv100"}
+  ]
+};
+
+function getRangeKey(lvl) {
+  if (lvl <= 30)  return "1-30";
+  if (lvl <= 50)  return "31-50";
+  if (lvl <= 60)  return "51-60";
+  if (lvl <= 80)  return "61-80";
+  return "81-100";
+}
+
+function buildRoulettes(lvl) {
+  var tbody = document.getElementById("rouTableBody");
+  tbody.innerHTML = "";
+  ROULETTES.forEach(function(r) {
+    var available = lvl >= r.req;
+    var tr = document.createElement("tr");
+    tr.className = available ? "available" : "locked-rou";
+    tr.innerHTML =
+      "<td><strong>" + r.name + "</strong><br><span style='font-size:11px;color:var(--text-muted)'>" + r.desc + "</span></td>" +
+      "<td><span style='font-family:Cinzel,serif;font-size:11px'>Lv" + r.req + "</span></td>" +
+      "<td><span class='rou-avail " + (available ? "ra-yes" : "ra-no") + "'>" + (available ? "Disponible" : "Lv" + r.req) + "</span></td>" +
+      "<td style='font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)'>" + (available ? r.exp : "—") + "</td>";
+    tbody.appendChild(tr);
+  });
+}
+
+function buildRoutine(lvl) {
+  var key = getRangeKey(lvl);
+  var steps = ROUTINES[key];
+  var labels = {"1-30":"Lv1–30","31-50":"Lv31–50","51-60":"Lv51–60","61-80":"Lv61–80","81-100":"Lv81–100"};
+  document.getElementById("routineTitle").textContent = labels[key];
+  var container = document.getElementById("routineSteps");
+  container.innerHTML = "";
+  steps.forEach(function(s) {
+    var div = document.createElement("div");
+    div.className = "routine-step";
+    div.innerHTML =
+      "<div class='rs-num'>" + s.n + "</div>" +
+      "<div class='rs-text'>" + s.text + "<span class='rs-exp'>⚡ " + s.exp + "</span></div>";
+    container.appendChild(div);
+  });
+}
+
+function applyFilter(lvl) {
+  lvl = parseInt(lvl);
+  document.getElementById("filterSlider").value = lvl;
+  document.getElementById("filterDisplay").textContent = "Lv" + lvl;
+
+  var tiers = [
+    {id:"1", min:1,  max:30},
+    {id:"2", min:31, max:50},
+    {id:"3", min:51, max:60},
+    {id:"4", min:61, max:80},
+    {id:"5", min:81, max:100}
+  ];
+
+  tiers.forEach(function(t) {
+    var card  = document.getElementById("tier" + t.id);
+    var badge = document.getElementById("tbadge" + t.id);
+    var now   = document.getElementById("tnow" + t.id);
+    var base  = "tier-card";
+
+    if (lvl >= t.min && lvl <= t.max) {
+      card.className  = base + " t-current";
+      badge.className = "tier-badge tb-current";
+      badge.textContent = "Tu rango";
+      if (now) now.style.display = "block";
+    } else if (lvl > t.max) {
+      card.className  = base + " t-done";
+      badge.className = "tier-badge tb-done";
+      badge.textContent = "Completado";
+      if (now) now.style.display = "none";
+    } else {
+      card.className  = base + " t-locked";
+      badge.className = "tier-badge tb-locked";
+      badge.textContent = "Lv" + t.min + "+";
+      if (now) now.style.display = "none";
+    }
+  });
+
+  buildRoulettes(lvl);
+  buildRoutine(lvl);
+}
+
+document.getElementById("filterSlider").addEventListener("input", function() { applyFilter(this.value); });
+var saved = sessionStorage.getItem("drg_lvl");
+applyFilter(saved ? parseInt(saved) : 1);
+</script>
 </body>
 </html>
