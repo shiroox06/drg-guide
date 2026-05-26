@@ -256,7 +256,7 @@ footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted
     <ul class="quest-list" id="questList"></ul>
     <div class="warn-box" style="margin-top:12px">
       <span style="font-size:16px;flex-shrink:0">⚠️</span>
-      <span class="warn-text">Las job quests NO son automáticas. Sin hacerlas no tienes las skills. A partir de Lv61 en adelante las habilidades se dan automáticamente por nivel.</span>
+      <span class="warn-text"><strong>Las quests de Lancer (Lv1–30) son OBLIGATORIAS</strong> — sin completarlas todas no puedes hacer Eye of the Dragon aunque tengas Lv30. Las job quests de Dragoon (Lv30–60) tampoco son automáticas. A partir de Lv61 las habilidades se dan automáticamente por nivel.</span>
     </div>
   </div>
 
@@ -329,16 +329,26 @@ var SKILLS = [
 ];
 
 var QUESTS = [
-  {lvl:30, name:"Eye of the Dragon", npc:"Ywain → Alberic", reward:"Job Stone + Jump",          loc:"Old Gridania"},
-  {lvl:35, name:"Lance of Fury",     npc:"Alberic",         reward:"Elusive Jump",               loc:"Coerthas Central"},
-  {lvl:40, name:"Unfading Skies",    npc:"Alberic",         reward:"Doom Spike (AoE)",           loc:"Coerthas Central"},
-  {lvl:45, name:"Double Dragoon",    npc:"Alberic",         reward:"Drachen Armor set gratis",   loc:"Coerthas Central"},
-  {lvl:45, name:"Fatal Seduction",   npc:"Alberic",         reward:"Winged Glide",               loc:"Coerthas Central"},
-  {lvl:50, name:"Into the Dragons Maw", npc:"Alberic",      reward:"Dragonfire Dive",            loc:"Coerthas Central"},
-  {lvl:52, name:"Days of Azure",     npc:"Alberic",         reward:"Battle Litany (raid buff)",  loc:"Coerthas Central"},
-  {lvl:56, name:"Dragoons Errand",   npc:"Alberic",         reward:"Fang and Claw",              loc:"Coerthas Central"},
-  {lvl:58, name:"Sanguine Dragoon",  npc:"Alberic",         reward:"Wheeling Thrust",            loc:"Coerthas Central"},
-  {lvl:60, name:"Dragoons Fate",     npc:"Alberic",         reward:"Geirskogul + Dragon Gauge",  loc:"Coerthas Central"}
+  // LANCER CLASS QUESTS — todas obligatorias antes de Eye of the Dragon
+  {lvl:1,  name:"Way of the Lancer",        npc:"Jillian",  reward:"Clase Lancer desbloqueada",       loc:"Old Gridania · Lancers Guild",    type:"lancer"},
+  {lvl:1,  name:"My First Spear",           npc:"Ywain",    reward:"Introduccion al gremio",          loc:"Old Gridania · Lancers Guild",    type:"lancer"},
+  {lvl:5,  name:"Spear of the Fearless",    npc:"Ywain",    reward:"Bone Harpoon + gear",             loc:"Old Gridania · Lancers Guild",    type:"lancer"},
+  {lvl:10, name:"Courage of Stone",         npc:"Ywain",    reward:"Feathered Harpoon + gear",        loc:"Old Gridania · Lancers Guild",    type:"lancer"},
+  {lvl:15, name:"A Dangerous Proposition",  npc:"Ywain",    reward:"Piercing Talon desbloqueado",     loc:"Old Gridania · Lancers Guild",    type:"lancer"},
+  {lvl:20, name:"Pulsing with Pride",       npc:"Ywain",    reward:"Disembowel desbloqueado",         loc:"Old Gridania · Lancers Guild",    type:"lancer"},
+  {lvl:25, name:"Gored and Gored Again",    npc:"Ywain",    reward:"Progresion hacia Lv30",           loc:"Old Gridania · Lancers Guild",    type:"lancer"},
+  {lvl:30, name:"Proof of Might",           npc:"Ywain",    reward:"Completa clase Lancer — habilita Eye of the Dragon", loc:"Old Gridania · Lancers Guild", type:"lancer"},
+  // DRAGOON JOB QUESTS
+  {lvl:30, name:"Eye of the Dragon",        npc:"Ywain → Alberic", reward:"Job Stone + Jump",         loc:"Old Gridania → Coerthas Central", type:"dragoon"},
+  {lvl:35, name:"Lance of Fury",            npc:"Alberic",  reward:"Elusive Jump",                    loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:40, name:"Unfading Skies",           npc:"Alberic",  reward:"Doom Spike (primera AoE)",        loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:45, name:"Double Dragoon",           npc:"Alberic",  reward:"Drachen Armor set gratis",        loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:45, name:"Fatal Seduction",          npc:"Alberic",  reward:"Winged Glide",                    loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:50, name:"Into the Dragons Maw",     npc:"Alberic",  reward:"Dragonfire Dive",                 loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:52, name:"Days of Azure",            npc:"Alberic",  reward:"Battle Litany — raid buff",       loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:56, name:"Dragoons Errand",          npc:"Alberic",  reward:"Fang and Claw",                   loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:58, name:"Sanguine Dragoon",         npc:"Alberic",  reward:"Wheeling Thrust",                 loc:"Coerthas Central",               type:"dragoon"},
+  {lvl:60, name:"Dragoons Fate",            npc:"Alberic",  reward:"Geirskogul + Dragon Gauge",       loc:"Coerthas Central",               type:"dragoon"}
 ];
 
 var TAG_HTML = {
@@ -371,17 +381,27 @@ function buildTable() {
 function buildQuests() {
   var ul = document.getElementById("questList");
   ul.innerHTML = "";
+  var lastType = "";
   QUESTS.forEach(function(q, i) {
+    // Add section header when type changes
+    if (q.type !== lastType) {
+      var header = document.createElement("li");
+      header.style.cssText = "padding:10px 0 4px;font-family:Cinzel,serif;font-size:11px;letter-spacing:0.1em;color:" + (q.type === "lancer" ? "var(--green)" : "var(--gold)") + ";border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:4px;list-style:none;";
+      header.textContent = q.type === "lancer" ? "⚔ LANCER — Class Quests (obligatorias)" : "🐉 DRAGOON — Job Quests";
+      ul.appendChild(header);
+      lastType = q.type;
+    }
     var li = document.createElement("li");
     li.className = "quest-item";
     li.id = "qi_" + i;
     li.dataset.lvl = q.lvl;
+    var typeColor = q.type === "lancer" ? "rgba(129,199,132,0.15)" : "rgba(201,168,76,0.15)";
     li.innerHTML =
       '<div class="quest-dot locked" id="qdot_'+i+'"></div>' +
       '<div class="quest-info">' +
         '<div class="quest-name locked" id="qname_'+i+'">Lv'+q.lvl+' — '+q.name+'</div>' +
         '<div class="quest-meta">📍 '+q.loc+' · NPC: '+q.npc+'</div>' +
-        '<span class="quest-reward">🎁 '+q.reward+'</span>' +
+        '<span class="quest-reward" style="background:'+typeColor+'">🎁 '+q.reward+'</span>' +
       '</div>';
     ul.appendChild(li);
   });
