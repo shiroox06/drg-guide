@@ -2,1136 +2,483 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dragoon — Guía de Progresión</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 01 — Progresión</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #c9a84c;
-    --gold-light: #f0d080;
-    --blue-dragon: #1a4a7a;
-    --blue-deep: #0d1f3c;
-    --blue-mid: #162d50;
-    --cyan: #4fc3f7;
-    --purple: #7c4dff;
-    --red-accent: #e53935;
-    --text-main: #e8dfc8;
-    --text-muted: #a09880;
-    --card-bg: rgba(22, 45, 80, 0.85);
-    --border-glow: rgba(201, 168, 76, 0.4);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--blue-deep);
-    color: var(--text-main);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Animated background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(76, 195, 247, 0.06) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(124, 77, 255, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 60% 80%, rgba(201, 168, 76, 0.05) 0%, transparent 40%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* Particle dots */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(201,168,76,0.15) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
-
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* HERO */
-  .hero {
-    text-align: center;
-    padding: 60px 20px 40px;
-    position: relative;
-  }
-
-  .hero-emblem {
-    font-size: 64px;
-    display: block;
-    margin-bottom: 8px;
-    filter: drop-shadow(0 0 20px rgba(201,168,76,0.6));
-    animation: float 4s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .hero h1 {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(28px, 6vw, 52px);
-    font-weight: 900;
-    color: var(--gold);
-    letter-spacing: 0.12em;
-    text-shadow: 0 0 40px rgba(201,168,76,0.5), 0 2px 4px rgba(0,0,0,0.8);
-    line-height: 1.1;
-  }
-
-  .hero-sub {
-    font-family: 'Crimson Pro', serif;
-    font-size: 15px;
-    color: var(--text-muted);
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    margin-top: 10px;
-  }
-
-  .hero-divider {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 24px auto;
-    max-width: 400px;
-  }
-
-  .hero-divider::before, .hero-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-
-  .hero-divider span {
-    color: var(--gold);
-    font-size: 20px;
-  }
-
-  /* CURRENT STATUS */
-  .status-bar {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-
-  .status-chip {
-    background: rgba(201, 168, 76, 0.12);
-    border: 1px solid var(--gold);
-    border-radius: 4px;
-    padding: 6px 14px;
-    font-family: 'Cinzel', serif;
-    font-size: 12px;
-    color: var(--gold-light);
-    letter-spacing: 0.08em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .status-chip.active {
-    background: rgba(229, 57, 53, 0.15);
-    border-color: #e57373;
-    color: #ffcdd2;
-  }
-
-  /* SECTION HEADERS */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin: 40px 0 20px;
-  }
-
-  .section-icon {
-    font-size: 28px;
-    filter: drop-shadow(0 0 8px currentColor);
-  }
-
-  .section-title {
-    font-family: 'Cinzel', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--gold), transparent);
-    opacity: 0.4;
-  }
-
-  /* PHASE CARDS — Main path */
-  .phase-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-glow);
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .phase-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: var(--gold);
-  }
-
-  .phase-card:hover {
-    border-color: var(--gold);
-    box-shadow: 0 0 24px rgba(201,168,76,0.15);
-  }
-
-  .phase-card.completed::before { background: #4caf50; }
-  .phase-card.completed { border-color: rgba(76, 175, 80, 0.3); }
-
-  .phase-card.current::before { background: var(--cyan); }
-  .phase-card.current {
-    border-color: rgba(79, 195, 247, 0.5);
-    box-shadow: 0 0 30px rgba(79, 195, 247, 0.1);
-  }
-
-  .phase-card.locked {
-    opacity: 0.6;
-  }
-
-  .phase-card.locked::before { background: #555; }
-
-  .phase-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 14px;
-  }
-
-  .phase-badge {
-    background: rgba(0,0,0,0.4);
-    border: 1px solid var(--gold);
-    border-radius: 4px;
-    padding: 4px 10px;
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    color: var(--gold);
-    white-space: nowrap;
-    letter-spacing: 0.06em;
-  }
-
-  .phase-badge.cyan { border-color: var(--cyan); color: var(--cyan); }
-  .phase-badge.green { border-color: #81c784; color: #81c784; }
-  .phase-badge.purple { border-color: #b39ddb; color: #b39ddb; }
-  .phase-badge.red { border-color: #ef9a9a; color: #ef9a9a; }
-
-  .phase-title {
-    font-family: 'Cinzel', serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-main);
-    flex: 1;
-  }
-
-  .phase-status {
-    font-size: 20px;
-  }
-
-  .phase-body {
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--text-main);
-  }
-
-  .phase-body p { margin-bottom: 8px; }
-
-  /* STEP LIST inside cards */
-  .step-list {
-    list-style: none;
-    margin-top: 12px;
-  }
-
-  .step-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  .step-list li:last-child { border-bottom: none; }
-
-  .step-num {
-    background: var(--gold);
-    color: var(--blue-deep);
-    font-family: 'Cinzel', serif;
-    font-size: 10px;
-    font-weight: 700;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .step-num.done {
-    background: #4caf50;
-  }
-
-  /* SKILL TABLE */
-  .skill-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-
-  .skill-table th {
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--gold);
-    text-align: left;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border-glow);
-    background: rgba(0,0,0,0.2);
-  }
-
-  .skill-table td {
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    vertical-align: top;
-  }
-
-  .skill-table tr:hover td {
-    background: rgba(201,168,76,0.05);
-  }
-
-  .skill-table tr.has-skill td { opacity: 1; }
-  .skill-table tr.locked-skill td { opacity: 0.55; }
-
-  .lvl-badge {
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    font-weight: 700;
-    background: rgba(201,168,76,0.15);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 2px 7px;
-    border-radius: 3px;
-    white-space: nowrap;
-  }
-
-  .lvl-badge.current-lvl {
-    background: rgba(79,195,247,0.15);
-    border-color: var(--cyan);
-    color: var(--cyan);
-  }
-
-  .skill-name {
-    font-weight: 600;
-    color: var(--text-main);
-  }
-
-  .skill-icon { font-size: 16px; margin-right: 6px; }
-
-  .tag {
-    display: inline-block;
-    font-size: 10px;
-    font-family: 'Cinzel', serif;
-    padding: 1px 6px;
-    border-radius: 2px;
-    margin-left: 6px;
-    vertical-align: middle;
-    letter-spacing: 0.04em;
-  }
-
-  .tag-aoe { background: rgba(229,57,53,0.2); color: #ef9a9a; border: 1px solid rgba(229,57,53,0.4); }
-  .tag-buff { background: rgba(76,175,80,0.2); color: #a5d6a7; border: 1px solid rgba(76,175,80,0.4); }
-  .tag-jump { background: rgba(124,77,255,0.2); color: #ce93d8; border: 1px solid rgba(124,77,255,0.4); }
-  .tag-raid { background: rgba(255,152,0,0.2); color: #ffcc80; border: 1px solid rgba(255,152,0,0.4); }
-  .tag-combo { background: rgba(33,150,243,0.2); color: #90caf9; border: 1px solid rgba(33,150,243,0.4); }
-  .tag-quest { background: rgba(201,168,76,0.2); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.4); }
-
-  /* GLOSSARY */
-  .glossary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 12px;
-    margin-top: 8px;
-  }
-
-  .glossary-item {
-    background: rgba(13, 31, 60, 0.7);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 6px;
-    padding: 12px 14px;
-  }
-
-  .glossary-term {
-    font-family: 'Cinzel', serif;
-    font-size: 12px;
-    color: var(--gold);
-    letter-spacing: 0.06em;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .glossary-def {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-
-  /* NPC CARD */
-  .npc-card {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    background: rgba(13, 31, 60, 0.7);
-    border: 1px solid rgba(201,168,76,0.25);
-    border-radius: 6px;
-    padding: 14px;
-    margin-top: 10px;
-  }
-
-  .npc-avatar {
-    font-size: 36px;
-    line-height: 1;
-    filter: drop-shadow(0 0 8px rgba(201,168,76,0.4));
-  }
-
-  .npc-info { flex: 1; }
-
-  .npc-name {
-    font-family: 'Cinzel', serif;
-    font-size: 14px;
-    color: var(--gold);
-    margin-bottom: 3px;
-  }
-
-  .npc-loc {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-
-  .npc-role {
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  /* TIP BOX */
-  .tip-box {
-    background: rgba(79, 195, 247, 0.06);
-    border: 1px solid rgba(79, 195, 247, 0.3);
-    border-radius: 6px;
-    padding: 14px 16px;
-    margin: 12px 0;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
-  .tip-icon { font-size: 20px; flex-shrink: 0; }
-
-  .tip-text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #b3e5fc;
-  }
-
-  .warn-box {
-    background: rgba(255, 152, 0, 0.07);
-    border: 1px solid rgba(255, 152, 0, 0.35);
-    border-radius: 6px;
-    padding: 14px 16px;
-    margin: 12px 0;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
-  .warn-text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #ffe082;
-  }
-
-  /* ROTATION DIAGRAM */
-  .rotation-flow {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 14px 0;
-    padding: 14px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .rot-step {
-    background: var(--blue-mid);
-    border: 1px solid rgba(201,168,76,0.4);
-    border-radius: 4px;
-    padding: 6px 10px;
-    font-size: 12px;
-    font-family: 'Cinzel', serif;
-    color: var(--gold-light);
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .rot-arrow {
-    color: var(--gold);
-    font-size: 16px;
-    opacity: 0.6;
-  }
-
-  .rot-step.highlight {
-    background: rgba(124, 77, 255, 0.2);
-    border-color: rgba(124, 77, 255, 0.6);
-    color: #ce93d8;
-  }
-
-  /* PROGRESS TIMELINE */
-  .timeline {
-    position: relative;
-    padding-left: 28px;
-    margin-top: 12px;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 9px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, var(--gold), rgba(201,168,76,0.1));
-  }
-
-  .tl-item {
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  .tl-dot {
-    position: absolute;
-    left: -23px;
-    top: 3px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 2px solid var(--gold);
-    background: var(--blue-deep);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .tl-dot.done { background: #4caf50; border-color: #4caf50; }
-  .tl-dot.now { background: var(--cyan); border-color: var(--cyan); animation: pulse 2s infinite; }
-  .tl-dot.locked { border-color: #555; }
-
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.5); }
-    50% { box-shadow: 0 0 0 6px rgba(79,195,247,0); }
-  }
-
-  .tl-label {
-    font-family: 'Cinzel', serif;
-    font-size: 12px;
-    color: var(--gold);
-    letter-spacing: 0.06em;
-    margin-bottom: 3px;
-  }
-
-  .tl-desc {
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-
-  .tl-label.now-label { color: var(--cyan); }
-
-  /* FOOTER */
-  .guide-footer {
-    text-align: center;
-    padding: 40px 20px 20px;
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
-    border-top: 1px solid rgba(201,168,76,0.15);
-    margin-top: 40px;
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--blue-deep); }
-  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    .rotation-flow { gap: 4px; }
-    .rot-step { font-size: 10px; padding: 4px 7px; }
-    .glossary-grid { grid-template-columns: 1fr; }
-  }
-
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(76,195,247,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(124,77,255,0.08) 0%,transparent 50%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.12) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.4;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(201,168,76,0.1);border:1px solid var(--gold);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+
+/* FILTER */
+.filter-bar{background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.filter-label{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;flex-shrink:0;}
+.filter-slider{flex:1;min-width:160px;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;}
+.filter-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cyan);cursor:pointer;border:2px solid var(--blue-deep);box-shadow:0 0 8px rgba(79,195,247,0.5);}
+.filter-lvl{font-family:"Cinzel",serif;font-size:15px;font-weight:700;color:var(--cyan);min-width:44px;text-align:right;}
+.filter-btn{background:rgba(201,168,76,0.15);border:1px solid var(--gold);border-radius:4px;padding:5px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);cursor:pointer;letter-spacing:0.06em;}
+
+/* LEGEND */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;font-family:"Cinzel",serif;}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:28px;margin-top:8px;}
+.timeline::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gold),rgba(201,168,76,0.1));}
+.tl-item{position:relative;margin-bottom:18px;transition:opacity 0.3s;}
+.tl-dot{position:absolute;left:-23px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--gold);background:var(--blue-deep);display:flex;align-items:center;justify-content:center;transition:all 0.3s;}
+.tl-dot.done{background:#4caf50;border-color:#4caf50;}
+.tl-dot.now{background:var(--cyan);border-color:var(--cyan);animation:pulse 2s infinite;}
+.tl-dot.locked{border-color:#555;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(79,195,247,0.5)}50%{box-shadow:0 0 0 6px rgba(79,195,247,0)}}
+.tl-label{font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;margin-bottom:3px;}
+.tl-label.done{color:var(--green);}
+.tl-label.now{color:var(--cyan);}
+.tl-label.locked{color:var(--text-muted);}
+.tl-desc{font-size:13px;color:var(--text-muted);line-height:1.5;}
+
+/* SKILLS TABLE */
+.skill-wrap{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+.skill-table{width:100%;border-collapse:collapse;font-size:13px;}
+.skill-table th{font-family:"Cinzel",serif;font-size:11px;letter-spacing:0.06em;color:var(--gold);text-align:left;padding:10px 12px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.25);}
+.skill-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle;}
+.skill-row{transition:all 0.3s;}
+.skill-row.state-have td{opacity:1;background:transparent;}
+.skill-row.state-have td:first-child::after{content:" ✅";font-size:11px;}
+.skill-row.state-next{background:rgba(201,168,76,0.04);}
+.skill-row.state-next td{opacity:1;}
+.skill-row.state-locked td{opacity:0.28;}
+.skill-row.state-current td{background:rgba(79,195,247,0.07);opacity:1;}
+
+.lvl-badge{font-family:"Cinzel",serif;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap;display:inline-block;}
+.lv-have{background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;}
+.lv-current{background:rgba(79,195,247,0.2);border:1px solid var(--cyan);color:#b3e5fc;}
+.lv-next{background:rgba(201,168,76,0.2);border:1px solid var(--gold);color:var(--gold-light);}
+.lv-locked{background:rgba(80,80,80,0.15);border:1px solid #555;color:#888;}
+
+.sk-name{font-weight:600;color:var(--text-main);font-size:13px;}
+.tag{display:inline-block;font-size:10px;font-family:"Cinzel",serif;padding:1px 6px;border-radius:2px;margin-left:5px;vertical-align:middle;letter-spacing:0.03em;}
+.tag-aoe{background:rgba(239,83,80,0.2);color:#ef9a9a;border:1px solid rgba(239,83,80,0.4);}
+.tag-buff{background:rgba(76,175,80,0.2);color:#a5d6a7;border:1px solid rgba(76,175,80,0.4);}
+.tag-jump{background:rgba(124,77,255,0.2);color:#ce93d8;border:1px solid rgba(124,77,255,0.4);}
+.tag-raid{background:rgba(255,152,0,0.2);color:#ffcc80;border:1px solid rgba(255,152,0,0.4);}
+.tag-combo{background:rgba(33,150,243,0.2);color:#90caf9;border:1px solid rgba(33,150,243,0.4);}
+.tag-quest{background:rgba(201,168,76,0.2);color:var(--gold-light);border:1px solid rgba(201,168,76,0.4);}
+.tag-auto{background:rgba(129,199,132,0.15);color:#c8e6c9;border:1px solid rgba(129,199,132,0.3);}
+.state-label{font-family:"Cinzel",serif;font-size:10px;padding:2px 7px;border-radius:10px;white-space:nowrap;}
+.sl-have{background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;}
+.sl-current{background:rgba(79,195,247,0.2);border:1px solid var(--cyan);color:#b3e5fc;animation:pulse-text 2s infinite;}
+@keyframes pulse-text{0%,100%{opacity:1}50%{opacity:0.6}}
+.sl-next{background:rgba(201,168,76,0.2);border:1px solid var(--gold);color:var(--gold-light);}
+.sl-locked{background:rgba(80,80,80,0.15);border:1px solid #555;color:#777;}
+.how-cell{font-size:12px;color:var(--text-muted);}
+.how-cell.hw-have{color:#a5d6a7;}
+.how-cell.hw-next{color:var(--gold-light);}
+.how-cell.hw-locked{color:#666;}
+
+/* JOB QUESTS */
+.quest-list{list-style:none;}
+.quest-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);transition:all 0.3s;}
+.quest-item:last-child{border-bottom:none;}
+.quest-dot{width:16px;height:16px;border-radius:50%;flex-shrink:0;margin-top:3px;border:2px solid var(--gold);background:var(--blue-deep);}
+.quest-dot.done{background:#4caf50;border-color:#4caf50;}
+.quest-dot.now{background:var(--cyan);border-color:var(--cyan);}
+.quest-dot.locked{border-color:#555;}
+.quest-info{flex:1;}
+.quest-name{font-family:"Cinzel",serif;font-size:13px;font-weight:700;margin-bottom:3px;}
+.quest-name.done{color:#c8e6c9;text-decoration:line-through;opacity:0.7;}
+.quest-name.now{color:var(--cyan);}
+.quest-name.locked{color:var(--text-muted);}
+.quest-meta{font-size:12px;color:var(--text-muted);line-height:1.5;}
+.quest-reward{display:inline-block;margin-top:4px;font-size:11px;font-family:"Cinzel",serif;padding:2px 8px;border-radius:3px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold-light);}
+
+/* GLOSSARY */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:8px;}
+.glossary-item{background:rgba(13,31,60,0.7);border:1px solid rgba(201,168,76,0.2);border-radius:6px;padding:12px 14px;}
+.glossary-term{font-family:"Cinzel",serif;font-size:12px;color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.glossary-def{font-size:12px;color:var(--text-muted);line-height:1.5;}
+
+/* TIP/WARN */
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-text{font-size:13px;line-height:1.6;color:#ffe082;}
+
+/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
-.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;-webkit-tap-highlight-color:transparent;text-align:center;}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
 .nav-btn:active{background:rgba(201,168,76,0.15);}
 .nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
 
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.glossary-grid{grid-template-columns:1fr;}.skill-table th:last-child,.skill-table td:last-child{display:none;}}
 </style>
 </head>
 <body>
-
 <div class="container">
-
-  <!-- HERO -->
-  <div class="hero">
-    <span class="hero-emblem">🐉</span>
-    <h1>DRAGOON</h1>
-    <div class="hero-sub">Guía de Progresión · Lancer → DRG · FFXIV Dawntrail</div>
-    <div class="hero-divider"><span>⚔</span></div>
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 01</div>
+    <h1 class="page-title">🗺️ Progresión & Skills</h1>
+    <p class="page-sub">Timeline de tu camino, skills con estado dinámico según tu nivel, job quests y glosario.</p>
   </div>
 
-  <!-- STATUS -->
-  <div class="status-bar">
-    <div class="status-chip active">📍 Nivel actual: 26</div>
-    <div class="status-chip">📜 MSQ: Nivel 20</div>
-    <div class="status-chip">⚔ Clase: Lancer</div>
-    <div class="status-chip">🎯 Objetivo: Dragoon Lv30</div>
-  
-<!-- LEVEL FILTER -->
-<div style="background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-  <span style="font-family:'Cinzel',serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;flex-shrink:0;">🎚️ FILTRAR POR NIVEL:</span>
-  <div style="flex:1;min-width:180px;">
-    <input type="range" id="filterSlider" min="1" max="100" value="32"
-      style="width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;"
-      oninput="filterByLevel(this.value)">
+  <div class="filter-bar">
+    <span class="filter-label">🎚️ TU NIVEL:</span>
+    <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="32">
+    <span class="filter-lvl" id="filterDisplay">Lv32</span>
+    <button class="filter-btn" onclick="applyFilter(100)">VER TODO</button>
   </div>
-  <span id="filterLvlBadge" style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--cyan);min-width:40px;text-align:right;">Lv32</span>
-  <button onclick="filterByLevel(100)" style="background:rgba(201,168,76,0.15);border:1px solid var(--gold);border-radius:4px;padding:4px 10px;font-family:'Cinzel',serif;font-size:10px;color:var(--gold);cursor:pointer;letter-spacing:0.06em;">MOSTRAR TODO</button>
-</div>
 
-  <!-- SECTION: TU CAMINO -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div><span style="color:#c8e6c9">Tienes</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--cyan);animation:pulse 2s infinite"></div><span style="color:#b3e5fc">Tu nivel actual</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div><span style="color:var(--gold-light)">Próxima (menos de 5 lvl)</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#555"></div><span style="color:var(--text-muted)">Bloqueada</span></div>
+  </div>
+
+  <!-- TIMELINE -->
   <div class="section-header">
     <span class="section-icon">🗺️</span>
-    <span class="section-title">Tu Camino Actual</span>
+    <span class="section-title">Tu Camino</span>
     <div class="section-line"></div>
   </div>
 
   <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dot done"></div>
-      <div class="tl-label">✅ Completado — Niveles 1–20</div>
-      <div class="tl-desc">Lancer desbloqueado. Skills básicas obtenidas. MSQ avanzando.</div>
+    <div class="tl-item" id="tl1" data-lvl="1">
+      <div class="tl-dot" id="tldot1"></div>
+      <div class="tl-label" id="tllbl1">Lv 1–17 · Lancer inicial</div>
+      <div class="tl-desc">True Thrust, Vorpal Thrust, Life Surge. Base del kit que se mantiene todo el juego.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot now"></div>
-      <div class="tl-label now-label">📍 AQUÍ ESTÁS — Nivel 26</div>
-      <div class="tl-desc">Tienes Full Thrust. Tu combo completo de single-target ya está activo. Te faltan 4 niveles para la conversión.</div>
+    <div class="tl-item" id="tl2" data-lvl="18">
+      <div class="tl-dot" id="tldot2"></div>
+      <div class="tl-label" id="tllbl2">Lv 18–25 · Power Surge</div>
+      <div class="tl-desc">Disembowel desbloquea Power Surge (+10% daño). La mecánica de buff que defines en toda la progresión.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot locked"></div>
-      <div class="tl-label">🔒 Pendiente — Nivel 30</div>
-      <div class="tl-desc">Hacer las quests de conversión a Dragoon. Desbloquea Jump y el job stone.</div>
+    <div class="tl-item" id="tl3" data-lvl="26">
+      <div class="tl-dot" id="tldot3"></div>
+      <div class="tl-label" id="tllbl3">Lv 26–29 · Combo completo base</div>
+      <div class="tl-desc">Full Thrust completa el primer combo de 3 hits. Ya tienes tu rotación de Lancer.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot locked"></div>
-      <div class="tl-label">🔒 Pendiente — Nivel 40</div>
-      <div class="tl-desc">Primera habilidad AoE: Doom Spike. Requiere quest de job.</div>
+    <div class="tl-item" id="tl4" data-lvl="30">
+      <div class="tl-dot" id="tldot4"></div>
+      <div class="tl-label" id="tllbl4">Lv 30 · DRAGOON — Eye of the Dragon</div>
+      <div class="tl-desc">Quest con Ywain → Alberic. Equipa el Job Stone. Desbloqueas Jump.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot locked"></div>
-      <div class="tl-label">🔒 Pendiente — Nivel 52</div>
-      <div class="tl-desc">Battle Litany — tu buff de raid. Aquí empiezas a ser realmente valioso en party.</div>
+    <div class="tl-item" id="tl5" data-lvl="35">
+      <div class="tl-dot" id="tldot5"></div>
+      <div class="tl-label" id="tllbl5">Lv 35–39 · Movilidad</div>
+      <div class="tl-desc">Elusive Jump (quest Lance of Fury). Dash hacia atrás para mecánicas y posicionamiento.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot locked"></div>
-      <div class="tl-label">🔒 Meta endgame — Nivel 100</div>
-      <div class="tl-desc">Kit completo. Starcross, Dragon Gauge, Wyrmwind Thrust. Full Dragoon.</div>
+    <div class="tl-item" id="tl6" data-lvl="40">
+      <div class="tl-dot" id="tldot6"></div>
+      <div class="tl-label" id="tllbl6">Lv 40 · Primera AoE — Doom Spike</div>
+      <div class="tl-desc">Quest Unfading Skies con Alberic. Tu primera habilidad que daña múltiples enemigos.</div>
+    </div>
+    <div class="tl-item" id="tl7" data-lvl="50">
+      <div class="tl-dot" id="tldot7"></div>
+      <div class="tl-label" id="tllbl7">Lv 50 · Dragonfire Dive</div>
+      <div class="tl-desc">AoE circular de alto impacto. Base de tu burst window. Entra al ciclo de 2 minutos.</div>
+    </div>
+    <div class="tl-item" id="tl8" data-lvl="52">
+      <div class="tl-dot" id="tldot8"></div>
+      <div class="tl-label" id="tllbl8">Lv 52 · Battle Litany ⭐</div>
+      <div class="tl-desc">Tu raid buff. +10% Crit Rate para todo el grupo. Aquí empiezas a ser valioso en party content.</div>
+    </div>
+    <div class="tl-item" id="tl9" data-lvl="60">
+      <div class="tl-dot" id="tldot9"></div>
+      <div class="tl-label" id="tllbl9">Lv 60 · Dragon Gauge — Geirskogul</div>
+      <div class="tl-desc">El sistema de recurso del Dragoon. Blood of the Dragon (+10% daño). Quest Dragoon Fate.</div>
+    </div>
+    <div class="tl-item" id="tl10" data-lvl="70">
+      <div class="tl-dot" id="tldot10"></div>
+      <div class="tl-label" id="tllbl10">Lv 70 · Life of the Dragon</div>
+      <div class="tl-desc">Upgrade del Dragon Gauge. +15% daño, 3x Nastrond. El burst window real del Dragoon.</div>
+    </div>
+    <div class="tl-item" id="tl11" data-lvl="80">
+      <div class="tl-dot" id="tldot11"></div>
+      <div class="tl-label" id="tllbl11">Lv 80 · Stardiver</div>
+      <div class="tl-desc">El salto de alto impacto del Dragoon. 1 uso por fase Life of the Dragon.</div>
+    </div>
+    <div class="tl-item" id="tl12" data-lvl="100">
+      <div class="tl-dot" id="tldot12"></div>
+      <div class="tl-label" id="tllbl12">Lv 100 · Kit Completo — Starcross</div>
+      <div class="tl-desc">El finisher del burst window máximo. Kit totalmente desbloqueado.</div>
     </div>
   </div>
 
-  <!-- SECTION: FASE 1 -->
+  <!-- SKILLS TABLE -->
   <div class="section-header">
     <span class="section-icon">⚔️</span>
-    <span class="section-title">Fase 1 — Completar el Lancer</span>
+    <span class="section-title">Todas las Skills</span>
     <div class="section-line"></div>
   </div>
 
-  <div class="phase-card current">
-    <div class="phase-header">
-      <span class="phase-badge cyan">NIVEL 26–30</span>
-      <span class="phase-title">Terminar de subir el Lancer</span>
-      <span class="phase-status">⚡</span>
-    </div>
-    <div class="phase-body">
-      <p>Estás a 4 niveles de poder convertirte en Dragoon. Es la etapa más corta del proceso.</p>
-
-      <ul class="step-list">
-        <li>
-          <span class="step-num">1</span>
-          <span>Sube a <strong>Nivel 30</strong> — usa Hunting Logs, FATEs, o colas de dungeon. Sastasha y Tam-Tara están disponibles para ti ahora.</span>
-        </li>
-        <li>
-          <span class="step-num">2</span>
-          <span>Avanza el <strong>MSQ hasta "Sylph-management"</strong> — quest de historia principal obligatoria. Approx. MSQ nivel 22–25.</span>
-        </li>
-        <li>
-          <span class="step-num">3</span>
-          <span>Completa la quest de clase <strong>"Proof of Might"</strong> (Lv30) — dada por Ywain en la Lancers' Guild.</span>
-        </li>
-      </ul>
-
-      <div class="tip-box">
-        <span class="tip-icon">💡</span>
-        <span class="tip-text">La forma más rápida de subir niveles en esta etapa es hacer las colas de Duty Roulette: Leveling. Dan bonus de EXP masivo si eres el único rol de tu tipo en el grupo.</span>
-      </div>
-    </div>
+  <div class="skill-wrap">
+    <table class="skill-table">
+      <thead>
+        <tr>
+          <th>Nivel</th>
+          <th>Skill</th>
+          <th>Estado</th>
+          <th>Cómo obtener</th>
+        </tr>
+      </thead>
+      <tbody id="skillTableBody">
+      </tbody>
+    </table>
   </div>
 
-  <!-- NPC -->
-  <div class="npc-card">
-    <span class="npc-avatar">🧙</span>
-    <div class="npc-info">
-      <div class="npc-name">Ywain — Lancers' Guild Master</div>
-      <div class="npc-loc">📍 Old Gridania (X:14.3, Y:5.8)</div>
-      <div class="npc-role">Da la quest de conversión "Eye of the Dragon" al llegar a Lv30. <strong>Habla con él primero</strong> para iniciar el proceso.</div>
-    </div>
-  </div>
-
-  <!-- SECTION: FASE 2 -->
-  <div class="section-header">
-    <span class="section-icon">🐲</span>
-    <span class="section-title">Fase 2 — Conversión a Dragoon</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="phase-card">
-    <div class="phase-header">
-      <span class="phase-badge">NIVEL 30</span>
-      <span class="phase-title">Quest: Eye of the Dragon</span>
-      <span class="phase-status">🐉</span>
-    </div>
-    <div class="phase-body">
-      <p>Esta es la quest que te convierte oficialmente en Dragoon. Al completarla recibes el <strong>Soul of the Dragoon</strong> — el job stone que debes equipar.</p>
-
-      <ul class="step-list">
-        <li>
-          <span class="step-num">1</span>
-          <span>Habla con <strong>Ywain</strong> en Old Gridania → acepta "Eye of the Dragon"</span>
-        </li>
-        <li>
-          <span class="step-num">2</span>
-          <span>Completa la quest (viaje a <strong>Coerthas Central Highlands</strong> donde está Alberic, tu nuevo trainer)</span>
-        </li>
-        <li>
-          <span class="step-num">3</span>
-          <span>Equipa el <strong>Soul of the Dragoon</strong> desde tu Armoury Chest (última tab). <em>Sin esto no eres Dragoon</em>.</span>
-        </li>
-        <li>
-          <span class="step-num">4</span>
-          <span>Recibes automáticamente tu primera skill exclusiva: <strong>Jump</strong> 🦘</span>
-        </li>
-      </ul>
-
-      <div class="warn-box">
-        <span class="tip-icon">⚠️</span>
-        <span class="warn-text">Si no equipas el job stone, sigues siendo Lancer. El stone va en el slot especial abajo a la derecha del equipo. No en la bolsa.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- NPC Alberic -->
-  <div class="npc-card">
-    <span class="npc-avatar">⚔️</span>
-    <div class="npc-info">
-      <div class="npc-name">Alberic — Job Trainer Dragoon</div>
-      <div class="npc-loc">📍 Coerthas Central Highlands (X:25.8, Y:28.3)</div>
-      <div class="npc-role">Tu trainer principal desde Lv30 en adelante. Todas las job quests de Dragoon hasta Lv60 pasan por él.</div>
-    </div>
-  </div>
-
-  <!-- SECTION: SKILLS -->
-  <div class="section-header">
-    <span class="section-icon">📖</span>
-    <span class="section-title">Skills — Orden de Desbloqueo</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="phase-card">
-    <div class="phase-body">
-      <table class="skill-table">
-        <thead>
-          <tr>
-            <th>Nivel</th>
-            <th>Skill</th>
-            <th>Notas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="has-skill">
-            <td><span class="lvl-badge">Lv 1</span></td>
-            <td><span class="skill-icon">🗡️</span><span class="skill-name">True Thrust</span></td>
-            <td><span class="tag tag-combo">INICIO COMBO</span> Ataque base. Siempre el primero en la cadena.</td>
-          </tr>
-          <tr class="has-skill">
-            <td><span class="lvl-badge">Lv 4</span></td>
-            <td><span class="skill-icon">⚡</span><span class="skill-name">Vorpal Thrust</span></td>
-            <td><span class="tag tag-combo">COMBO</span> Segundo hit después de True Thrust.</td>
-          </tr>
-          <tr class="has-skill">
-            <td><span class="lvl-badge">Lv 6</span></td>
-            <td><span class="skill-icon">💚</span><span class="skill-name">Life Surge</span></td>
-            <td><span class="tag tag-buff">BUFF</span> Garantiza crítico en tu próximo ataque. Úsalo en Full Thrust.</td>
-          </tr>
-          <tr class="has-skill">
-            <td><span class="lvl-badge">Lv 15</span></td>
-            <td><span class="skill-icon">🎯</span><span class="skill-name">Piercing Talon</span></td>
-            <td>Ataque a distancia 20y. Para cuando no puedes llegar al enemigo.</td>
-          </tr>
-          <tr class="has-skill">
-            <td><span class="lvl-badge">Lv 18</span></td>
-            <td><span class="skill-icon">🔥</span><span class="skill-name">Disembowel</span></td>
-            <td><span class="tag tag-combo">COMBO</span><span class="tag tag-buff">BUFF</span> Aplica Power Surge +10% daño. <strong>Siempre activo.</strong></td>
-          </tr>
-          <tr class="has-skill">
-            <td><span class="lvl-badge current-lvl">Lv 26 ← TÚ</span></td>
-            <td><span class="skill-icon">💥</span><span class="skill-name">Full Thrust</span></td>
-            <td><span class="tag tag-combo">COMBO</span> Finisher de alta potencia. El más fuerte que tienes ahora.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 30</span></td>
-            <td><span class="skill-icon">🦘</span><span class="skill-name">Jump</span></td>
-            <td><span class="tag tag-jump">JUMP</span><span class="tag tag-quest">QUEST</span> Primera skill icónica de Dragoon. Quest: Eye of the Dragon.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 35</span></td>
-            <td><span class="skill-icon">↩️</span><span class="skill-name">Elusive Jump</span></td>
-            <td><span class="tag tag-jump">JUMP</span><span class="tag tag-quest">QUEST</span> Dash hacia atrás ~15y. Escapes y posicionamiento.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 40</span></td>
-            <td><span class="skill-icon">💢</span><span class="skill-name">Doom Spike</span></td>
-            <td><span class="tag tag-aoe">AoE</span><span class="tag tag-quest">QUEST</span> <strong>Primera AoE.</strong> Línea frontal. Quest: Unfading Skies.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 45</span></td>
-            <td><span class="skill-icon">🌪️</span><span class="skill-name">Winged Glide</span></td>
-            <td><span class="tag tag-jump">JUMP</span><span class="tag tag-quest">QUEST</span> Dash hacia el target. Movilidad.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 50</span></td>
-            <td><span class="skill-icon">🔥</span><span class="skill-name">Dragonfire Dive</span></td>
-            <td><span class="tag tag-aoe">AoE</span><span class="tag tag-jump">JUMP</span><span class="tag tag-quest">QUEST</span> AoE circular de alto impacto. 120s CD.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 52</span></td>
-            <td><span class="skill-icon">✨</span><span class="skill-name">Battle Litany</span></td>
-            <td><span class="tag tag-raid">RAID BUFF</span><span class="tag tag-quest">QUEST</span> +10% Crit Rate para todo el grupo. Tu valor en raids.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 60</span></td>
-            <td><span class="skill-icon">🐲</span><span class="skill-name">Geirskogul</span></td>
-            <td><span class="tag tag-quest">QUEST</span> Activa el Dragon Gauge. Entra a modo Blood of the Dragon +10% daño.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 70</span></td>
-            <td><span class="skill-icon">⚡</span><span class="skill-name">Nastrond</span></td>
-            <td>Upgrade: Blood → <strong>Life of the Dragon</strong> +15% daño, 3 cargas de Nastrond.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 80</span></td>
-            <td><span class="skill-icon">🌠</span><span class="skill-name">Stardiver</span></td>
-            <td><span class="tag tag-jump">JUMP</span><span class="tag tag-aoe">AoE</span> 1 uso por fase Life of the Dragon. Altísima potencia.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 90</span></td>
-            <td><span class="skill-icon">🌀</span><span class="skill-name">Wyrmwind Thrust</span></td>
-            <td>2 stacks de Firstminds' Focus → disparo dracónico. No lo guardes.</td>
-          </tr>
-          <tr class="locked-skill">
-            <td><span class="lvl-badge">Lv 100</span></td>
-            <td><span class="skill-icon">💫</span><span class="skill-name">Starcross</span></td>
-            <td>Finisher del burst window máximo. Solo tras Stardiver dentro de Life of the Dragon.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- SECTION: ROTACION ACTUAL -->
-  <div class="section-header">
-    <span class="section-icon">🔄</span>
-    <span class="section-title">Tu Rotación Ahora (Lv26)</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="phase-card">
-    <div class="phase-body">
-      <p style="margin-bottom: 12px; color: var(--text-muted);">Combo A — Heavens' Thrust path (daño bruto):</p>
-      <div class="rotation-flow">
-        <div class="rot-step">True Thrust</div>
-        <span class="rot-arrow">→</span>
-        <div class="rot-step">Vorpal Thrust</div>
-        <span class="rot-arrow">→</span>
-        <div class="rot-step highlight">Full Thrust 💥</div>
-      </div>
-
-      <p style="margin-bottom: 12px; color: var(--text-muted);">Combo B — Power Surge (mantiene buff +10%):</p>
-      <div class="rotation-flow">
-        <div class="rot-step">True Thrust</div>
-        <span class="rot-arrow">→</span>
-        <div class="rot-step highlight">Disembowel 🔥</div>
-      </div>
-
-      <div class="tip-box">
-        <span class="tip-icon">💡</span>
-        <span class="tip-text"><strong>Regla práctica:</strong> Alterna entre los dos combos. Usa Life Surge justo antes de Full Thrust para el crítico garantizado. Mantén siempre el buff de Disembowel activo — si se cae, pierdes 10% de todo tu daño.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTION: JOB QUESTS RECOMENDADAS -->
+  <!-- JOB QUESTS -->
   <div class="section-header">
     <span class="section-icon">📜</span>
-    <span class="section-title">Job Quests — Hacer en Orden</span>
+    <span class="section-title">Job Quests</span>
     <div class="section-line"></div>
   </div>
 
-  <div class="phase-card">
-    <div class="phase-body">
-      <table class="skill-table">
-        <thead>
-          <tr>
-            <th>Req.</th>
-            <th>Quest</th>
-            <th>NPC</th>
-            <th>Recompensa</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="lvl-badge">Lv 30</span></td>
-            <td>Eye of the Dragon</td>
-            <td>Ywain → Alberic</td>
-            <td>🐉 Job Stone + Jump</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 35</span></td>
-            <td>Lance of Fury</td>
-            <td>Alberic</td>
-            <td>↩️ Elusive Jump</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 40</span></td>
-            <td>Unfading Skies</td>
-            <td>Alberic</td>
-            <td>💢 Doom Spike (AoE)</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 45</span></td>
-            <td>Double Dragoon</td>
-            <td>Alberic</td>
-            <td>🛡️ Drachen Armor set</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 45</span></td>
-            <td>Fatal Seduction</td>
-            <td>Alberic</td>
-            <td>🌪️ Winged Glide</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 50</span></td>
-            <td>Into the Dragon's Maw</td>
-            <td>Alberic</td>
-            <td>🔥 Dragonfire Dive</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 52</span></td>
-            <td>Days of Azure ⭐</td>
-            <td>Alberic</td>
-            <td>✨ Battle Litany (raid buff)</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 56</span></td>
-            <td>Dragoon's Errand</td>
-            <td>Alberic</td>
-            <td>⚔️ Fang and Claw</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 58</span></td>
-            <td>Sanguine Dragoon</td>
-            <td>Alberic</td>
-            <td>🌀 Wheeling Thrust</td>
-          </tr>
-          <tr>
-            <td><span class="lvl-badge">Lv 60</span></td>
-            <td>Dragoon's Fate ⭐</td>
-            <td>Alberic</td>
-            <td>🐲 Geirskogul + Dragon Gauge</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="warn-box" style="margin-top: 14px;">
-        <span class="tip-icon">⚠️</span>
-        <span class="warn-text">Las job quests NO son automáticas. Si no las haces, no tienes las skills. A partir de Lv60 en adelante las habilidades sí se dan automáticamente por nivel sin quest adicional.</span>
-      </div>
+  <div style="background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:18px;margin-bottom:16px;">
+    <ul class="quest-list" id="questList"></ul>
+    <div class="warn-box" style="margin-top:12px">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <span class="warn-text">Las job quests NO son automáticas. Sin hacerlas no tienes las skills. A partir de Lv61 en adelante las habilidades se dan automáticamente por nivel.</span>
     </div>
   </div>
 
-  <!-- SECTION: GLOSARIO -->
+  <!-- GLOSARIO -->
   <div class="section-header">
     <span class="section-icon">📚</span>
-    <span class="section-title">Glosario de Términos</span>
+    <span class="section-title">Glosario</span>
     <div class="section-line"></div>
   </div>
 
   <div class="glossary-grid">
-    <div class="glossary-item">
-      <div class="glossary-term">📜 MSQ</div>
-      <div class="glossary-def"><strong>Main Scenario Quest.</strong> La historia principal del juego. Desbloquea zonas, features y es prerequisito para muchas quests de job.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">💎 Job Stone</div>
-      <div class="glossary-def">Item especial que transforma tu clase en job. Se equipa en el slot inferior del panel de equipo. Sin él, eres solo Lancer.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">🔄 Combo</div>
-      <div class="glossary-def">Secuencia de skills donde cada una activa la siguiente. Usarlas fuera de orden da daño base reducido.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">⏱️ GCD / oGCD</div>
-      <div class="glossary-def"><strong>GCD</strong>: habilidades con cooldown de ~2.5s (la mayoría de ataques). <strong>oGCD</strong>: habilidades que no consumen el GCD, se usan entre hits normales.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">🌊 FATE</div>
-      <div class="glossary-def">Eventos de zona que aparecen en el mapa con un círculo azul. Son buenos para subir nivel rápido.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">🎯 Potencia</div>
-      <div class="glossary-def">Medida relativa del daño de una skill. 380 potencia golpea ~65% más fuerte que 230 potencia.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">🐲 Dragon Gauge</div>
-      <div class="glossary-def">Barra de recurso especial del Dragoon, visible desde Lv60. Tiene dos fases: Blood of the Dragon y Life of the Dragon.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">✨ Raid Buff</div>
-      <div class="glossary-def">Habilidad que beneficia a todo el grupo, no solo a ti. Battle Litany es el raid buff del Dragoon — lo que te hace valioso en partidas 8 personas.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">🔁 Duty Roulette</div>
-      <div class="glossary-def">Cola de dungeon aleatoria. Da bonus masivo de EXP una vez por día. La opción más eficiente para subir nivel.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">🛡️ Hunting Log</div>
-      <div class="glossary-def">Lista de enemigos a matar por clase. Se completa una vez y da buena EXP acumulada. Útil en niveles bajos.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">🎯 Single-target</div>
-      <div class="glossary-def">Habilidades que afectan solo a un enemigo. Toda tu rotación hasta Lv40 es single-target.</div>
-    </div>
-    <div class="glossary-item">
-      <div class="glossary-term">💢 AoE</div>
-      <div class="glossary-def"><strong>Area of Effect.</strong> Habilidades que dañan múltiples enemigos en un área. El Dragoon las obtiene desde Lv40.</div>
-    </div>
+    <div class="glossary-item"><div class="glossary-term">📜 MSQ</div><div class="glossary-def">Main Scenario Quest. Historia principal. Desbloquea zonas y es prerequisito para quests de job.</div></div>
+    <div class="glossary-item"><div class="glossary-term">💎 Job Stone</div><div class="glossary-def">Item que transforma Lancer en Dragoon. Se equipa en el slot inferior del panel de equipo.</div></div>
+    <div class="glossary-item"><div class="glossary-term">🔄 Combo</div><div class="glossary-def">Secuencia donde cada skill activa la siguiente. Fuera de orden da daño base reducido.</div></div>
+    <div class="glossary-item"><div class="glossary-term">⏱ GCD / oGCD</div><div class="glossary-def">GCD: ataques con cooldown ~2.5s. oGCD: habilidades que no consumen el GCD, se usan entre hits.</div></div>
+    <div class="glossary-item"><div class="glossary-term">🌊 FATE</div><div class="glossary-def">Eventos de zona en el mapa (círculo azul). Buena EXP mientras esperas cola de dungeon.</div></div>
+    <div class="glossary-item"><div class="glossary-term">🐲 Dragon Gauge</div><div class="glossary-def">Barra de recurso del Dragoon desde Lv60. Fases: Blood of the Dragon y Life of the Dragon.</div></div>
+    <div class="glossary-item"><div class="glossary-term">✨ Raid Buff</div><div class="glossary-def">Habilidad que beneficia a todo el grupo. Battle Litany es el raid buff del Dragoon.</div></div>
+    <div class="glossary-item"><div class="glossary-term">🔁 Duty Roulette</div><div class="glossary-def">Cola de dungeon aleatoria con bonus de EXP masivo una vez por día.</div></div>
+    <div class="glossary-item"><div class="glossary-term">💢 AoE</div><div class="glossary-def">Area of Effect. Habilidades que dañan múltiples enemigos. Dragoon las obtiene desde Lv40.</div></div>
+    <div class="glossary-item"><div class="glossary-term">🎯 Positional</div><div class="glossary-def">Habilidades con bonus de daño según posición: trasero (Heavens Thrust) o flanco (Chaotic Spring).</div></div>
+    <div class="glossary-item"><div class="glossary-term">💥 Burst Window</div><div class="glossary-def">Ventana de ~20s cada 2 min donde usas todos tus cooldowns juntos para maximizar el daño.</div></div>
+    <div class="glossary-item"><div class="glossary-term">🪙 Tomestones</div><div class="glossary-def">Moneda especial que se obtiene en dungeons y roulettes. Se canjea por gear de calidad.</div></div>
   </div>
 
-  <div class="guide-footer">
-    <div style="font-size: 24px; margin-bottom: 8px;">🐉</div>
-    FFXIV Dragoon · Guía basada en Patch 7.x Dawntrail<br>
-    Fuentes: consolegameswiki.com · icy-veins.com/ffxiv
-  </div>
-
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🗺️</div>
+    Módulo 01 · Progresión · Patch 7.5
+  </footer>
 </div>
 
 <nav class="bottom-nav">
-  <a href="index.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn">◀ Hub</a>
   <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
   <a href="02-leveling.html" class="nav-btn">Siguiente ▶</a>
 </nav>
 
 <script>
-// Restore level from hub sessionStorage
-const savedLvl = sessionStorage.getItem('drg_lvl');
-if (savedLvl) {
-  document.getElementById('filterSlider').value = savedLvl;
-  filterByLevel(savedLvl);
+var SKILLS = [
+  {lvl:1,  name:"True Thrust",       icon:"🗡️", tags:["COMBO"],          how:"Auto Lv1",                                              desc:"Ataque base. Siempre el primero del combo."},
+  {lvl:4,  name:"Vorpal Thrust",     icon:"⚡", tags:["COMBO"],          how:"Auto Lv4",                                              desc:"2do hit del combo tras True Thrust."},
+  {lvl:6,  name:"Life Surge",        icon:"💚", tags:["BUFF"],           how:"Auto Lv6",                                              desc:"Garantiza crítico en próxima weaponskill. Úsalo en Full Thrust."},
+  {lvl:15, name:"Piercing Talon",    icon:"🎯", tags:[],                 how:"Auto Lv15",                                             desc:"Ataque a distancia 20y. Para cuando no puedes llegar al boss."},
+  {lvl:18, name:"Disembowel",        icon:"🔥", tags:["COMBO","BUFF"],   how:"Auto Lv18",                                             desc:"Aplica Power Surge +10% daño 30s. Mantener activo siempre."},
+  {lvl:26, name:"Full Thrust",       icon:"💥", tags:["COMBO"],          how:"Auto Lv26",                                             desc:"Finisher de alto daño. Upgradea a Heavens Thrust en Lv86."},
+  {lvl:30, name:"Jump",              icon:"🦘", tags:["JUMP","QUEST"],   how:"Quest: Eye of the Dragon — Ywain, Old Gridania (Lv30)", desc:"Salto icónico del Dragoon. oGCD, no rompe el combo."},
+  {lvl:35, name:"Elusive Jump",      icon:"↩️", tags:["JUMP","QUEST"],   how:"Quest: Lance of Fury — Alberic, Coerthas (Lv35)",       desc:"Dash hacia atrás ~15y. Movilidad y escape de mecánicas."},
+  {lvl:40, name:"Doom Spike",        icon:"💢", tags:["AOE","QUEST"],    how:"Quest: Unfading Skies — Alberic, Coerthas (Lv40)",      desc:"Primera AoE. Línea frontal. Usar con 3+ enemigos."},
+  {lvl:45, name:"Winged Glide",      icon:"🌪️", tags:["JUMP","QUEST"],   how:"Quest: Fatal Seduction — Alberic, Coerthas (Lv45)",     desc:"Dash hacia el target. Gap closer principal."},
+  {lvl:50, name:"Dragonfire Dive",   icon:"🔥", tags:["AOE","QUEST"],    how:"Quest: Into the Dragons Maw — Alberic (Lv50)",          desc:"AoE circular potente. 120s CD. Entra al burst de 2 min."},
+  {lvl:52, name:"Battle Litany",     icon:"✨", tags:["RAID","QUEST"],   how:"Quest: Days of Azure — Alberic (Lv52)",                 desc:"+10% Crit Rate para todo el grupo 20s. Tu raid buff principal."},
+  {lvl:56, name:"Fang and Claw",     icon:"🐾", tags:["COMBO","QUEST"],  how:"Quest: Dragoons Errand — Alberic (Lv56)",               desc:"4to hit del combo Heavens Thrust path."},
+  {lvl:58, name:"Wheeling Thrust",   icon:"🌀", tags:["COMBO","QUEST"],  how:"Quest: Sanguine Dragoon — Alberic (Lv58)",              desc:"4to hit del combo Chaotic Spring path."},
+  {lvl:60, name:"Geirskogul",        icon:"🐲", tags:["QUEST"],          how:"Quest: Dragoons Fate — Alberic (Lv60)",                 desc:"Activa Dragon Gauge. Blood of the Dragon +10% daño 20s."},
+  {lvl:62, name:"Sonic Thrust",      icon:"🌊", tags:["AOE","COMBO"],    how:"Auto Lv62",                                             desc:"Paso 2 del combo AoE. Usar con 3+ enemigos."},
+  {lvl:64, name:"Lance Charge",      icon:"⚡", tags:["BUFF"],           how:"Auto Lv64",                                             desc:"+10% daño personal 20s. 60s CD. Alinea con burst window."},
+  {lvl:68, name:"Mirage Dive",       icon:"👁️", tags:["JUMP"],           how:"Auto Lv68",                                             desc:"Tras High Jump. Llena Gaze Gauge para Life of the Dragon."},
+  {lvl:70, name:"Nastrond",          icon:"⚡", tags:[],                 how:"Auto Lv70",                                             desc:"3 cargas dentro de Life of the Dragon. Core del burst window."},
+  {lvl:72, name:"Coerthan Torment",  icon:"❄️", tags:["AOE","COMBO"],    how:"Auto Lv72",                                             desc:"Paso 3 del combo AoE completo."},
+  {lvl:74, name:"High Jump",         icon:"🦘", tags:["JUMP"],           how:"Auto Lv74 (upgradea Jump)",                             desc:"Reemplaza Jump. Mayor potencia y cooldown separado."},
+  {lvl:80, name:"Stardiver",         icon:"🌠", tags:["JUMP","AOE"],     how:"Auto Lv80",                                             desc:"1 uso por fase Life of the Dragon. Altísima potencia."},
+  {lvl:84, name:"Chaotic Spring",    icon:"🌿", tags:["COMBO"],          how:"Auto Lv84 (upgradea Chaos Thrust)",                     desc:"Upgradea Chaos Thrust. Añade DoT potente al combo."},
+  {lvl:86, name:"Heavens Thrust",    icon:"💥", tags:["COMBO"],          how:"Auto Lv86 (upgradea Full Thrust)",                      desc:"Upgradea Full Thrust. Mayor potencia raw."},
+  {lvl:90, name:"Wyrmwind Thrust",   icon:"🌀", tags:[],                 how:"Auto Lv90",                                             desc:"2 Firstminds stacks = disparo dracónico. No retener."},
+  {lvl:92, name:"Draconian Fury",    icon:"💢", tags:["AOE"],            how:"Auto Lv92 (upgradea Doom Spike AoE)",                   desc:"Upgradea el inicio del combo AoE."},
+  {lvl:96, name:"Drakesbane",        icon:"🐉", tags:["COMBO"],          how:"Auto Lv96",                                             desc:"Finisher de ambos combos de 5 hits."},
+  {lvl:100,name:"Starcross",         icon:"💫", tags:[],                 how:"Auto Lv100",                                            desc:"Finisher tras Stardiver en Life of the Dragon. Kit completo."}
+];
+
+var QUESTS = [
+  {lvl:30, name:"Eye of the Dragon", npc:"Ywain → Alberic", reward:"Job Stone + Jump",          loc:"Old Gridania"},
+  {lvl:35, name:"Lance of Fury",     npc:"Alberic",         reward:"Elusive Jump",               loc:"Coerthas Central"},
+  {lvl:40, name:"Unfading Skies",    npc:"Alberic",         reward:"Doom Spike (AoE)",           loc:"Coerthas Central"},
+  {lvl:45, name:"Double Dragoon",    npc:"Alberic",         reward:"Drachen Armor set gratis",   loc:"Coerthas Central"},
+  {lvl:45, name:"Fatal Seduction",   npc:"Alberic",         reward:"Winged Glide",               loc:"Coerthas Central"},
+  {lvl:50, name:"Into the Dragons Maw", npc:"Alberic",      reward:"Dragonfire Dive",            loc:"Coerthas Central"},
+  {lvl:52, name:"Days of Azure",     npc:"Alberic",         reward:"Battle Litany (raid buff)",  loc:"Coerthas Central"},
+  {lvl:56, name:"Dragoons Errand",   npc:"Alberic",         reward:"Fang and Claw",              loc:"Coerthas Central"},
+  {lvl:58, name:"Sanguine Dragoon",  npc:"Alberic",         reward:"Wheeling Thrust",            loc:"Coerthas Central"},
+  {lvl:60, name:"Dragoons Fate",     npc:"Alberic",         reward:"Geirskogul + Dragon Gauge",  loc:"Coerthas Central"}
+];
+
+var TAG_HTML = {
+  "COMBO": '<span class="tag tag-combo">COMBO</span>',
+  "BUFF":  '<span class="tag tag-buff">BUFF</span>',
+  "AOE":   '<span class="tag tag-aoe">AoE</span>',
+  "JUMP":  '<span class="tag tag-jump">JUMP</span>',
+  "RAID":  '<span class="tag tag-raid">RAID</span>',
+  "QUEST": '<span class="tag tag-quest">QUEST</span>'
+};
+
+function buildTable() {
+  var tbody = document.getElementById("skillTableBody");
+  tbody.innerHTML = "";
+  SKILLS.forEach(function(s, i) {
+    var tags = s.tags.map(function(t){ return TAG_HTML[t] || ""; }).join("");
+    var tr = document.createElement("tr");
+    tr.className = "skill-row";
+    tr.id = "sk_" + i;
+    tr.dataset.lvl = s.lvl;
+    tr.innerHTML =
+      '<td><span class="lvl-badge lv-locked" id="skbadge_'+i+'">Lv '+s.lvl+'</span></td>' +
+      '<td><span class="sk-name">'+s.icon+' '+s.name+'</span>'+tags+'<br><span style="font-size:11px;color:var(--text-muted)">'+s.desc+'</span></td>' +
+      '<td><span class="state-label sl-locked" id="skstate_'+i+'">Lv'+s.lvl+'</span></td>' +
+      '<td class="how-cell hw-locked" id="skhow_'+i+'">'+s.how+'</td>';
+    tbody.appendChild(tr);
+  });
 }
 
-function filterByLevel(lvl) {
+function buildQuests() {
+  var ul = document.getElementById("questList");
+  ul.innerHTML = "";
+  QUESTS.forEach(function(q, i) {
+    var li = document.createElement("li");
+    li.className = "quest-item";
+    li.id = "qi_" + i;
+    li.dataset.lvl = q.lvl;
+    li.innerHTML =
+      '<div class="quest-dot locked" id="qdot_'+i+'"></div>' +
+      '<div class="quest-info">' +
+        '<div class="quest-name locked" id="qname_'+i+'">Lv'+q.lvl+' — '+q.name+'</div>' +
+        '<div class="quest-meta">📍 '+q.loc+' · NPC: '+q.npc+'</div>' +
+        '<span class="quest-reward">🎁 '+q.reward+'</span>' +
+      '</div>';
+    ul.appendChild(li);
+  });
+}
+
+function applyFilter(lvl) {
   lvl = parseInt(lvl);
-  document.getElementById('filterLvlBadge').textContent = 'Lv' + lvl;
-  document.getElementById('filterSlider').value = lvl;
+  document.getElementById("filterSlider").value = lvl;
+  document.getElementById("filterDisplay").textContent = "Lv" + lvl;
 
-  // Filter skill table rows
-  document.querySelectorAll('.skill-table tbody tr').forEach(row => {
-    const badge = row.querySelector('.lvl-badge');
-    if (!badge) return;
-    const rowLvl = parseInt(badge.textContent.replace(/[^0-9]/g,''));
-    if (isNaN(rowLvl)) return;
+  // Skills
+  SKILLS.forEach(function(s, i) {
+    var row = document.getElementById("sk_" + i);
+    var badge = document.getElementById("skbadge_" + i);
+    var state = document.getElementById("skstate_" + i);
+    var how = document.getElementById("skhow_" + i);
+    var diff = s.lvl - lvl;
+    var base = "skill-row";
 
-    if (rowLvl <= lvl) {
-      row.style.opacity = '1';
-      row.style.display = '';
-      if (rowLvl < lvl) {
-        row.style.opacity = '0.55'; // already passed
-      } else {
-        row.style.opacity = '1'; // current range
-        row.style.background = 'rgba(79,195,247,0.07)';
-      }
+    if (lvl >= s.lvl) {
+      row.className = base + " state-have";
+      badge.className = "lvl-badge lv-have";
+      state.className = "state-label sl-have";
+      state.textContent = "Tienes";
+      how.className = "how-cell hw-have";
+    } else if (diff <= 5) {
+      row.className = base + " state-next";
+      badge.className = "lvl-badge lv-next";
+      state.className = "state-label sl-next";
+      state.textContent = "Pronto Lv" + s.lvl;
+      how.className = "how-cell hw-next";
+    } else if (diff <= 10) {
+      row.className = base + " state-current";
+      badge.className = "lvl-badge lv-current";
+      state.className = "state-label sl-current";
+      state.textContent = "Lv" + s.lvl;
+      how.className = "how-cell hw-locked";
     } else {
-      row.style.opacity = '0.3';
-      row.style.display = '';
+      row.className = base + " state-locked";
+      badge.className = "lvl-badge lv-locked";
+      state.className = "state-label sl-locked";
+      state.textContent = "Lv" + s.lvl;
+      how.className = "how-cell hw-locked";
     }
   });
 
-  // Filter timeline items
-  document.querySelectorAll('.tl-item').forEach(item => {
-    const lbl = item.querySelector('.tl-label');
-    if (!lbl) return;
-    const match = lbl.textContent.match(/(\d+)/);
-    if (!match) return;
-    const itemLvl = parseInt(match[1]);
-    item.style.opacity = itemLvl <= lvl ? '1' : '0.35';
+  // Quests
+  QUESTS.forEach(function(q, i) {
+    var dot  = document.getElementById("qdot_" + i);
+    var name = document.getElementById("qname_" + i);
+    var diff = q.lvl - lvl;
+
+    if (lvl >= q.lvl) {
+      dot.className  = "quest-dot done";
+      name.className = "quest-name done";
+    } else if (diff <= 5) {
+      dot.className  = "quest-dot now";
+      name.className = "quest-name now";
+    } else {
+      dot.className  = "quest-dot locked";
+      name.className = "quest-name locked";
+    }
+  });
+
+  // Timeline
+  var TL = [
+    {id:"1", lvl:1}, {id:"2", lvl:18}, {id:"3", lvl:26}, {id:"4", lvl:30},
+    {id:"5", lvl:35}, {id:"6", lvl:40}, {id:"7", lvl:50}, {id:"8", lvl:52},
+    {id:"9", lvl:60}, {id:"10", lvl:70}, {id:"11", lvl:80}, {id:"12", lvl:100}
+  ];
+
+  TL.forEach(function(t) {
+    var dot = document.getElementById("tldot" + t.id);
+    var lbl = document.getElementById("tllbl" + t.id);
+    var item = document.getElementById("tl" + t.id);
+    var diff = t.lvl - lvl;
+
+    if (lvl >= t.lvl) {
+      dot.className = "tl-dot done";
+      lbl.className = "tl-label done";
+      item.style.opacity = "0.7";
+    } else if (diff <= 5) {
+      dot.className = "tl-dot now";
+      lbl.className = "tl-label now";
+      item.style.opacity = "1";
+    } else {
+      dot.className = "tl-dot locked";
+      lbl.className = "tl-label locked";
+      item.style.opacity = "0.35";
+    }
   });
 }
-</script>
 
+document.getElementById("filterSlider").addEventListener("input", function() { applyFilter(this.value); });
+
+buildTable();
+buildQuests();
+var saved = sessionStorage.getItem("drg_lvl");
+applyFilter(saved ? parseInt(saved) : 32);
+</script>
 </body>
 </html>
