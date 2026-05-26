@@ -606,6 +606,12 @@
     .rot-step { font-size: 10px; padding: 4px 7px; }
     .glossary-grid { grid-template-columns: 1fr; }
   }
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;-webkit-tap-highlight-color:transparent;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+
 </style>
 </head>
 <body>
@@ -626,7 +632,18 @@
     <div class="status-chip">📜 MSQ: Nivel 20</div>
     <div class="status-chip">⚔ Clase: Lancer</div>
     <div class="status-chip">🎯 Objetivo: Dragoon Lv30</div>
+  
+<!-- LEVEL FILTER -->
+<div style="background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+  <span style="font-family:'Cinzel',serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;flex-shrink:0;">🎚️ FILTRAR POR NIVEL:</span>
+  <div style="flex:1;min-width:180px;">
+    <input type="range" id="filterSlider" min="1" max="100" value="32"
+      style="width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;"
+      oninput="filterByLevel(this.value)">
   </div>
+  <span id="filterLvlBadge" style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--cyan);min-width:40px;text-align:right;">Lv32</span>
+  <button onclick="filterByLevel(100)" style="background:rgba(201,168,76,0.15);border:1px solid var(--gold);border-radius:4px;padding:4px 10px;font-family:'Cinzel',serif;font-size:10px;color:var(--gold);cursor:pointer;letter-spacing:0.06em;">MOSTRAR TODO</button>
+</div>
 
   <!-- SECTION: TU CAMINO -->
   <div class="section-header">
@@ -1062,6 +1079,59 @@
   </div>
 
 </div>
+
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="02-leveling.html" class="nav-btn">Siguiente ▶</a>
+</nav>
+
+<script>
+// Restore level from hub sessionStorage
+const savedLvl = sessionStorage.getItem('drg_lvl');
+if (savedLvl) {
+  document.getElementById('filterSlider').value = savedLvl;
+  filterByLevel(savedLvl);
+}
+
+function filterByLevel(lvl) {
+  lvl = parseInt(lvl);
+  document.getElementById('filterLvlBadge').textContent = 'Lv' + lvl;
+  document.getElementById('filterSlider').value = lvl;
+
+  // Filter skill table rows
+  document.querySelectorAll('.skill-table tbody tr').forEach(row => {
+    const badge = row.querySelector('.lvl-badge');
+    if (!badge) return;
+    const rowLvl = parseInt(badge.textContent.replace(/[^0-9]/g,''));
+    if (isNaN(rowLvl)) return;
+
+    if (rowLvl <= lvl) {
+      row.style.opacity = '1';
+      row.style.display = '';
+      if (rowLvl < lvl) {
+        row.style.opacity = '0.55'; // already passed
+      } else {
+        row.style.opacity = '1'; // current range
+        row.style.background = 'rgba(79,195,247,0.07)';
+      }
+    } else {
+      row.style.opacity = '0.3';
+      row.style.display = '';
+    }
+  });
+
+  // Filter timeline items
+  document.querySelectorAll('.tl-item').forEach(item => {
+    const lbl = item.querySelector('.tl-label');
+    if (!lbl) return;
+    const match = lbl.textContent.match(/(\d+)/);
+    if (!match) return;
+    const itemLvl = parseInt(match[1]);
+    item.style.opacity = itemLvl <= lvl ? '1' : '0.35';
+  });
+}
+</script>
 
 </body>
 </html>

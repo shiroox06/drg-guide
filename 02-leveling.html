@@ -11,7 +11,7 @@
   body{font-family:'Crimson Pro',Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
   body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(76,195,247,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(124,77,255,0.08) 0%,transparent 50%);pointer-events:none;z-index:0;}
   body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.12) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.4;}
-  .container{max-width:860px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;}
+  .container{max-width:860px;margin:0 auto;padding:0 20px 100px;position:relative;z-index:1;}
   .nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;transition:opacity 0.2s;}
   .nav-back:hover{opacity:1;}
   .page-header{padding:20px 0 30px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:30px;}
@@ -58,6 +58,12 @@
   footer{text-align:center;padding:40px 20px 20px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;}
   ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
   @media(max-width:600px){.buff-grid{grid-template-columns:1fr;}}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;-webkit-tap-highlight-color:transparent;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+
 </style>
 </head>
 <body>
@@ -315,5 +321,10 @@
     <a href="index.html" style="color:var(--gold);text-decoration:none;margin-top:6px;display:inline-block">← Volver al Hub</a>
   </footer>
 </div>
+<nav class="bottom-nav">
+  <a href="01-progresion.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="03-rotacion.html" class="nav-btn">Siguiente ▶</a>
+</nav>
 </body>
 </html>

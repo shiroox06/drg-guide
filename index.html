@@ -2,249 +2,283 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Dragoon — Guía Completa</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #c9a84c;
-    --gold-light: #f0d080;
-    --blue-deep: #0d1f3c;
-    --blue-mid: #162d50;
-    --cyan: #4fc3f7;
-    --text-main: #e8dfc8;
-    --text-muted: #a09880;
-    --card-bg: rgba(22, 45, 80, 0.85);
-    --border-glow: rgba(201, 168, 76, 0.4);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--blue-deep);
-    color: var(--text-main);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(76,195,247,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(124,77,255,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 60% 80%, rgba(201,168,76,0.05) 0%, transparent 40%);
-    pointer-events: none; z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(201,168,76,0.12) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none; z-index: 0; opacity: 0.4;
-  }
-  .container { max-width: 860px; margin: 0 auto; padding: 0 20px 60px; position: relative; z-index: 1; }
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(76,195,247,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(124,77,255,0.08) 0%,transparent 50%),radial-gradient(ellipse at 60% 80%,rgba(201,168,76,0.05) 0%,transparent 40%);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.12) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.4;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 100px;position:relative;z-index:1;}
 
-  .hero { text-align: center; padding: 60px 20px 40px; }
-  .hero-emblem { font-size: 72px; display: block; margin-bottom: 10px; filter: drop-shadow(0 0 24px rgba(201,168,76,0.7)); animation: float 4s ease-in-out infinite; }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  .hero h1 { font-family:'Cinzel',serif; font-size:clamp(32px,7vw,58px); font-weight:900; color:var(--gold); letter-spacing:0.12em; text-shadow:0 0 40px rgba(201,168,76,0.5),0 2px 4px rgba(0,0,0,0.8); }
-  .hero-sub { font-size:14px; color:var(--text-muted); letter-spacing:0.3em; text-transform:uppercase; margin-top:10px; }
-  .version-chip { display:inline-block; margin-top:14px; background:rgba(79,195,247,0.12); border:1px solid var(--cyan); border-radius:20px; padding:4px 16px; font-family:'Cinzel',serif; font-size:11px; color:var(--cyan); letter-spacing:0.08em; }
-  .divider { display:flex; align-items:center; gap:16px; margin:28px auto; max-width:400px; }
-  .divider::before,.divider::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
-  .divider span { color:var(--gold); font-size:20px; }
+/* HERO */
+.hero{text-align:center;padding:50px 16px 30px;}
+.hero-emblem{font-size:64px;display:block;margin-bottom:8px;filter:drop-shadow(0 0 20px rgba(201,168,76,0.6));animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Cinzel',serif;font-size:clamp(28px,7vw,54px);font-weight:900;color:var(--gold);letter-spacing:0.12em;text-shadow:0 0 40px rgba(201,168,76,0.5);}
+.hero-sub{font-size:13px;color:var(--text-muted);letter-spacing:0.25em;text-transform:uppercase;margin-top:8px;}
+.version-chip{display:inline-block;margin-top:12px;background:rgba(79,195,247,0.12);border:1px solid var(--cyan);border-radius:20px;padding:4px 14px;font-family:'Cinzel',serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;}
+.divider{display:flex;align-items:center;gap:16px;margin:24px auto;max-width:400px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.divider span{color:var(--gold);font-size:18px;}
 
-  /* MODULE GRID */
-  .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-top:12px; }
+/* LEVEL TRACKER */
+.tracker-box{background:rgba(13,31,60,0.9);border:1px solid var(--gold);border-radius:12px;padding:20px;margin-bottom:24px;}
+.tracker-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:0.1em;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.tracker-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tracker-field label{font-family:'Cinzel',serif;font-size:11px;color:var(--text-muted);letter-spacing:0.06em;display:block;margin-bottom:6px;}
+.lvl-display{font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:var(--cyan);text-align:center;margin-bottom:4px;}
+.lvl-slider{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;}
+.lvl-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cyan);cursor:pointer;border:2px solid var(--blue-deep);box-shadow:0 0 8px rgba(79,195,247,0.5);}
+.msq-select{width:100%;background:var(--blue-mid);border:1px solid rgba(201,168,76,0.3);border-radius:6px;padding:8px 10px;color:var(--text-main);font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.04em;cursor:pointer;outline:none;}
+.msq-select option{background:var(--blue-deep);}
+.progress-bar-wrap{margin-top:12px;}
+.progress-bar-label{font-family:'Cinzel',serif;font-size:10px;color:var(--text-muted);letter-spacing:0.06em;margin-bottom:6px;display:flex;justify-content:space-between;}
+.progress-bar{height:8px;background:var(--blue-mid);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--gold));border-radius:4px;transition:width 0.5s ease;}
 
-  .module-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-glow);
-    border-radius: 10px;
-    padding: 22px;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
-  }
-  .module-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 4px;
-    background: var(--gold);
-    transition: width 0.3s;
-  }
-  .module-card:hover { border-color:var(--gold); transform:translateY(-3px); box-shadow:0 8px 32px rgba(201,168,76,0.15); }
-  .module-card:hover::before { width: 6px; }
+/* STATUS CHIPS */
+.status-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.status-chip{background:rgba(201,168,76,0.1);border:1px solid var(--gold);border-radius:4px;padding:5px 12px;font-family:'Cinzel',serif;font-size:11px;color:var(--gold-light);letter-spacing:0.06em;display:flex;align-items:center;gap:6px;}
+.status-chip.active{background:rgba(79,195,247,0.1);border-color:var(--cyan);color:#b3e5fc;}
+.status-chip.done{background:rgba(129,199,132,0.1);border-color:var(--green);color:#c8e6c9;}
 
-  .module-card.cyan::before { background: var(--cyan); }
-  .module-card.cyan { border-color:rgba(79,195,247,0.3); }
-  .module-card.cyan:hover { border-color:var(--cyan); }
+/* SECTION */
+.section-header{display:flex;align-items:center;gap:14px;margin:32px 0 16px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
 
-  .module-card.purple::before { background: #b39ddb; }
-  .module-card.purple { border-color:rgba(179,157,219,0.3); }
-  .module-card.purple:hover { border-color:#b39ddb; }
+/* MODULE CARDS */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.module-card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:10px;padding:20px;cursor:pointer;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;-webkit-tap-highlight-color:transparent;}
+.module-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);transition:width 0.3s;}
+.module-card:active{transform:scale(0.98);}
+.module-card:hover,.module-card:focus{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,168,76,0.15);outline:none;}
+.module-card.cyan::before{background:var(--cyan);}
+.module-card.cyan:hover{border-color:var(--cyan);}
+.module-card.purple::before{background:var(--purple);}
+.module-card.purple:hover{border-color:var(--purple);}
+.module-card.green::before{background:var(--green);}
+.module-card.green:hover{border-color:var(--green);}
+.module-card.red::before{background:var(--red);}
+.module-card.red:hover{border-color:var(--red);}
+.module-card.orange::before{background:var(--orange);}
+.module-card.orange:hover{border-color:var(--orange);}
+.module-icon{font-size:32px;margin-bottom:10px;display:block;}
+.module-num{font-family:'Cinzel',serif;font-size:10px;color:var(--text-muted);letter-spacing:0.1em;margin-bottom:4px;}
+.module-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--text-main);margin-bottom:6px;}
+.module-desc{font-size:13px;color:var(--text-muted);line-height:1.5;}
+.module-tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:5px;}
+.mtag{font-size:10px;font-family:'Cinzel',serif;padding:2px 7px;border-radius:3px;letter-spacing:0.04em;}
+.mtag-gold{background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);}
+.mtag-cyan{background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.4);color:#b3e5fc;}
+.mtag-purple{background:rgba(179,157,219,0.15);border:1px solid rgba(179,157,219,0.4);color:#ede7f6;}
+/* locked state */
+.module-card.locked{opacity:0.45;pointer-events:none;}
+.module-card.locked::after{content:'🔒';position:absolute;top:12px;right:12px;font-size:16px;}
+.lock-hint{font-size:11px;color:var(--red);margin-top:6px;font-family:'Cinzel',serif;letter-spacing:0.04em;}
 
-  .module-card.green::before { background: #81c784; }
-  .module-card.green { border-color:rgba(129,199,132,0.3); }
-  .module-card.green:hover { border-color:#81c784; }
+/* NEXT STEP BOX */
+.next-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.35);border-radius:8px;padding:16px;margin-bottom:20px;}
+.next-title{font-family:'Cinzel',serif;font-size:12px;color:var(--cyan);letter-spacing:0.1em;margin-bottom:10px;}
+.next-item{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5;}
+.next-item:last-child{border-bottom:none;}
+.next-icon{font-size:16px;flex-shrink:0;}
 
-  .module-card.red::before { background: #ef9a9a; }
-  .module-card.red { border-color:rgba(239,154,154,0.3); }
-  .module-card.red:hover { border-color:#ef9a9a; }
-
-  .module-card.orange::before { background: #ffcc80; }
-  .module-card.orange { border-color:rgba(255,204,128,0.3); }
-  .module-card.orange:hover { border-color:#ffcc80; }
-
-  .module-icon { font-size:36px; margin-bottom:12px; display:block; filter:drop-shadow(0 0 8px rgba(201,168,76,0.4)); }
-  .module-num { font-family:'Cinzel',serif; font-size:10px; color:var(--text-muted); letter-spacing:0.1em; margin-bottom:6px; }
-  .module-title { font-family:'Cinzel',serif; font-size:16px; font-weight:700; color:var(--text-main); margin-bottom:8px; }
-  .module-desc { font-size:13px; color:var(--text-muted); line-height:1.6; }
-  .module-tags { margin-top:12px; display:flex; flex-wrap:wrap; gap:6px; }
-  .mtag { font-size:10px; font-family:'Cinzel',serif; padding:2px 8px; border-radius:3px; letter-spacing:0.04em; }
-  .mtag-gold { background:rgba(201,168,76,0.15); border:1px solid rgba(201,168,76,0.4); color:var(--gold-light); }
-  .mtag-cyan { background:rgba(79,195,247,0.15); border:1px solid rgba(79,195,247,0.4); color:#b3e5fc; }
-  .mtag-purple { background:rgba(179,157,219,0.15); border:1px solid rgba(179,157,219,0.4); color:#ede7f6; }
-
-  /* STATUS BAR */
-  .status-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
-  .status-chip { background:rgba(201,168,76,0.1); border:1px solid var(--gold); border-radius:4px; padding:5px 12px; font-family:'Cinzel',serif; font-size:11px; color:var(--gold-light); letter-spacing:0.06em; display:flex; align-items:center; gap:6px; }
-  .status-chip.active { background:rgba(79,195,247,0.1); border-color:var(--cyan); color:#b3e5fc; }
-
-  .section-header { display:flex; align-items:center; gap:14px; margin:40px 0 20px; }
-  .section-icon { font-size:26px; }
-  .section-title { font-family:'Cinzel',serif; font-size:16px; font-weight:700; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
-  .section-line { flex:1; height:1px; background:linear-gradient(90deg,var(--gold),transparent); opacity:0.4; }
-
-  .tip-box { background:rgba(79,195,247,0.06); border:1px solid rgba(79,195,247,0.3); border-radius:6px; padding:14px 16px; margin:20px 0; display:flex; gap:12px; align-items:flex-start; }
-  .tip-text { font-size:14px; line-height:1.6; color:#b3e5fc; }
-
-  footer { text-align:center; padding:40px 20px 20px; font-size:11px; color:var(--text-muted); letter-spacing:0.1em; border-top:1px solid rgba(201,168,76,0.15); margin-top:40px; }
-
-  ::-webkit-scrollbar { width:6px; }
-  ::-webkit-scrollbar-track { background:var(--blue-deep); }
-  ::-webkit-scrollbar-thumb { background:var(--gold); border-radius:3px; }
-
-  @media(max-width:600px){ .module-grid{grid-template-columns:1fr;} }
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.tracker-grid{grid-template-columns:1fr;}.module-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 <div class="container">
-
-  <div class="hero">
-    <span class="hero-emblem">🐉</span>
-    <h1>DRAGOON</h1>
-    <div class="hero-sub">Guía Completa Modular · FFXIV Dawntrail</div>
-    <span class="version-chip">📅 Actualizado · Patch 7.5 · Mayo 2026</span>
-    <div class="divider"><span>⚔</span></div>
-  </div>
-
-  <div class="status-bar">
-    <div class="status-chip active">📍 Tu nivel: 26</div>
-    <div class="status-chip">📜 MSQ: Lv20</div>
-    <div class="status-chip">⚔ Clase: Lancer</div>
-    <div class="status-chip">🎯 6 módulos disponibles</div>
-  </div>
-
-  <div class="tip-box">
-    <span style="font-size:20px;flex-shrink:0">🧭</span>
-    <span class="tip-text">Cada módulo es independiente. Puedes abrirlos en cualquier orden. Se recomienda empezar por <strong>01 · Progresión</strong> si es tu primera vez, o ir directo al módulo que necesites.</span>
-  </div>
-
-  <div class="section-header">
-    <span class="section-icon">📚</span>
-    <span class="section-title">Módulos de la Guía</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="module-grid">
-
-    <a href="01-progresion.html" class="module-card">
-      <span class="module-icon">🗺️</span>
-      <div class="module-num">MÓDULO 01</div>
-      <div class="module-title">Progresión & Skills</div>
-      <div class="module-desc">Timeline de tu camino actual, quests de conversión, lista completa de habilidades por nivel y glosario de términos.</div>
-      <div class="module-tags">
-        <span class="mtag mtag-gold">Skills</span>
-        <span class="mtag mtag-gold">Job Quests</span>
-        <span class="mtag mtag-gold">Glosario</span>
-      </div>
-    </a>
-
-    <a href="02-leveling.html" class="module-card cyan">
-      <span class="module-icon">⚡</span>
-      <div class="module-num">MÓDULO 02</div>
-      <div class="module-title">Leveling Eficiente</div>
-      <div class="module-desc">Mejores actividades por rango de nivel. Duty Roulette, Palace of the Dead, FATEs, Beast Tribes y buffs de EXP apilables.</div>
-      <div class="module-tags">
-        <span class="mtag mtag-cyan">Lv1–30</span>
-        <span class="mtag mtag-cyan">Lv30–60</span>
-        <span class="mtag mtag-cyan">Lv60–100</span>
-      </div>
-    </a>
-
-    <a href="03-rotacion.html" class="module-card purple">
-      <span class="module-icon">🔄</span>
-      <div class="module-num">MÓDULO 03</div>
-      <div class="module-title">Rotaciones por Etapa</div>
-      <div class="module-desc">Cómo evoluciona tu rotación desde Lv26 hasta Lv100. Diagramas de combos, burst windows y uso del Dragon Gauge.</div>
-      <div class="module-tags">
-        <span class="mtag mtag-purple">Single Target</span>
-        <span class="mtag mtag-purple">AoE</span>
-        <span class="mtag mtag-purple">Burst Window</span>
-      </div>
-    </a>
-
-    <a href="04-gear.html" class="module-card green">
-      <span class="module-icon">🛡️</span>
-      <div class="module-num">MÓDULO 04</div>
-      <div class="module-title">Gear & Equipamiento</div>
-      <div class="module-desc">Cuándo y cómo actualizar equipo en cada etapa. Tomestones, Market Board, stats prioritarios y armas por expansión.</div>
-      <div class="module-tags">
-        <span class="mtag mtag-gold">Tomestones</span>
-        <span class="mtag mtag-gold">iLvl</span>
-        <span class="mtag mtag-gold">Stats</span>
-      </div>
-    </a>
-
-    <a href="05-role-actions.html" class="module-card red">
-      <span class="module-icon">🎭</span>
-      <div class="module-num">MÓDULO 05</div>
-      <div class="module-title">Role Actions</div>
-      <div class="module-desc">Habilidades compartidas con todos los Melee DPS. Feint, True North, Bloodbath, Second Wind — cuándo y cómo usarlas.</div>
-      <div class="module-tags">
-        <span class="mtag mtag-cyan">Feint</span>
-        <span class="mtag mtag-cyan">True North</span>
-        <span class="mtag mtag-cyan">Mitigation</span>
-      </div>
-    </a>
-
-    <a href="06-errores.html" class="module-card orange">
-      <span class="module-icon">⚠️</span>
-      <div class="module-num">MÓDULO 06</div>
-      <div class="module-title">Errores Comunes</div>
-      <div class="module-desc">Los 10 errores que más DPS cuestan en Dragoon. Dungeon checklist pre-pull y consejos de posicionamiento en raids.</div>
-      <div class="module-tags">
-        <span class="mtag mtag-gold">DPS Loss</span>
-        <span class="mtag mtag-gold">Posicionamiento</span>
-        <span class="mtag mtag-gold">Checklist</span>
-      </div>
-    </a>
-
-  </div>
-
-  <footer>
-    <div style="font-size:28px;margin-bottom:8px">🐉</div>
-    FFXIV Dragoon · Guía Modular · Patch 7.5 Dawntrail<br>
-    Fuentes: icy-veins.com/ffxiv · thebalanceffxiv.com · consolegameswiki.com
-  </footer>
-
+<div class="hero">
+  <span class="hero-emblem">🐉</span>
+  <h1>DRAGOON</h1>
+  <div class="hero-sub">Guía Completa Modular · FFXIV Dawntrail</div>
+  <span class="version-chip">📅 Patch 7.5 · Mayo 2026</span>
+  <div class="divider"><span>⚔</span></div>
 </div>
+
+<!-- TRACKER -->
+<div class="tracker-box">
+  <div class="tracker-title">📍 Tu Progreso Actual</div>
+  <div class="tracker-grid">
+    <div class="tracker-field">
+      <label>NIVEL DE PERSONAJE</label>
+      <div class="lvl-display" id="lvlDisplay">32</div>
+      <input type="range" class="lvl-slider" id="lvlSlider" min="1" max="100" value="32">
+    </div>
+    <div class="tracker-field">
+      <label>ÚLTIMA MSQ COMPLETADA</label>
+      <select class="msq-select" id="msqSelect">
+        <option value="0">— Selecciona —</option>
+        <option value="10">A Realm Reborn inicio</option>
+        <option value="20" selected>Sylph-management ✅</option>
+        <option value="30">The Company You Keep</option>
+        <option value="35">Ultima Weapon</option>
+        <option value="50">Through the Maelstrom (Lv50)</option>
+        <option value="53">Before the Dawn (HW unlock)</option>
+        <option value="60">Heavensward completa</option>
+        <option value="63">Stormblood unlock</option>
+        <option value="70">Stormblood completa</option>
+        <option value="73">Shadowbringers unlock</option>
+        <option value="80">Shadowbringers completa</option>
+        <option value="83">Endwalker unlock</option>
+        <option value="90">Endwalker completa</option>
+        <option value="93">Dawntrail unlock</option>
+        <option value="100">Dawntrail completa</option>
+      </select>
+    </div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label">
+      <span>Progreso hacia Lv100</span>
+      <span id="pctLabel">32%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:32%"></div></div>
+  </div>
+</div>
+
+<!-- STATUS -->
+<div class="status-bar" id="statusBar">
+  <div class="status-chip active">⚔ Lancer → Dragoon ✅</div>
+  <div class="status-chip done">📜 Eye of the Dragon ✅</div>
+  <div class="status-chip done">📜 Sylph-management ✅</div>
+  <div class="status-chip" id="chipJob">🎯 Nivel: <span id="chipLvl">32</span></div>
+</div>
+
+<!-- PRÓXIMO PASO -->
+<div class="next-box" id="nextBox">
+  <div class="next-title">⚡ PRÓXIMOS PASOS</div>
+  <div id="nextSteps"></div>
+</div>
+
+<div class="section-header">
+  <span class="section-icon">📚</span>
+  <span class="section-title">Módulos</span>
+  <div class="section-line"></div>
+</div>
+
+<div class="module-grid" id="moduleGrid">
+  <a href="01-progresion.html" class="module-card" data-minlvl="1">
+    <span class="module-icon">🗺️</span>
+    <div class="module-num">MÓDULO 01</div>
+    <div class="module-title">Progresión & Skills</div>
+    <div class="module-desc">Timeline, job quests, habilidades por nivel y glosario.</div>
+    <div class="module-tags"><span class="mtag mtag-gold">Skills</span><span class="mtag mtag-gold">Job Quests</span><span class="mtag mtag-gold">Glosario</span></div>
+  </a>
+  <a href="02-leveling.html" class="module-card cyan" data-minlvl="1">
+    <span class="module-icon">⚡</span>
+    <div class="module-num">MÓDULO 02</div>
+    <div class="module-title">Leveling Eficiente</div>
+    <div class="module-desc">Mejores actividades por rango de nivel y rutina diaria.</div>
+    <div class="module-tags"><span class="mtag mtag-cyan">Lv1–30</span><span class="mtag mtag-cyan">Lv30–60</span><span class="mtag mtag-cyan">Lv60–100</span></div>
+  </a>
+  <a href="03-rotacion.html" class="module-card purple" data-minlvl="26">
+    <span class="module-icon">🔄</span>
+    <div class="module-num">MÓDULO 03</div>
+    <div class="module-title">Rotaciones por Etapa</div>
+    <div class="module-desc">Combos, burst windows y Dragon Gauge por nivel.</div>
+    <div class="module-tags"><span class="mtag mtag-purple">Single Target</span><span class="mtag mtag-purple">AoE</span><span class="mtag mtag-purple">Burst</span></div>
+    <div class="lock-hint" id="lockHint03" style="display:none">Requiere Lv26+</div>
+  </a>
+  <a href="04-gear.html" class="module-card green" data-minlvl="1">
+    <span class="module-icon">🛡️</span>
+    <div class="module-num">MÓDULO 04</div>
+    <div class="module-title">Gear & Equipamiento</div>
+    <div class="module-desc">Stats prioritarios y fuentes de equipo por expansión.</div>
+    <div class="module-tags"><span class="mtag mtag-gold">iLvl</span><span class="mtag mtag-gold">Tomestones</span><span class="mtag mtag-gold">Stats</span></div>
+  </a>
+  <a href="05-role-actions.html" class="module-card red" data-minlvl="8">
+    <span class="module-icon">🎭</span>
+    <div class="module-num">MÓDULO 05</div>
+    <div class="module-title">Role Actions</div>
+    <div class="module-desc">Feint, True North, Bloodbath — cuándo y cómo usarlas.</div>
+    <div class="module-tags"><span class="mtag mtag-cyan">Mitigation</span><span class="mtag mtag-cyan">Utility</span><span class="mtag mtag-cyan">Survival</span></div>
+  </a>
+  <a href="06-errores.html" class="module-card orange" data-minlvl="1">
+    <span class="module-icon">⚠️</span>
+    <div class="module-num">MÓDULO 06</div>
+    <div class="module-title">Errores Comunes</div>
+    <div class="module-desc">Top 10 errores de DPS, posicionamiento y checklist pre-dungeon.</div>
+    <div class="module-tags"><span class="mtag mtag-gold">DPS</span><span class="mtag mtag-gold">Posicionamiento</span><span class="mtag mtag-gold">Checklist</span></div>
+  </a>
+</div>
+
+<footer>
+  <div style="font-size:26px;margin-bottom:6px">🐉</div>
+  FFXIV Dragoon · Patch 7.5 Dawntrail<br>
+  icy-veins.com/ffxiv · thebalanceffxiv.com · consolegameswiki.com
+</footer>
+</div>
+
+<script>
+const STEPS = [
+  {minLvl:1,  maxLvl:29,  msq:0,  icon:'⚔️', text:'Sube a Lv30 para hacer la quest de conversión a Dragoon.'},
+  {minLvl:30, maxLvl:30,  msq:0,  icon:'📜', text:'Habla con Ywain en Old Gridania → quest "Eye of the Dragon" → equipa el Job Stone.'},
+  {minLvl:31, maxLvl:34,  msq:20, icon:'🦘', text:'Sube a Lv35 y habla con Alberic en Coerthas → quest "Lance of Fury" → desbloquea Elusive Jump.'},
+  {minLvl:35, maxLvl:39,  msq:20, icon:'💢', text:'Sube a Lv40 → quest "Unfading Skies" con Alberic → desbloquea Doom Spike (primera AoE).'},
+  {minLvl:40, maxLvl:44,  msq:20, icon:'🌪️', text:'Sube a Lv45 → quest "Fatal Seduction" → desbloquea Winged Glide.'},
+  {minLvl:45, maxLvl:49,  msq:20, icon:'🔥', text:'Sube a Lv50 → quest "Into the Dragon\'s Maw" → desbloquea Dragonfire Dive.'},
+  {minLvl:50, maxLvl:50,  msq:35, icon:'📜', text:'Completa el MSQ "Ultima Weapon" para desbloquear Heavensward content.'},
+  {minLvl:51, maxLvl:51,  msq:50, icon:'✨', text:'Lv52 → quest "Days of Azure" → desbloquea Battle Litany (tu raid buff principal).'},
+  {minLvl:52, maxLvl:59,  msq:50, icon:'⚔️', text:'Continúa job quests con Alberic: Lv56 (Fang and Claw), Lv58 (Wheeling Thrust).'},
+  {minLvl:60, maxLvl:60,  msq:53, icon:'🐲', text:'Lv60 → quest "Dragoon\'s Fate" → desbloquea Geirskogul y el Dragon Gauge.'},
+  {minLvl:61, maxLvl:99,  msq:60, icon:'🌟', text:'Lv60+: habilidades se desbloquean automáticamente por nivel. Sigue el MSQ de cada expansión.'},
+  {minLvl:100,maxLvl:100, msq:90, icon:'💫', text:'Kit completo desbloqueado. Enfócate en gear endgame y Savage raids.'},
+];
+
+function getNextSteps(lvl, msq) {
+  return STEPS.filter(s => lvl >= s.minLvl && lvl <= s.maxLvl && msq >= s.msq);
+}
+
+function update() {
+  const lvl = parseInt(document.getElementById('lvlSlider').value);
+  const msq = parseInt(document.getElementById('msqSelect').value) || 0;
+  document.getElementById('lvlDisplay').textContent = lvl;
+  document.getElementById('chipLvl').textContent = lvl;
+  document.getElementById('progressFill').style.width = lvl + '%';
+  document.getElementById('pctLabel').textContent = lvl + '%';
+
+  // next steps
+  const steps = getNextSteps(lvl, msq);
+  const container = document.getElementById('nextSteps');
+  if (steps.length === 0) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--text-muted)">No hay pasos pendientes para este rango.</div>';
+  } else {
+    container.innerHTML = steps.map(s =>
+      `<div class="next-item"><span class="next-icon">${s.icon}</span><span>${s.text}</span></div>`
+    ).join('');
+  }
+
+  // module lock/unlock
+  document.querySelectorAll('.module-card').forEach(card => {
+    const min = parseInt(card.dataset.minlvl || 1);
+    if (lvl < min) {
+      card.classList.add('locked');
+    } else {
+      card.classList.remove('locked');
+    }
+  });
+
+  // save to sessionStorage
+  sessionStorage.setItem('drg_lvl', lvl);
+  sessionStorage.setItem('drg_msq', msq);
+}
+
+// restore from session
+const savedLvl = sessionStorage.getItem('drg_lvl');
+const savedMsq = sessionStorage.getItem('drg_msq');
+if (savedLvl) document.getElementById('lvlSlider').value = savedLvl;
+if (savedMsq) document.getElementById('msqSelect').value = savedMsq;
+
+document.getElementById('lvlSlider').addEventListener('input', update);
+document.getElementById('msqSelect').addEventListener('change', update);
+update();
+</script>
 </body>
 </html>
