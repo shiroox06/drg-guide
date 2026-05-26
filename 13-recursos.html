@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 13 — Recursos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(201,168,76,0.1);border:1px solid var(--gold);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:8px;}
+.resource-card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:16px;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.resource-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
+.resource-card.rc-gold::before{background:var(--gold);}
+.resource-card.rc-cyan::before{background:var(--cyan);}
+.resource-card.rc-purple::before{background:var(--purple);}
+.resource-card.rc-green::before{background:var(--green);}
+.resource-card:hover{border-color:var(--gold);}
+.rc-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.rc-icon{font-size:24px;}
+.rc-name{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--text-main);}
+.rc-url{font-size:11px;color:var(--cyan);font-family:monospace;margin-top:2px;word-break:break-all;}
+.rc-desc{font-size:13px;color:var(--text-muted);line-height:1.5;margin-top:6px;}
+.rc-tag{display:inline-block;font-family:"Cinzel",serif;font-size:10px;padding:2px 7px;border-radius:3px;margin-top:6px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold-light);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.resource-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 13</div>
+    <h1 class="page-title">🌐 Comunidad & Recursos</h1>
+    <p class="page-sub">Las mejores fuentes para mejorar como Dragoon — guías, herramientas de análisis, comunidades y referencias oficiales.</p>
+  </div>
+
+  <div class="section-header">
+    <span class="section-icon">📚</span>
+    <span class="section-title">Guías y Referencia</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card rc-gold">
+      <div class="rc-header"><span class="rc-icon">⚖️</span><span class="rc-name">The Balance FFXIV</span></div>
+      <div class="rc-url">thebalanceffxiv.com</div>
+      <div class="rc-desc">La referencia principal de teorycrafting. Guías de rotación, openers y BiS (Best in Slot) de gear actualizadas por expertos del job. La fuente más confiable para Dragoon.</div>
+      <span class="rc-tag">⭐ PRIORITARIO</span>
+    </div>
+    <div class="resource-card rc-cyan">
+      <div class="rc-header"><span class="rc-icon">❄️</span><span class="rc-name">Icy Veins FFXIV</span></div>
+      <div class="rc-url">icy-veins.com/ffxiv</div>
+      <div class="rc-desc">Guías completas de leveling, rotación y gear. Actualizadas cada patch. Más visual que The Balance, buena entrada para principiantes.</div>
+      <span class="rc-tag">Leveling</span>
+    </div>
+    <div class="resource-card rc-purple">
+      <div class="rc-header"><span class="rc-icon">🌐</span><span class="rc-name">FFXIV Console Wiki</span></div>
+      <div class="rc-url">ffxiv.consolegameswiki.com</div>
+      <div class="rc-desc">Wiki completa del juego. Ideal para buscar lore de quests, ubicaciones de NPCs, listas de skills y datos de drops.</div>
+      <span class="rc-tag">Wiki</span>
+    </div>
+    <div class="resource-card rc-green">
+      <div class="rc-header"><span class="rc-icon">🏠</span><span class="rc-name">Lodestone (Oficial)</span></div>
+      <div class="rc-url">na.finalfantasyxiv.com</div>
+      <div class="rc-desc">Página oficial. Patch notes, job guides, comunidad y noticias del juego. El Job Guide oficial muestra todas las skills con sus descripciones.</div>
+      <span class="rc-tag">Oficial</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <span class="section-title">Herramientas de Análisis</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card rc-gold">
+      <div class="rc-header"><span class="rc-icon">🔍</span><span class="rc-name">xivanalysis</span></div>
+      <div class="rc-url">xivanalysis.com</div>
+      <div class="rc-desc">Analiza tus logs de combate y te dice exactamente qué estás haciendo mal. Detecta GCDs perdidos, uso incorrecto de cooldowns, positionals fallados. Imprescindible para mejorar.</div>
+      <span class="rc-tag">⭐ ANÁLISIS</span>
+    </div>
+    <div class="resource-card rc-cyan">
+      <div class="rc-header"><span class="rc-icon">📈</span><span class="rc-name">FFLogs</span></div>
+      <div class="rc-url">fflogs.com</div>
+      <div class="rc-desc">Rankings de DPS en raids. Puedes ver logs de los mejores jugadores del mundo en Dragoon y comparar rotaciones. Para PS5 requiere el overlay de ACT (PC companion app).</div>
+      <span class="rc-tag">Rankings</span>
+    </div>
+    <div class="resource-card rc-purple">
+      <div class="rc-header"><span class="rc-icon">⚔️</span><span class="rc-name">Etro.gg</span></div>
+      <div class="rc-url">etro.gg</div>
+      <div class="rc-desc">Simulador de gear sets. Construye y compara sets de equipo para ver cuál da más DPS. Útil cuando llegues a Lv90+ y empieces a optimizar BiS con materia.</div>
+      <span class="rc-tag">Gear Planner</span>
+    </div>
+    <div class="resource-card rc-green">
+      <div class="rc-header"><span class="rc-icon">🕹️</span><span class="rc-name">Universalis</span></div>
+      <div class="rc-url">universalis.app</div>
+      <div class="rc-desc">Precios del Market Board en tiempo real. Busca el precio actual de cualquier item en tu servidor antes de comprar o vender. Esencial para no pagar de más.</div>
+      <span class="rc-tag">Market Board</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-icon">💬</span>
+    <span class="section-title">Comunidades</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card rc-gold">
+      <div class="rc-header"><span class="rc-icon">🎮</span><span class="rc-name">The Balance Discord</span></div>
+      <div class="rc-url">discord.gg/thebalanceffxiv</div>
+      <div class="rc-desc">El servidor de Discord más importante para optimización en FFXIV. Canal dedicado a Dragoon con expertos activos. Puedes preguntar sobre rotaciones, BiS y mecánicas.</div>
+      <span class="rc-tag">⭐ COMUNIDAD</span>
+    </div>
+    <div class="resource-card rc-cyan">
+      <div class="rc-header"><span class="rc-icon">🌎</span><span class="rc-name">r/ffxiv</span></div>
+      <div class="rc-url">reddit.com/r/ffxiv</div>
+      <div class="rc-desc">La comunidad más grande del juego en Reddit. Buena para noticias, fanart y preguntas generales. No tan técnico como The Balance para optimización.</div>
+      <span class="rc-tag">General</span>
+    </div>
+    <div class="resource-card rc-purple">
+      <div class="rc-header"><span class="rc-icon">🇪🇸</span><span class="rc-name">FFXIV Español</span></div>
+      <div class="rc-url">discord / Facebook groups</div>
+      <div class="rc-desc">Hay varios grupos hispanos activos en Discord y Facebook. Busca "FFXIV Español" o "FFXIV Latinoamérica". Útil para encontrar party de habla hispana en tu datacenter.</div>
+      <span class="rc-tag">Hispano</span>
+    </div>
+    <div class="resource-card rc-green">
+      <div class="rc-header"><span class="rc-icon">▶️</span><span class="rc-name">YouTube — Guides</span></div>
+      <div class="rc-url">youtube.com</div>
+      <div class="rc-desc">Busca "FFXIV Dragoon guide [patch]" o "FFXIV [dungeon name] guide" antes de un nuevo dungeon. Video guides de mecánicas son la forma más rápida de prepararse.</div>
+      <span class="rc-tag">Visual</span>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:20px">
+    <span style="font-size:16px;flex-shrink:0">🐉</span>
+    <span class="tip-text"><strong>Para empezar:</strong> En tu nivel actual solo necesitas esta guía y Icy Veins como referencia. Cuando llegues a Lv60+ y empieces parties serias, agrega The Balance y xivanalysis. FFLogs y Etro son para cuando estés en Savage.</span>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🌐</div>
+    Módulo 13 · Recursos · Patch 7.5
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="12-comparativa.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="index.html" class="nav-btn">🏠 Inicio</a>
+</nav>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 08 — Endgame</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(124,77,255,0.07) 0%,transparent 60%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(201,168,76,0.1);border:1px solid var(--gold);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-text{font-size:13px;line-height:1.6;color:#ffe082;}
+
+.content-tier{border-radius:8px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.content-tier::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
+.tier-normal{background:var(--card-bg);border:1px solid rgba(129,199,132,0.3);}
+.tier-normal::before{background:var(--green);}
+.tier-extreme{background:var(--card-bg);border:1px solid rgba(201,168,76,0.3);}
+.tier-extreme::before{background:var(--gold);}
+.tier-savage{background:var(--card-bg);border:1px solid rgba(239,154,154,0.3);}
+.tier-savage::before{background:var(--red);}
+.tier-ultimate{background:var(--card-bg);border:1px solid rgba(179,157,219,0.3);}
+.tier-ultimate::before{background:var(--purple);}
+.tier-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.tier-icon{font-size:28px;}
+.tier-name{font-family:"Cinzel",serif;font-size:16px;font-weight:700;flex:1;}
+.diff-badge{font-family:"Cinzel",serif;font-size:10px;padding:3px 10px;border-radius:12px;white-space:nowrap;}
+.db-normal{background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;}
+.db-extreme{background:rgba(201,168,76,0.2);border:1px solid var(--gold);color:var(--gold-light);}
+.db-savage{background:rgba(239,83,80,0.2);border:1px solid #ef9a9a;color:#ffcdd2;}
+.db-ultimate{background:rgba(179,157,219,0.2);border:1px solid var(--purple);color:#ede7f6;}
+.tier-body{font-size:14px;line-height:1.7;}
+.tier-body ul{list-style:none;margin-top:8px;}
+.tier-body ul li{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;}
+.tier-body ul li:last-child{border-bottom:none;}
+
+.roadmap{position:relative;padding-left:28px;margin-top:8px;}
+.roadmap::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gold),rgba(201,168,76,0.1));}
+.rm-item{position:relative;margin-bottom:18px;}
+.rm-dot{position:absolute;left:-23px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--gold);background:var(--blue-deep);}
+.rm-dot.green{background:var(--green);border-color:var(--green);}
+.rm-dot.gold{background:var(--gold);border-color:var(--gold);}
+.rm-dot.red{background:var(--red);border-color:var(--red);}
+.rm-dot.purple{background:var(--purple);border-color:var(--purple);}
+.rm-label{font-family:"Cinzel",serif;font-size:12px;color:var(--gold);margin-bottom:3px;}
+.rm-desc{font-size:13px;color:var(--text-muted);line-height:1.5;}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 08</div>
+    <h1 class="page-title">🏆 Contenido Endgame</h1>
+    <p class="page-sub">Qué hacer al llegar a Lv100. Tipos de raids, dificultades, cómo acceder, qué esperar y la ruta recomendada para entrar al endgame serio.</p>
+  </div>
+
+  <div class="tip-box">
+    <span style="font-size:16px;flex-shrink:0">📍</span>
+    <span class="tip-text">Este módulo es relevante cuando llegues a Lv100. Por ahora puedes leerlo para entender hacia dónde vas, pero no hay nada que hacer aquí hasta tener el kit completo.</span>
+  </div>
+
+  <!-- TIPOS DE CONTENIDO -->
+  <div class="section-header">
+    <span class="section-icon">⚔️</span>
+    <span class="section-title">Tipos de Contenido Endgame</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="content-tier tier-normal">
+    <div class="tier-header">
+      <span class="tier-icon">🟢</span>
+      <span class="tier-name" style="color:#81c784">Normal Raids / Trials</span>
+      <span class="diff-badge db-normal">ENTRADA</span>
+    </div>
+    <div class="tier-body">
+      <p>El contenido base del endgame. 8 jugadores, mecánicas simples, gear de calidad media. Se puede entrar directamente desde el Duty Finder sin preparación especial.</p>
+      <ul>
+        <li><span>🏰</span><span><strong>Arcadion (Dawntrail)</strong> — Raid normal de 8 personas. Resetea semanalmente. Dropea coffers de iLvl 700–710.</span></li>
+        <li><span>⚡</span><span><strong>Trials normales</strong> — Bosses de la historia. Se desbloquean siguiendo el MSQ.</span></li>
+        <li><span>🔄</span><span><strong>Alliance Raids</strong> — 24 jugadores. Más caótico, muy accesible. Disponible en Duty Roulette.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-tier tier-extreme">
+    <div class="tier-header">
+      <span class="tier-icon">🟡</span>
+      <span class="tier-name" style="color:var(--gold)">Extreme Trials</span>
+      <span class="diff-badge db-extreme">INTERMEDIO</span>
+    </div>
+    <div class="tier-body">
+      <p>Versiones difíciles de los bosses principales. 8 jugadores, mecánicas complejas, requiere comunicación y coordinación. Drop de mounts exclusivos y gear iLvl 720+.</p>
+      <ul>
+        <li><span>⚠️</span><span>No tienen Duty Finder automático — se busca party en Party Finder o con grupo fijo.</span></li>
+        <li><span>🎯</span><span>Buen punto de entrada al "serious content" antes de Savage.</span></li>
+        <li><span>🏇</span><span>Dropea monturas exclusivas que no se consiguen de otra forma.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-tier tier-savage">
+    <div class="tier-header">
+      <span class="tier-icon">🔴</span>
+      <span class="tier-name" style="color:var(--red)">Savage Raids</span>
+      <span class="diff-badge db-savage">AVANZADO</span>
+    </div>
+    <div class="tier-body">
+      <p>El contenido de alto nivel principal de FFXIV. 8 jugadores, mecánicas muy complejas, requiere rotación optimizada, posicionamiento preciso y coordinación total del grupo. Drop del mejor gear disponible.</p>
+      <ul>
+        <li><span>📋</span><span>Requiere conocer tu rotación al 100% — aquí los errores de DPS se notan y pueden costar el clear.</span></li>
+        <li><span>👥</span><span>Se forma grupo en Party Finder o con static (grupo fijo semanal).</span></li>
+        <li><span>⏱️</span><span>Cada boss puede tomar varias sesiones de wipes antes del primer clear.</span></li>
+        <li><span>🎁</span><span>Gear iLvl 730+ — el mejor del juego fuera de Ultimate.</span></li>
+      </ul>
+      <div class="warn-box" style="margin-top:10px">
+        <span style="font-size:16px;flex-shrink:0">⚠️</span>
+        <span class="warn-text">No entres a Savage sin haber practicado la rotación completa en Normal content primero. Llegar sin saber el opener es el mayor error que puedes cometer como Dragoon.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-tier tier-ultimate">
+    <div class="tier-header">
+      <span class="tier-icon">🟣</span>
+      <span class="tier-name" style="color:var(--purple)">Ultimate Raids</span>
+      <span class="diff-badge db-ultimate">ÉLITE</span>
+    </div>
+    <div class="tier-body">
+      <p>El contenido más difícil del juego. Fights de 15–20 minutos con múltiples fases encadenadas. Requieren meses de práctica grupal. Solo para jugadores con dominio total del job.</p>
+      <ul>
+        <li><span>🏆</span><span>Actualmente disponible: The Omega Protocol (TOP), Futures Rewritten (FRU), The Cloud of Darkness (ChaoticAlly).</span></li>
+        <li><span>🎨</span><span>Drop de armas exclusivas con efectos visuales únicos — el flex máximo del juego.</span></li>
+        <li><span>⏳</span><span>Un clear puede tomar semanas o meses con static dedicado.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section-header">
+    <span class="section-icon">🗺️</span>
+    <span class="section-title">Ruta Recomendada al Llegar a Lv100</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="roadmap">
+    <div class="rm-item">
+      <div class="rm-dot green"></div>
+      <div class="rm-label">Paso 1 — Gear base (iLvl 700+)</div>
+      <div class="rm-desc">Tomestones of Causality + Normal Raids semanales. Meta: llegar a iLvl 710 antes de intentar Extremes.</div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-dot green"></div>
+      <div class="rm-label">Paso 2 — Dominar la rotación</div>
+      <div class="rm-desc">Practica el opener y el loop completo en Normal Raids y Duty Roulettes hasta que sea automático. Usa xivanalysis para revisar tus logs.</div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-dot gold"></div>
+      <div class="rm-label">Paso 3 — Extreme Trials</div>
+      <div class="rm-desc">Empieza con las Extremes de Dawntrail. Party Finder o con amigos. Gear iLvl 720+, mounts exclusivos.</div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-dot gold"></div>
+      <div class="rm-label">Paso 4 — Gear iLvl 720–730</div>
+      <div class="rm-desc">Combinación de Extremes + Tomestones + crafted gear. Aquí empieza el melding serio de Materia (Crit first).</div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-dot red"></div>
+      <div class="rm-label">Paso 5 — Savage Raids</div>
+      <div class="rm-desc">Arcadion Savage (Dawntrail). Busca static en The Balance Discord o Party Finder. Gear iLvl 730+.</div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-dot purple"></div>
+      <div class="rm-label">Paso 6 — Ultimate (opcional)</div>
+      <div class="rm-desc">Si quieres el challenge máximo. Requiere clear de Savage del tier actual o anterior.</div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:16px">
+    <span style="font-size:16px;flex-shrink:0">💡</span>
+    <span class="tip-text"><strong>Para PS5:</strong> El Party Finder funciona igual que en PC. Puedes filtrar por content, tipo de grupo (prog/clear/farm) y requisitos. La comunidad hispana es activa en Chaos/Light datacenter.</span>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🏆</div>
+    Módulo 08 · Endgame · Patch 7.5
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="07-posicionamiento.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="09-opener.html" class="nav-btn">Siguiente ▶</a>
+</nav>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 12 — Comparativa Melee</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(124,77,255,0.07) 0%,transparent 60%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(179,157,219,0.1);border:1px solid var(--purple);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--purple);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.job-card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;}
+.job-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
+.job-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.job-icon{font-size:32px;}
+.job-name{font-family:"Cinzel",serif;font-size:16px;font-weight:700;flex:1;}
+.job-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.jb{font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;}
+.jb-easy{background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;}
+.jb-medium{background:rgba(255,167,38,0.2);border:1px solid var(--orange);color:#ffe082;}
+.jb-hard{background:rgba(239,83,80,0.2);border:1px solid var(--red);color:#ffcdd2;}
+.jb-utility{background:rgba(79,195,247,0.2);border:1px solid var(--cyan);color:#b3e5fc;}
+.jb-damage{background:rgba(179,157,219,0.2);border:1px solid var(--purple);color:#ede7f6;}
+.job-body{font-size:13px;line-height:1.7;}
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.pro-list,.con-list{list-style:none;}
+.pro-list li,.con-list li{display:flex;gap:6px;padding:4px 0;font-size:12px;line-height:1.4;}
+.comparison-table{width:100%;border-collapse:collapse;font-size:12px;}
+.comparison-table th{font-family:"Cinzel",serif;font-size:10px;letter-spacing:0.06em;color:var(--gold);text-align:center;padding:8px 8px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.25);}
+.comparison-table th:first-child{text-align:left;}
+.comparison-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.05);text-align:center;vertical-align:middle;}
+.comparison-table td:first-child{text-align:left;font-family:"Cinzel",serif;font-size:11px;color:var(--text-muted);}
+.comparison-table tr.highlight-drg td{background:rgba(201,168,76,0.06);}
+.star-full{color:var(--gold);}
+.star-empty{color:#333;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.pros-cons{grid-template-columns:1fr;}.comparison-table th:nth-child(n+4),.comparison-table td:nth-child(n+4){display:none;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 12</div>
+    <h1 class="page-title">⚔️ Comparativa Melee DPS</h1>
+    <p class="page-sub">Por qué elegiste bien con Dragoon. Cómo se compara con Monk, Samurai, Ninja, Reaper y Viper en playstyle, dificultad y utilidad.</p>
+  </div>
+
+  <!-- TABLA COMPARATIVA -->
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <span class="section-title">Tabla Comparativa · Patch 7.5</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;overflow:hidden;margin-bottom:16px;overflow-x:auto;">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Job</th>
+          <th>Dificultad</th>
+          <th>DPS</th>
+          <th>Raid Utility</th>
+          <th>Movilidad</th>
+          <th>Positionals</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-drg">
+          <td>🐉 <strong style="color:var(--gold)">Dragoon</strong></td>
+          <td><span style="color:var(--orange)">Media</span></td>
+          <td><span class="star-full">★★★★</span><span class="star-empty">★</span></td>
+          <td><span class="star-full">★★★★★</span></td>
+          <td><span class="star-full">★★★</span><span class="star-empty">★★</span></td>
+          <td><span style="color:#c8e6c9">3 skills</span></td>
+        </tr>
+        <tr>
+          <td>🥊 Monk</td>
+          <td><span style="color:var(--red)">Alta</span></td>
+          <td><span class="star-full">★★★★★</span></td>
+          <td><span class="star-full">★★★★</span><span class="star-empty">★</span></td>
+          <td><span class="star-full">★★★★★</span></td>
+          <td><span style="color:#ffcdd2">5 skills</span></td>
+        </tr>
+        <tr>
+          <td>🗡️ Ninja</td>
+          <td><span style="color:var(--red)">Alta</span></td>
+          <td><span class="star-full">★★★★</span><span class="star-empty">★</span></td>
+          <td><span class="star-full">★★★★★</span></td>
+          <td><span class="star-full">★★★★★</span></td>
+          <td><span style="color:#a5d6a7">2 skills</span></td>
+        </tr>
+        <tr>
+          <td>⚔️ Samurai</td>
+          <td><span style="color:var(--orange)">Media</span></td>
+          <td><span class="star-full">★★★★★</span></td>
+          <td><span class="star-full">★★</span><span class="star-empty">★★★</span></td>
+          <td><span class="star-full">★★★</span><span class="star-empty">★★</span></td>
+          <td><span style="color:#ffcdd2">4 skills</span></td>
+        </tr>
+        <tr>
+          <td>💀 Reaper</td>
+          <td><span style="color:#c8e6c9">Baja</span></td>
+          <td><span class="star-full">★★★★</span><span class="star-empty">★</span></td>
+          <td><span class="star-full">★★★</span><span class="star-empty">★★</span></td>
+          <td><span class="star-full">★★★★</span><span class="star-empty">★</span></td>
+          <td><span style="color:#a5d6a7">2 skills</span></td>
+        </tr>
+        <tr>
+          <td>🐍 Viper</td>
+          <td><span style="color:var(--orange)">Media</span></td>
+          <td><span class="star-full">★★★★</span><span class="star-empty">★</span></td>
+          <td><span class="star-full">★★★</span><span class="star-empty">★★</span></td>
+          <td><span class="star-full">★★★★★</span></td>
+          <td><span style="color:#a5d6a7">2 skills</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- JOBS DETALLE -->
+  <div class="section-header">
+    <span class="section-icon">🐉</span>
+    <span class="section-title">Por Qué Dragoon</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="job-card" style="border-color:rgba(201,168,76,0.4);">
+    <div class="job-card::before" style="background:var(--gold)"></div>
+    <div class="job-header">
+      <span class="job-icon">🐉</span>
+      <span class="job-name" style="color:var(--gold)">Dragoon — Tu elección</span>
+      <div class="job-badges">
+        <span class="jb jb-medium">Dificultad Media</span>
+        <span class="jb jb-utility">Raid Buff ⭐</span>
+        <span class="jb jb-damage">Burst Window</span>
+      </div>
+    </div>
+    <div class="job-body">
+      El Dragoon tiene una rotación estructurada y predecible — el mismo loop de 10 GCDs alternando dos combos. Ideal para aprender melee DPS sin la presión de decision-making constante de Ninja o Monk. Su mayor fortaleza es <strong>Battle Litany</strong> — el mejor raid buff de los melee — que lo hace casi siempre bienvenido en party content serio.
+    </div>
+    <div class="pros-cons">
+      <ul class="pro-list">
+        <li>✅ Rotación aprendible</li>
+        <li>✅ Mejor raid buff melee</li>
+        <li>✅ Visualmente espectacular</li>
+        <li>✅ Burst window satisfactorio</li>
+        <li>✅ Buena comunidad de recursos</li>
+      </ul>
+      <ul class="con-list">
+        <li>❌ Sin mitigation personal</li>
+        <li>❌ Movilidad media</li>
+        <li>❌ Positionals son exigentes en Savage</li>
+        <li>❌ Burst window puede desincronizarse si mueres</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="job-card" style="border-color:rgba(239,83,80,0.3);">
+    <div class="job-header">
+      <span class="job-icon">💀</span>
+      <span class="job-name" style="color:#ef9a9a">Reaper — Si quieres algo más simple</span>
+      <div class="job-badges">
+        <span class="jb jb-easy">Dificultad Baja</span>
+      </div>
+    </div>
+    <div class="job-body">
+      El job más accesible del melee. Dos combos simples, daño competitivo, buena movilidad. Menos utility que Dragoon pero menor complejidad. Si quieres algo para relajarte, Reaper es la opción. Requiere solo Gladiator/Marauder Lv60 para desbloquearse — no necesita clase base.
+    </div>
+  </div>
+
+  <div class="job-card" style="border-color:rgba(255,167,38,0.3);">
+    <div class="job-header">
+      <span class="job-icon">⚔️</span>
+      <span class="job-name" style="color:var(--orange)">Samurai — Si quieres más DPS</span>
+      <div class="job-badges">
+        <span class="jb jb-medium">Dificultad Media</span>
+        <span class="jb jb-damage">Máximo DPS</span>
+      </div>
+    </div>
+    <div class="job-body">
+      El DPS más alto del melee consistentemente. Sin raid buff — todo el daño es personal. Rotación más rígida que Dragoon pero recompensa con los números más altos. Si los logs de DPS son tu prioridad, Samurai es el candidato.
+    </div>
+  </div>
+
+  <div class="job-card" style="border-color:rgba(179,157,219,0.3);">
+    <div class="job-header">
+      <span class="job-icon">🗡️</span>
+      <span class="job-name" style="color:var(--purple)">Ninja — Si quieres utility máximo</span>
+      <div class="job-badges">
+        <span class="jb jb-hard">Dificultad Alta</span>
+        <span class="jb jb-utility">Trick Attack</span>
+      </div>
+    </div>
+    <div class="job-body">
+      El melee con más utility del juego. Trick Attack amplifica el daño de todo el grupo. Requiere manejo de Mudras (combinaciones de botones) y timing preciso. Alta curva de aprendizaje pero muy valorado en statics de Savage.
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <span style="font-size:16px;flex-shrink:0">💡</span>
+    <span class="tip-text"><strong>Conclusión:</strong> Dragoon es el balance ideal entre accesibilidad, daño competitivo y utility real. Si ya elegiste Dragoon, elegiste bien — especialmente para empezar desde cero con vistas a party content serio.</span>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">⚔️</div>
+    Módulo 12 · Comparativa Melee · Patch 7.5
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="11-ps5setup.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="13-recursos.html" class="nav-btn">Siguiente ▶</a>
+</nav>
+</body>
+</html>

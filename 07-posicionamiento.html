@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 07 — Posicionamiento</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(239,154,154,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(239,154,154,0.1);border:1px solid var(--red);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--red);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+.card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);}
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-text{font-size:13px;line-height:1.6;color:#ffe082;}
+
+/* HITBOX DIAGRAM */
+.hitbox-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px;background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.25);border-radius:10px;margin:14px 0;}
+.hitbox-grid{display:grid;grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,80px);gap:4px;}
+.hb-cell{border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Cinzel",serif;font-size:10px;text-align:center;padding:6px;cursor:pointer;transition:all 0.2s;gap:3px;}
+.hb-front{background:rgba(239,83,80,0.2);border:1px solid rgba(239,83,80,0.5);color:#ffcdd2;}
+.hb-flank{background:rgba(201,168,76,0.2);border:1px solid var(--gold);color:var(--gold-light);}
+.hb-rear{background:rgba(129,199,132,0.25);border:1px solid var(--green);color:#c8e6c9;}
+.hb-boss{background:rgba(79,195,247,0.15);border:2px solid var(--cyan);color:var(--cyan);font-size:22px;}
+.hb-cell.active{transform:scale(1.08);box-shadow:0 0 12px currentColor;}
+.hb-label{font-size:9px;opacity:0.7;letter-spacing:0.04em;}
+.hitbox-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.hbl-item{display:flex;align-items:center;gap:6px;font-size:12px;font-family:"Cinzel",serif;}
+.hbl-dot{width:10px;height:10px;border-radius:50%;}
+.hitbox-info{background:rgba(13,31,60,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:12px 16px;min-width:220px;text-align:center;}
+.hi-title{font-family:"Cinzel",serif;font-size:12px;color:var(--gold);margin-bottom:6px;}
+.hi-skills{font-size:13px;line-height:1.7;}
+
+/* POSITIONAL TABLE */
+.pos-table{width:100%;border-collapse:collapse;font-size:13px;}
+.pos-table th{font-family:"Cinzel",serif;font-size:11px;letter-spacing:0.06em;color:var(--gold);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2);}
+.pos-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:middle;}
+.pos-table tr.locked-row td{opacity:0.3;}
+.pos-table tr.active-row td{background:rgba(79,195,247,0.06);}
+.pos-rear{display:inline-block;background:rgba(129,199,132,0.2);border:1px solid var(--green);color:#c8e6c9;font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;}
+.pos-flank{display:inline-block;background:rgba(201,168,76,0.2);border:1px solid var(--gold);color:var(--gold-light);font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;}
+.pot-diff{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);}
+
+/* FILTER */
+.filter-bar{background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.filter-label{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;flex-shrink:0;}
+.filter-slider{flex:1;min-width:160px;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;}
+.filter-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cyan);cursor:pointer;border:2px solid var(--blue-deep);box-shadow:0 0 8px rgba(79,195,247,0.5);}
+.filter-lvl{font-family:"Cinzel",serif;font-size:15px;font-weight:700;color:var(--cyan);min-width:44px;text-align:right;}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.hitbox-grid{grid-template-columns:repeat(3,80px);grid-template-rows:repeat(3,65px);}.hitbox-legend{gap:8px;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 07</div>
+    <h1 class="page-title">🎯 Posicionamiento</h1>
+    <p class="page-sub">El sistema de positionals del Dragoon — qué son, qué skills los tienen, cuándo llegan y cómo mantenerlos en combate real.</p>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">🎚️ TU NIVEL:</span>
+    <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="1">
+    <span class="filter-lvl" id="filterDisplay">Lv1</span>
+  </div>
+
+  <!-- QUE SON -->
+  <div class="section-header">
+    <span class="section-icon">📖</span>
+    <span class="section-title">¿Qué son los Positionals?</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:14px;line-height:1.8;margin-bottom:12px;">Ciertas skills hacen <strong>más daño si estás en la posición correcta</strong> respecto al boss cuando las ejecutas. Si fallas la posición el ataque igual conecta, pero con menos potencia.</p>
+    <p style="font-size:14px;line-height:1.8;margin-bottom:12px;">El boss tiene tres zonas: <strong style="color:#ef9a9a">Frente</strong> (sin bonus), <strong style="color:var(--gold)">Flanco</strong> (lateral) y <strong style="color:#81c784">Trasero</strong> (detrás). El Dragoon tiene positionals en <strong>3 skills</strong> del kit completo.</p>
+    <div class="tip-box">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span class="tip-text">A tu nivel actual (Lv1–49) <strong>no tienes ningún positional</strong> — llegan con Chaos Thrust en Lv50. Aprende el concepto ahora para que no te tome por sorpresa cuando lleguen.</span>
+    </div>
+  </div>
+
+  <!-- HITBOX INTERACTIVO -->
+  <div class="section-header">
+    <span class="section-icon">🗺️</span>
+    <span class="section-title">Hitbox del Boss — Interactivo</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="hitbox-wrap">
+    <div class="hitbox-grid">
+      <div class="hb-cell hb-front" onclick="showZone('front')"><span>❌</span><span class="hb-label">FRENTE</span></div>
+      <div class="hb-cell hb-front" onclick="showZone('front')"><span>❌</span><span class="hb-label">FRENTE</span></div>
+      <div class="hb-cell hb-front" onclick="showZone('front')"><span>❌</span><span class="hb-label">FRENTE</span></div>
+      <div class="hb-cell hb-flank" onclick="showZone('flank')"><span>🟡</span><span class="hb-label">FLANCO</span></div>
+      <div class="hb-cell hb-boss">🐉</div>
+      <div class="hb-cell hb-flank" onclick="showZone('flank')"><span>🟡</span><span class="hb-label">FLANCO</span></div>
+      <div class="hb-cell hb-rear" onclick="showZone('rear')"><span>✅</span><span class="hb-label">TRASERO</span></div>
+      <div class="hb-cell hb-rear" onclick="showZone('rear')"><span>✅</span><span class="hb-label">TRASERO</span></div>
+      <div class="hb-cell hb-rear" onclick="showZone('rear')"><span>✅</span><span class="hb-label">TRASERO</span></div>
+    </div>
+    <div class="hitbox-info" id="hitboxInfo">
+      <div class="hi-title">Toca una zona para ver qué skills van ahí</div>
+      <div class="hi-skills" id="hitboxSkills" style="color:var(--text-muted)">— — —</div>
+    </div>
+    <div class="hitbox-legend">
+      <div class="hbl-item"><div class="hbl-dot" style="background:#ef9a9a"></div><span style="color:#ef9a9a">Frente — sin bonus de daño</span></div>
+      <div class="hbl-item"><div class="hbl-dot" style="background:var(--gold)"></div><span style="color:var(--gold-light)">Flanco — Fang and Claw</span></div>
+      <div class="hbl-item"><div class="hbl-dot" style="background:#81c784"></div><span style="color:#c8e6c9">Trasero — Chaotic Spring + Wheeling Thrust</span></div>
+    </div>
+  </div>
+
+  <!-- TABLA DE POSITIONALS -->
+  <div class="section-header">
+    <span class="section-icon">⚔️</span>
+    <span class="section-title">Skills con Positional</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="pos-table" id="posTable">
+      <thead>
+        <tr>
+          <th>Lv</th>
+          <th>Skill</th>
+          <th>Posición</th>
+          <th>Potencia base</th>
+          <th>Con positional</th>
+          <th>Diferencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-lvl="50" class="locked-row">
+          <td><span style="font-family:Cinzel,serif;font-size:11px">Lv 50</span></td>
+          <td><strong>Chaos Thrust</strong><br><span style="font-size:11px;color:var(--text-muted)">→ upgradea a Chaotic Spring (Lv84)</span></td>
+          <td><span class="pos-rear">🔴 TRASERO</span></td>
+          <td>300</td>
+          <td>340</td>
+          <td><span class="pot-diff">+40 ⚡</span></td>
+        </tr>
+        <tr data-lvl="56" class="locked-row">
+          <td><span style="font-family:Cinzel,serif;font-size:11px">Lv 56</span></td>
+          <td><strong>Fang and Claw</strong></td>
+          <td><span class="pos-flank">🟡 FLANCO</span></td>
+          <td>300</td>
+          <td>340</td>
+          <td><span class="pot-diff">+40 ⚡</span></td>
+        </tr>
+        <tr data-lvl="58" class="locked-row">
+          <td><span style="font-family:Cinzel,serif;font-size:11px">Lv 58</span></td>
+          <td><strong>Wheeling Thrust</strong></td>
+          <td><span class="pos-rear">🔴 TRASERO</span></td>
+          <td>300</td>
+          <td>340</td>
+          <td><span class="pot-diff">+40 ⚡</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn-box">
+    <span style="font-size:16px;flex-shrink:0">⚠️</span>
+    <span class="warn-text">Los positionals son la <strong>última prioridad</strong> en el combate. Primero: no morir, mantener uptime, no romper combo. Los positionals son el pulido final — no te metas en una mecánica peligrosa solo para conseguirlos.</span>
+  </div>
+
+  <!-- FLUJO NATURAL -->
+  <div class="section-header">
+    <span class="section-icon">🔄</span>
+    <span class="section-title">Flujo Natural del Dragoon</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:14px;line-height:1.7;margin-bottom:14px;">El Dragoon tiene una ventaja única: su rotación agrupa los positionals de forma que puedes <strong>quedarte en el trasero 5 GCDs seguidos</strong>, luego moverte al flanco solo para Fang and Claw.</p>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-family:Cinzel,serif;font-size:11px;color:#c8e6c9;letter-spacing:0.06em;margin-bottom:8px;">COMBO A — CHAOTIC SPRING (todo trasero):</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;padding:10px;background:rgba(0,0,0,0.25);border-radius:6px;">
+        <span style="background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">True Thrust</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">Spiral Blow</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(129,199,132,0.2);border:1px solid var(--green);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:#c8e6c9">Chaotic Spring 🔴</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(129,199,132,0.2);border:1px solid var(--green);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:#c8e6c9">Wheeling Thrust 🔴</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">Drakesbane</span>
+      </div>
+      <p style="font-size:12px;color:#c8e6c9;margin-top:6px;">🔴 = Trasero. Quédate atrás durante todo este combo.</p>
+    </div>
+
+    <div>
+      <div style="font-family:Cinzel,serif;font-size:11px;color:var(--gold-light);letter-spacing:0.06em;margin-bottom:8px;">COMBO B — HEAVENS' THRUST (flanco en Fang and Claw):</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;padding:10px;background:rgba(0,0,0,0.25);border-radius:6px;">
+        <span style="background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">True Thrust</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">Lance Barrage</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">Heavens' Thrust</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(201,168,76,0.2);border:1px solid var(--gold);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">Fang and Claw 🟡</span>
+        <span style="color:var(--gold);font-size:12px;align-self:center">→</span>
+        <span style="background:rgba(13,31,60,0.8);border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:5px 10px;font-family:Cinzel,serif;font-size:11px;color:var(--gold-light)">Drakesbane</span>
+      </div>
+      <p style="font-size:12px;color:var(--gold-light);margin-top:6px;">🟡 = Flanco. Solo necesitas moverte para este hit, luego vuelves al trasero.</p>
+    </div>
+
+    <div class="tip-box" style="margin-top:14px">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span class="tip-text"><strong>Estrategia óptima:</strong> Colócate detrás del boss por defecto. Para Fang and Claw da un pequeño paso al flanco, conecta el hit, y vuelve al trasero. Son 2-3 pasos, no un reposicionamiento completo.</span>
+    </div>
+  </div>
+
+  <!-- TRUE NORTH -->
+  <div class="section-header">
+    <span class="section-icon">🧭</span>
+    <span class="section-title">True North — Tu Salvavidas</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card" style="border-color:rgba(179,157,219,0.4);">
+    <div style="display:flex;gap:14px;align-items:flex-start;">
+      <span style="font-size:36px">🧭</span>
+      <div>
+        <div style="font-family:Cinzel,serif;font-size:15px;font-weight:700;color:var(--purple);margin-bottom:8px;">True North — Role Action (Lv50)</div>
+        <p style="font-size:14px;line-height:1.7;margin-bottom:10px;">Cancela los requerimientos de posición durante <strong>10 segundos</strong> (15s con trait Lv98). Todas tus skills actúan como si estuvieras en la posición correcta sin importar dónde estés. 2 cargas, 45s CD por carga.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:rgba(13,31,60,0.6);border-radius:4px;padding:8px 10px;font-size:12px;line-height:1.5;">
+            <span style="font-family:Cinzel,serif;font-size:9px;color:#a5d6a7;display:block;margin-bottom:3px;">✅ USAR EN:</span>
+            Mecánicas que te fuercen a alejarte del boss. Boss que rota inesperadamente. Cuando necesitas moverte y hay positionals en el próximo GCD.
+          </div>
+          <div style="background:rgba(13,31,60,0.6);border-radius:4px;padding:8px 10px;font-size:12px;line-height:1.5;">
+            <span style="font-family:Cinzel,serif;font-size:9px;color:#ef9a9a;display:block;margin-bottom:3px;">❌ NO DESPERDICIAR EN:</span>
+            Combate normal donde puedes mantener posición. Guarda las 2 cargas para las mecánicas impredecibles del fight.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOSSES CON TARGET RING -->
+  <div class="section-header">
+    <span class="section-icon">⭕</span>
+    <span class="section-title">Target Ring Continuo</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:14px;line-height:1.7;margin-bottom:12px;">Algunos bosses tienen un <strong>target ring continuo</strong> — el círculo alrededor de su base no tiene cortes. Estos bosses <strong>siempre cuentan el positional como exitoso</strong> sin importar desde dónde ataques.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+      <div style="background:rgba(129,199,132,0.08);border:1px solid rgba(129,199,132,0.3);border-radius:6px;padding:12px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">⭕</div>
+        <div style="font-family:Cinzel,serif;font-size:12px;color:#c8e6c9;margin-bottom:4px;">Ring continuo</div>
+        <div style="font-size:12px;color:var(--text-muted)">Positionals automáticos — ataca desde cualquier lado</div>
+      </div>
+      <div style="background:rgba(239,83,80,0.08);border:1px solid rgba(239,83,80,0.3);border-radius:6px;padding:12px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">◔</div>
+        <div style="font-family:Cinzel,serif;font-size:12px;color:#ffcdd2;margin-bottom:4px;">Ring con cortes</div>
+        <div style="font-size:12px;color:var(--text-muted)">Positionals reales — necesitas posicionarte correctamente</div>
+      </div>
+    </div>
+    <div class="tip-box" style="margin-top:12px">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span class="tip-text">La mayoría de adds en dungeons tienen ring continuo. Los bosses principales suelen tener ring con cortes. Mira el círculo antes de reposicionarte — si es continuo, no necesitas moverte.</span>
+    </div>
+  </div>
+
+  <!-- CUANDO LLEGAN -->
+  <div class="section-header">
+    <span class="section-icon">📅</span>
+    <span class="section-title">Cuándo Llegan en tu Progresión</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <div id="posTimeline"></div>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🎯</div>
+    Módulo 07 · Posicionamiento · Patch 7.5
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="06-errores.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="08-endgame.html" class="nav-btn">Siguiente ▶</a>
+</nav>
+
+<script>
+function showZone(zone) {
+  var info = document.getElementById("hitboxInfo");
+  var skills = document.getElementById("hitboxSkills");
+  if (zone === "front") {
+    info.style.borderColor = "rgba(239,83,80,0.4)";
+    document.getElementById("hitboxInfo").querySelector(".hi-title").style.color = "#ef9a9a";
+    document.getElementById("hitboxInfo").querySelector(".hi-title").textContent = "❌ FRENTE — Sin bonus";
+    skills.style.color = "#ef9a9a";
+    skills.textContent = "Ninguna skill del Dragoon tiene positional aquí. Evita el frente — es donde el boss ataca.";
+  } else if (zone === "flank") {
+    info.style.borderColor = "rgba(201,168,76,0.5)";
+    document.getElementById("hitboxInfo").querySelector(".hi-title").style.color = "var(--gold)";
+    document.getElementById("hitboxInfo").querySelector(".hi-title").textContent = "🟡 FLANCO — +40 potencia";
+    skills.style.color = "var(--gold-light)";
+    skills.innerHTML = "<strong>Fang and Claw</strong> (Lv56)<br>El único positional de flanco del Dragoon.<br>Solo necesitas estar aquí para este hit.";
+  } else {
+    info.style.borderColor = "rgba(129,199,132,0.5)";
+    document.getElementById("hitboxInfo").querySelector(".hi-title").style.color = "#81c784";
+    document.getElementById("hitboxInfo").querySelector(".hi-title").textContent = "✅ TRASERO — +40 potencia";
+    skills.style.color = "#c8e6c9";
+    skills.innerHTML = "<strong>Chaotic Spring</strong> (Lv50/84)<br><strong>Wheeling Thrust</strong> (Lv58)<br>Tu posición por defecto — quédate aquí.";
+  }
+}
+
+function applyFilter(lvl) {
+  lvl = parseInt(lvl);
+  document.getElementById("filterSlider").value = lvl;
+  document.getElementById("filterDisplay").textContent = "Lv" + lvl;
+
+  var rows = document.querySelectorAll("#posTable tbody tr");
+  rows.forEach(function(row) {
+    var rowLvl = parseInt(row.getAttribute("data-lvl"));
+    var diff = rowLvl - lvl;
+    row.classList.remove("locked-row","active-row");
+    if (lvl >= rowLvl) {
+      row.style.opacity = "1";
+    } else if (diff <= 8) {
+      row.style.opacity = "0.7";
+      row.classList.add("active-row");
+    } else {
+      row.classList.add("locked-row");
+    }
+  });
+
+  // Timeline
+  var tl = document.getElementById("posTimeline");
+  var items = [
+    {lvl:1,  text:"Lv1–49 — Sin positionals. Aprende la mecánica pero no la necesitas aún.", color:"#555"},
+    {lvl:50, text:"Lv50 — Chaos Thrust: primer positional (trasero). Desbloquea con quest Into the Dragon's Maw.", color:"var(--cyan)"},
+    {lvl:56, text:"Lv56 — Fang and Claw: positional de flanco. Quest Dragoon's Errand con Alberic.", color:"var(--gold)"},
+    {lvl:58, text:"Lv58 — Wheeling Thrust: segundo positional trasero. Quest Sanguine Dragoon.", color:"var(--green)"},
+    {lvl:84, text:"Lv84 — Chaotic Spring: upgradea Chaos Thrust, mismo positional trasero con mayor potencia.", color:"var(--purple)"}
+  ];
+
+  tl.innerHTML = items.map(function(item) {
+    var state = lvl >= item.lvl ? "1" : (item.lvl - lvl <= 8 ? "0.7" : "0.3");
+    return '<div style="display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);opacity:' + state + '">' +
+      '<div style="width:12px;height:12px;border-radius:50%;background:' + item.color + ';flex-shrink:0;margin-top:3px;"></div>' +
+      '<span style="font-size:13px;line-height:1.5">' + item.text + '</span></div>';
+  }).join("");
+}
+
+document.getElementById("filterSlider").addEventListener("input", function() { applyFilter(this.value); });
+var saved = sessionStorage.getItem("drg_lvl");
+applyFilter(saved ? parseInt(saved) : 1);
+</script>
+</body>
+</html>

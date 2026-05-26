@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 10 — Party</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 40% 60%,rgba(129,199,132,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(129,199,132,0.1);border:1px solid var(--green);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--green);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+.card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);}
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-text{font-size:13px;line-height:1.6;color:#ffe082;}
+.rule-list{list-style:none;}
+.rule-list li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5;}
+.rule-list li:last-child{border-bottom:none;}
+.rule-icon{font-size:18px;flex-shrink:0;}
+.do-list li{border-left:3px solid var(--green);padding-left:12px;margin-bottom:8px;background:rgba(129,199,132,0.05);border-radius:0 4px 4px 0;}
+.dont-list li{border-left:3px solid var(--red);padding-left:12px;margin-bottom:8px;background:rgba(239,83,80,0.05);border-radius:0 4px 4px 0;}
+.role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px;}
+.role-item{background:rgba(13,31,60,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:12px;}
+.role-name{font-family:"Cinzel",serif;font-size:12px;margin-bottom:4px;}
+.role-desc{font-size:12px;color:var(--text-muted);line-height:1.5;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.role-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 10</div>
+    <h1 class="page-title">👥 Party Content & Etiqueta</h1>
+    <p class="page-sub">Cómo comportarse en dungeons y raids. Qué comunicar, cómo no ser el problema del grupo y qué esperar de cada rol.</p>
+  </div>
+
+  <!-- COMPOSICION -->
+  <div class="section-header">
+    <span class="section-icon">⚔️</span>
+    <span class="section-title">Composición de Party</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="card">
+    <p style="font-size:14px;line-height:1.7;margin-bottom:14px;">Un party estándar en FFXIV es <strong>1 Tank · 1 Healer · 2 DPS</strong> en dungeons. En raids son <strong>2 Tanks · 2 Healers · 4 DPS</strong>. Como Dragoon eres DPS — tu trabajo es hacer daño y sobrevivir.</p>
+    <div class="role-grid">
+      <div class="role-item">
+        <div class="role-name" style="color:var(--cyan)">🛡️ Tank</div>
+        <div class="role-desc">Mantiene aggro del boss, marca el ritmo del pull, lidera el movimiento en dungeon.</div>
+      </div>
+      <div class="role-item">
+        <div class="role-name" style="color:#81c784">💚 Healer</div>
+        <div class="role-desc">Mantiene al grupo vivo. No les hagas la vida difícil recibiendo daño evitable.</div>
+      </div>
+      <div class="role-item">
+        <div class="role-name" style="color:var(--red)">⚔️ DPS (tú)</div>
+        <div class="role-desc">Matar todo lo más rápido posible. Bonus: Battle Litany beneficia a todos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DO / DONT -->
+  <div class="section-header">
+    <span class="section-icon">✅</span>
+    <span class="section-title">Qué Hacer</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="card" style="border-color:rgba(129,199,132,0.3);">
+    <ul class="rule-list do-list">
+      <li class="rule-list"><span class="rule-icon">⏳</span><span><strong>Espera al tank:</strong> Deja que el tank tenga aggro antes de atacar. 1–2 GCDs de margen evita que el boss te de la vuelta y mate al healer.</span></li>
+      <li class="rule-list"><span class="rule-icon">✨</span><span><strong>Tira Battle Litany en cada pull:</strong> Es tu raid buff — úsalo en cada encuentro, no solo cuando te acuerdes.</span></li>
+      <li class="rule-list"><span class="rule-icon">🛡️</span><span><strong>Usa Feint en tankbusters:</strong> El tank lo agradece. Si no sabes cuándo es, pregunta o mira el cast bar del boss.</span></li>
+      <li class="rule-list"><span class="rule-icon">💚</span><span><strong>Usa Second Wind y Bloodbath:</strong> No fuerces al healer a gastarte un GCD de cura si te lo puedes manejar solo.</span></li>
+      <li class="rule-list"><span class="rule-icon">💬</span><span><strong>Comunica si eres nuevo:</strong> Un simple "first time" en el chat evita malentendidos y el grupo suele ayudarte.</span></li>
+      <li class="rule-list"><span class="rule-icon">🔄</span><span><strong>Ready check antes del pull:</strong> En raids siempre confirma cuando el líder hace el ready check. No hagas pull antes de que todos estén listos.</span></li>
+    </ul>
+  </div>
+
+  <div class="section-header">
+    <span class="section-icon">❌</span>
+    <span class="section-title">Qué No Hacer</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="card" style="border-color:rgba(239,83,80,0.3);">
+    <ul class="rule-list dont-list">
+      <li class="rule-list"><span class="rule-icon">🚫</span><span><strong>No hagas pull antes del tank:</strong> Si atacas antes de que el tank tenga aggro, el boss va a ti o al healer. Causa wipes innecesarios.</span></li>
+      <li class="rule-list"><span class="rule-icon">🚫</span><span><strong>No te quedes en AoE del suelo:</strong> Las marcas rojas/verdes en el suelo te matan. Muévete inmediatamente. El DPS perdido por moverte es menor que el wipe.</span></li>
+      <li class="rule-list"><span class="rule-icon">🚫</span><span><strong>No critiques al healer si mueres:</strong> Si estás en AoE y mueres, es responsabilidad tuya, no del healer.</span></li>
+      <li class="rule-list"><span class="rule-icon">🚫</span><span><strong>No uses Elusive Jump en dirección equivocada:</strong> En espacios pequeños puedes caer del escenario o alejarte del boss en un momento crítico.</span></li>
+      <li class="rule-list"><span class="rule-icon">🚫</span><span><strong>No abandones sin avisar:</strong> Si necesitas salir, avisa en el chat. Dejar un dungeon a medias perjudica a 3 personas.</span></li>
+    </ul>
+  </div>
+
+  <!-- COMUNICACION -->
+  <div class="section-header">
+    <span class="section-icon">💬</span>
+    <span class="section-title">Comunicación Básica en Chat</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="card">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead><tr>
+        <th style="font-family:Cinzel,serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Situación</th>
+        <th style="font-family:Cinzel,serif;font-size:11px;color:var(--gold);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-glow);background:rgba(0,0,0,0.2)">Qué decir</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05)">Es tu primera vez en el dungeon</td><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#c8e6c9">"ft" o "first time"</td></tr>
+        <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05)">Necesitas un momento</td><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#c8e6c9">"one moment" o "1m"</td></tr>
+        <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05)">Listo para seguir</td><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#c8e6c9">"ready" o "r"</td></tr>
+        <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05)">Después de un wipe</td><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#c8e6c9">"gg" o nada — no culpes a nadie</td></tr>
+        <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05)">Quieres explicación de mecánica</td><td style="padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#c8e6c9">"can someone explain?" o "?mech"</td></tr>
+        <tr><td style="padding:8px 10px">Al terminar el dungeon</td><td style="padding:8px 10px;color:#c8e6c9">"gg" o "ty" — siempre</td></tr>
+      </tbody>
+    </table>
+    <div class="tip-box" style="margin-top:12px">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span class="tip-text">La comunidad de FFXIV es generalmente muy amigable con nuevos jugadores. Si dices que es tu primera vez, el 90% del grupo te guiará. No tengas miedo de preguntar.</span>
+    </div>
+  </div>
+
+  <!-- VOTEKICK -->
+  <div class="section-header">
+    <span class="section-icon">⚠️</span>
+    <span class="section-title">Vote Kick — Qué Es y Cuándo Pasa</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="card" style="border-color:rgba(255,152,0,0.3);">
+    <p style="font-size:14px;line-height:1.7;margin-bottom:12px;">El voto de expulsión es el mecanismo del juego para remover a un jugador problemático de un grupo. Requiere mayoría de votos. En la práctica es raro que pase en content normal.</p>
+    <ul class="rule-list">
+      <li><span class="rule-icon">🚫</span><span><strong>Razones reales para un kick:</strong> AFK sin avisar, comportamiento tóxico repetido, sabotear el grupo intencionalmente.</span></li>
+      <li><span class="rule-icon">✅</span><span><strong>NO es razón para kick:</strong> Jugar mal, morir en mecánicas, tener poco DPS siendo nuevo, no conocer el dungeon.</span></li>
+      <li><span class="rule-icon">💡</span><span><strong>Si te proponen kickear a alguien:</strong> Piensa si la razón es válida antes de votar. FFXIV tiene cultura de no kick por skill.</span></li>
+    </ul>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">👥</div>
+    Módulo 10 · Party Content · Patch 7.5
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="09-opener.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="11-ps5setup.html" class="nav-btn">Siguiente ▶</a>
+</nav>
+</body>
+</html>

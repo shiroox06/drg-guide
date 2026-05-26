@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 11 — PS5 Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;--cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;--text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);--border-glow:rgba(201,168,76,0.4);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 20% 70%,rgba(0,61,127,0.1) 0%,transparent 60%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(79,195,247,0.08) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.35;}
+.container{max-width:860px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(0,61,127,0.3);border:1px solid var(--cyan);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--cyan);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+.card{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cyan);}
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-text{font-size:13px;line-height:1.6;color:#ffe082;}
+
+/* HOTBAR LAYOUT */
+.hotbar{background:rgba(0,0,0,0.4);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:16px;margin:12px 0;}
+.hotbar-title{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;margin-bottom:12px;}
+.hb-row{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;}
+.hb-slot{width:52px;height:52px;background:rgba(22,45,80,0.9);border:1px solid rgba(201,168,76,0.3);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:18px;position:relative;cursor:default;}
+.hb-slot.highlight{border-color:var(--cyan);box-shadow:0 0 8px rgba(79,195,247,0.3);}
+.hb-key{position:absolute;bottom:2px;right:3px;font-family:"Cinzel",serif;font-size:8px;color:var(--text-muted);}
+.hb-label{font-size:9px;color:var(--text-muted);text-align:center;margin-top:4px;max-width:52px;line-height:1.2;font-family:"Cinzel",serif;}
+
+.setting-list{list-style:none;}
+.setting-list li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5;}
+.setting-list li:last-child{border-bottom:none;}
+.setting-icon{font-size:18px;flex-shrink:0;}
+.setting-path{font-family:"Cinzel",serif;font-size:10px;color:var(--cyan);display:block;margin-bottom:3px;letter-spacing:0.04em;}
+
+.macro-box{background:rgba(0,0,0,0.35);border:1px solid rgba(201,168,76,0.2);border-radius:6px;padding:12px;margin:10px 0;font-family:monospace;font-size:12px;color:#c8e6c9;line-height:1.8;}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:500px){.hb-slot{width:44px;height:44px;font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 11</div>
+    <h1 class="page-title">🎮 Setup PS5 — Hotbar & HUD</h1>
+    <p class="page-sub">Layout de hotbar recomendado para Dragoon en mando DualSense, configuración de HUD y macros útiles.</p>
+  </div>
+
+  <!-- HOTBAR LAYOUT -->
+  <div class="section-header">
+    <span class="section-icon">🎮</span>
+    <span class="section-title">Layout de Hotbar Recomendado</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:14px;line-height:1.7;margin-bottom:14px;">En PS5 el mando tiene acceso a <strong>16 slots por hotbar</strong> (Cruz × 4 direcciones + L2/R2 modificadores). La clave es poner las skills más usadas en las posiciones más cómodas.</p>
+
+    <div class="hotbar">
+      <div class="hotbar-title">🎯 HOTBAR 1 — Combo principal (botones base)</div>
+      <div class="hb-row">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">🗡️<span class="hb-key">△</span></div>
+          <div class="hb-label">True Thrust</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">⚡<span class="hb-key">○</span></div>
+          <div class="hb-label">Vorpal / Lance Barrage</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">💥<span class="hb-key">□</span></div>
+          <div class="hb-label">Full / Heavens' Thrust</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">🔥<span class="hb-key">✕</span></div>
+          <div class="hb-label">Disembowel / Spiral Blow</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🐾<span class="hb-key">↑</span></div>
+          <div class="hb-label">Fang and Claw</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🌀<span class="hb-key">↓</span></div>
+          <div class="hb-label">Wheeling Thrust</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🐉<span class="hb-key">←</span></div>
+          <div class="hb-label">Drakesbane</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">💢<span class="hb-key">→</span></div>
+          <div class="hb-label">Doom Spike / AoE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotbar">
+      <div class="hotbar-title">⚡ HOTBAR 2 — oGCDs (R2 + botones)</div>
+      <div class="hb-row">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">🦘<span class="hb-key">R2+△</span></div>
+          <div class="hb-label">High Jump</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">👁️<span class="hb-key">R2+○</span></div>
+          <div class="hb-label">Mirage Dive</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">🐲<span class="hb-key">R2+□</span></div>
+          <div class="hb-label">Geirskogul</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">⚡<span class="hb-key">R2+✕</span></div>
+          <div class="hb-label">Nastrond</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🌠<span class="hb-key">R2+↑</span></div>
+          <div class="hb-label">Stardiver</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">💫<span class="hb-key">R2+↓</span></div>
+          <div class="hb-label">Starcross</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🔥<span class="hb-key">R2+←</span></div>
+          <div class="hb-label">Dragonfire Dive</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">💚<span class="hb-key">R2+→</span></div>
+          <div class="hb-label">Life Surge</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotbar">
+      <div class="hotbar-title">🛡️ HOTBAR 3 — Buffs y Role Actions (L2 + botones)</div>
+      <div class="hb-row">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">⚡<span class="hb-key">L2+△</span></div>
+          <div class="hb-label">Lance Charge</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot highlight">✨<span class="hb-key">L2+○</span></div>
+          <div class="hb-label">Battle Litany</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🛡️<span class="hb-key">L2+□</span></div>
+          <div class="hb-label">Feint</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">💚<span class="hb-key">L2+✕</span></div>
+          <div class="hb-label">Second Wind</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🧭<span class="hb-key">L2+↑</span></div>
+          <div class="hb-label">True North</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">✋<span class="hb-key">L2+↓</span></div>
+          <div class="hb-label">Arm's Length</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">↩️<span class="hb-key">L2+←</span></div>
+          <div class="hb-label">Elusive Jump</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="hb-slot">🌪️<span class="hb-key">L2+→</span></div>
+          <div class="hb-label">Winged Glide</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span class="tip-text">El layout es una sugerencia — ajústalo a lo que te resulte cómodo. Lo crítico es que el combo principal (True Thrust, Vorpal, Full Thrust, Disembowel) esté en los 4 botones de acción principales sin modificador.</span>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="section-header">
+    <span class="section-icon">⚙️</span>
+    <span class="section-title">Configuraciones Recomendadas</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <ul class="setting-list">
+      <li><span class="setting-icon">🎯</span><div><span class="setting-path">System → Character Configuration → Control Settings → Gamepad</span><strong>Cross Hotbar Display:</strong> Activa "Always Show" para ver siempre el hotbar sin tener que mantener presionado.</div></li>
+      <li><span class="setting-icon">🔔</span><div><span class="setting-path">System → Character Configuration → UI Settings</span><strong>Castbar + Enemy Castbar:</strong> Actívalos ambos. Ver el cast del boss es esencial para saber cuándo usar Feint.</div></li>
+      <li><span class="setting-icon">💊</span><div><span class="setting-path">HUD Layout</span><strong>Pon el DoT tracker visible:</strong> Mueve la barra de status effects del objetivo a un lugar donde lo veas fácilmente — necesitas ver el timer de Chaotic Spring.</div></li>
+      <li><span class="setting-icon">🎮</span><div><span class="setting-path">System → Character Configuration → Control Settings</span><strong>Confirm Targeting:</strong> Activa "Prioritize Nearest Enemy" para que el joystick izquierdo no te cambie el target durante combate.</div></li>
+      <li><span class="setting-icon">🌊</span><div><span class="setting-path">Character Configuration → Display Name Settings</span><strong>Show own HP:</strong> Activa para ver tu HP sin necesitar mirar la party list completa.</div></li>
+    </ul>
+  </div>
+
+  <!-- MACROS -->
+  <div class="section-header">
+    <span class="section-icon">📝</span>
+    <span class="section-title">Macros Útiles</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:14px;line-height:1.6;margin-bottom:14px;">Los macros en FFXIV son simples — van en <strong>System → User Macros</strong>. Máximo 15 líneas por macro. En PS5 se ejecutan igual que cualquier skill en el hotbar.</p>
+
+    <p style="font-family:Cinzel,serif;font-size:11px;color:var(--gold);margin-bottom:6px;">MACRO 1 — Battle Litany con aviso al grupo:</p>
+    <div class="macro-box">/action "Battle Litany"
+/p Battle Litany! Burst window open! &lt;se.3&gt;</div>
+
+    <p style="font-family:Cinzel,serif;font-size:11px;color:var(--gold);margin-bottom:6px;margin-top:14px;">MACRO 2 — Feint con aviso al tank:</p>
+    <div class="macro-box">/action "Feint" &lt;t&gt;
+/p Feint on &lt;t&gt;! &lt;se.1&gt;</div>
+
+    <p style="font-family:Cinzel,serif;font-size:11px;color:var(--gold);margin-bottom:6px;margin-top:14px;">MACRO 3 — Aviso "first time" al entrar a dungeon:</p>
+    <div class="macro-box">/p Hi! First time here, please bear with me &lt;se.2&gt;</div>
+
+    <div class="warn-box" style="margin-top:12px">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <span class="warn-text"><strong>No uses macros para el combo principal.</strong> Los macros tienen un delay de 1 segundo entre líneas — rompen la rotación. Solo son útiles para habilidades únicas con comunicación.</span>
+    </div>
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🎮</div>
+    Módulo 11 · PS5 Setup · Patch 7.5
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="10-party.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="12-comparativa.html" class="nav-btn">Siguiente ▶</a>
+</nav>
+</body>
+</html>
