@@ -311,7 +311,14 @@ footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted
         <span class="sk-type sk-type-role">ROLE</span>
         <span class="state-badge" id="badge-secondwind">🔒 Bloqueada</span>
       </div>
-      <div class="sk-desc">Autocura — 800 de potencia (mejorado en Patch 7.x). Útil en solo, questing y como emergencia en raids cuando bajaste HP antes de un mechanic de daño masivo.</div>
+      <div class="sk-desc">Autocura instantánea. <strong>500 potencia base</strong> hasta Lv93. Sube a <strong>800 potencia</strong> con el trait <em>Enhanced Second Wind</em> (Lv94, automático).</div>
+      <div style="background:rgba(179,157,219,0.08);border:1px solid rgba(179,157,219,0.25);border-radius:4px;padding:6px 10px;margin-top:6px;font-size:12px;color:#ede7f6;">
+        🔷 <strong>Trait:</strong> Enhanced Second Wind — Lv94 (auto) → potencia 500→800
+      </div>
+      <div class="sk-usage">
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ USAR EN:</span>Solo, questing, emergencias antes de mecánica de daño masivo.</div>
+        <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#ef9a9a">⚠️ RECUERDA:</span>No reemplaza al healer. Solo compra tiempo puntual.</div>
+      </div>
       <div class="sk-how locked" id="how-secondwind">🔒 Automático al llegar a Lv8</div>
     </div>
   </div>
@@ -343,11 +350,14 @@ footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted
       <div class="sk-header">
         <span class="sk-name">Feint</span>
         <span class="sk-lvl" style="background:rgba(239,154,154,0.15);border:1px solid var(--red);color:#ffcdd2">Lv 22</span>
-        <span class="sk-cd">90s CD · 15s duración</span>
+        <span class="sk-cd">90s CD · 10s / 15s duración</span>
         <span class="sk-type sk-type-role">ROLE</span>
         <span class="state-badge" id="badge-feint">🔒 Bloqueada</span>
       </div>
       <div class="sk-desc">Reduce el Physical Damage del boss en 10% y Magic Damage en 5% por 15s. <strong>Mitigation para todo el grupo</strong>. La role action más valiosa del Dragoon en raids.</div>
+      <div style="background:rgba(179,157,219,0.08);border:1px solid rgba(179,157,219,0.25);border-radius:4px;padding:6px 10px;margin-top:6px;font-size:12px;color:#ede7f6;">
+        🔷 <strong>Trait:</strong> Enhanced Feint — Lv98 (auto) → duración 10s→15s
+      </div>
       <div class="sk-how locked" id="how-feint">🔒 Automático al llegar a Lv22</div>
       <div class="sk-usage">
         <div class="sk-usage-item"><span class="sk-usage-lbl" style="color:#a5d6a7">✅ USAR EN:</span>Justo antes de un tankbuster o raidwide del boss.</div>
@@ -395,6 +405,13 @@ var SKILLS = {
   "legsweep":10,"bloodbath":12,"secondwind":8,"arms":32,
   "feint":22,"truenorth":50
 };
+// Trait upgrades — used only for display info
+var TRAITS = {
+  "secondwind": {lvl:94, name:"Enhanced Second Wind", effect:"Potencia 500 → 800"},
+  "feint":      {lvl:98, name:"Enhanced Feint",        effect:"Duración 10s → 15s"},
+  "jump":       {lvl:74, name:"High Jump",              effect:"Jump upgradea a High Jump — mayor potencia"},
+  "lifesurge":  {lvl:88, name:"Enhanced Life Surge",    effect:"Gana una carga adicional (total 2)"}
+};
 var QUESTS = {
   "jump":"Quest: Eye of the Dragon — Ywain, Old Gridania (Lv30)",
   "elusive":"Quest: Lance of Fury — Alberic, Coerthas (Lv35)",
@@ -426,7 +443,17 @@ function applyFilter(lvl) {
       card.className = base + " state-have";
       badge.className = "state-badge sb-have";
       badge.textContent = "Tienes";
-      if (howEl) { howEl.className = "sk-how have"; howEl.textContent = "Ya disponible"; }
+      if (howEl) {
+        howEl.className = "sk-how have";
+        var traitInfo = TRAITS[id];
+        if (traitInfo && lvl < traitInfo.lvl) {
+          howEl.textContent = "Disponible — trait pendiente Lv" + traitInfo.lvl + ": " + traitInfo.effect;
+        } else if (traitInfo && lvl >= traitInfo.lvl) {
+          howEl.textContent = "Disponible — trait activo: " + traitInfo.effect;
+        } else {
+          howEl.textContent = "Ya disponible";
+        }
+      }
     } else if (diff <= 5) {
       card.className = base + " state-next";
       badge.className = "state-badge sb-next";
