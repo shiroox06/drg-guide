@@ -12,14 +12,16 @@
   --text-main:#e8dfc8;--text-muted:#a09880;
   --ps-tri:#4CAF7D;--ps-cir:#E84B4B;--ps-sq:#CB5AB5;--ps-x:#4B8FE8;
   --ps-dpad:#546e7a;
+  --la-r2:#1e3a8a;--la-l2:#14532d;
+  --lb-r2:#4c1d95;--lb-l2:#1c1917;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
 body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(79,195,247,0.05) 0%,transparent 60%);pointer-events:none;z-index:0;}
-body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.08) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.3;}
-.container{max-width:900px;margin:0 auto;padding:0 12px 110px;position:relative;z-index:1;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.07) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.3;}
+.container{max-width:920px;margin:0 auto;padding:0 12px 120px;position:relative;z-index:1;}
 .nav-back{display:inline-flex;align-items:center;gap:8px;margin:20px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
-.page-header{padding:16px 0 20px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:14px;}
+.page-header{padding:16px 0 20px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:16px;}
 .module-badge{display:inline-block;background:rgba(79,195,247,0.1);border:1px solid var(--cyan);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--cyan);letter-spacing:0.1em;margin-bottom:8px;}
 .page-title{font-family:"Cinzel",serif;font-size:clamp(20px,5vw,34px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
 .page-sub{font-size:13px;color:var(--text-muted);margin-top:6px;line-height:1.5;}
@@ -32,139 +34,98 @@ body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(c
 .filter-lvl{font-family:"Cinzel",serif;font-size:15px;font-weight:700;color:var(--cyan);min-width:40px;text-align:right;}
 .filter-btn{background:rgba(201,168,76,0.15);border:1px solid var(--gold);border-radius:4px;padding:4px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);cursor:pointer;}
 
-/* LEGEND */
-.legend-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;padding:5px 9px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);}
-.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+/* LAYOUT TOGGLE */
+.layout-toggle{display:flex;gap:0;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);}
+.lt-btn{flex:1;padding:12px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;text-align:center;cursor:pointer;border:none;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.lt-btn.active-a{background:rgba(30,58,138,0.9);color:#93c5fd;}
+.lt-btn.inactive-a{background:rgba(10,20,45,0.7);color:#2a4080;}
+.lt-btn.active-b{background:rgba(76,29,149,0.9);color:#c4b5fd;}
+.lt-btn.inactive-b{background:rgba(10,20,45,0.7);color:#3b1f70;}
+.lt-sub{font-size:10px;opacity:0.7;font-family:"Crimson Pro",serif;}
+.lt-divider{width:1px;background:rgba(255,255,255,0.08);}
 
-/* ================================================================
-   CROSS HOTBAR — Game accurate layout
-   ================================================================ */
-.xhb-wrapper{margin-bottom:10px;}
-.xhb-header{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:8px 8px 0 0;border:1px solid;border-bottom:none;}
-.xhb-mod-chip{font-family:"Cinzel",serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:0.06em;border:1px solid;}
-.xhb-title{font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;flex:1;}
-.xhb-count{font-family:"Cinzel",serif;font-size:10px;color:var(--text-muted);}
-.xhb-context{padding:7px 14px;font-size:12px;line-height:1.4;border-left:1px solid;border-right:1px solid;font-style:italic;color:rgba(255,255,255,0.55);}
-.xhb-body{
-  display:flex;align-items:center;justify-content:center;
-  padding:14px 10px;border:1px solid;border-top:none;border-radius:0 0 8px 8px;
-  gap:0;
-}
-.xhb-divider{width:2px;height:52px;background:rgba(255,255,255,0.05);margin:0 8px;flex-shrink:0;}
+/* SECTION */
+.section-header{display:flex;align-items:center;gap:12px;margin:18px 0 12px;}
+.section-icon{font-size:20px;}
+.section-title{font-family:"Cinzel",serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
 
-/* CROSS GRID — 3×3, center is spacer */
-.xhb-cross{
-  display:grid;
-  grid-template-columns:repeat(3,50px);
-  grid-template-rows:repeat(3,50px);
-  gap:2px;
-  flex-shrink:0;
-}
+/* DUAL HOTBAR LAYOUT */
+.dual-hotbar{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+
+/* HOTBAR WIDGET */
+.hb-widget{border-radius:8px;overflow:hidden;}
+.hb-header{padding:8px 12px;display:flex;align-items:center;gap:8px;}
+.hb-mod-chip{font-family:"Cinzel",serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;border:1px solid;letter-spacing:0.06em;}
+.hb-label{font-family:"Cinzel",serif;font-size:11px;flex:1;}
+.hb-count{font-family:"Cinzel",serif;font-size:10px;color:var(--text-muted);}
+.hb-body{padding:10px 8px;display:flex;gap:6px;align-items:center;justify-content:center;}
+.hb-divider-v{width:2px;height:48px;background:rgba(255,255,255,0.05);flex-shrink:0;}
+
+/* CROSS GRID */
+.xhb-cross{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:2px;}
 
 /* SLOT */
-.xhb-slot{
-  border-radius:5px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:1px;
-  cursor:pointer;transition:all 0.15s;
-  border:1.5px solid transparent;
-  position:relative;overflow:hidden;
-  user-select:none;
-}
-.xhb-slot.s-active{border:1.5px solid rgba(255,255,255,0.12);}
-.xhb-slot.s-empty{background:rgba(8,16,32,0.8);border:1px dashed rgba(255,255,255,0.05);cursor:default;}
-.xhb-slot.s-locked{opacity:0.28;cursor:pointer;}
+.xhb-slot{border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;transition:all 0.15s;border:1.5px solid transparent;position:relative;overflow:hidden;user-select:none;}
+.xhb-slot.s-active{border:1.5px solid rgba(255,255,255,0.1);}
+.xhb-slot.s-empty{background:rgba(8,14,28,0.9);border:1px dashed rgba(255,255,255,0.05);cursor:default;}
+.xhb-slot.s-locked{opacity:0.25;cursor:pointer;}
 .xhb-slot.s-center{background:transparent!important;border:none!important;cursor:default;}
-.xhb-slot.s-selected{border-color:rgba(255,255,255,0.9)!important;box-shadow:0 0 12px rgba(255,255,255,0.3);transform:scale(1.09);z-index:2;}
-.xhb-slot.s-swapped::after{
-  content:"↑";position:absolute;top:1px;right:2px;
-  font-size:8px;font-family:"Cinzel",serif;font-weight:700;
-  color:rgba(255,220,50,0.9);
-}
-.xhb-slot:active:not(.s-empty):not(.s-center){transform:scale(0.92);}
+.xhb-slot.s-selected{border-color:white!important;box-shadow:0 0 10px rgba(255,255,255,0.35);transform:scale(1.1);z-index:2;}
+.xhb-slot.s-swapped::after{content:"↑";position:absolute;top:1px;right:2px;font-size:7px;font-family:"Cinzel",serif;font-weight:700;color:rgba(255,220,50,0.95);}
+.xhb-slot:active:not(.s-empty):not(.s-center){transform:scale(0.9);}
+.s-btn{font-family:"Cinzel",serif;font-size:11px;font-weight:900;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,0.2);flex-shrink:0;}
+.s-arr{font-size:12px;width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,0.15);flex-shrink:0;background:rgba(84,110,122,0.2);}
+.s-icon{font-size:12px;line-height:1;}
+.s-name{font-family:"Cinzel",serif;font-size:6px;text-align:center;line-height:1.2;max-width:42px;letter-spacing:0.02em;padding:0 1px;}
+.s-lv{position:absolute;bottom:1px;right:2px;font-family:"Cinzel",serif;font-size:5.5px;background:rgba(0,0,0,0.7);border-radius:2px;padding:1px 2px;color:rgba(255,255,255,0.4);}
+.s-lock{position:absolute;top:1px;right:2px;font-size:8px;opacity:0.5;}
 
-/* Slot internals */
-.s-btn{
-  font-family:"Cinzel",serif;font-size:12px;font-weight:900;
-  width:24px;height:24px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  border:1.5px solid rgba(255,255,255,0.2);flex-shrink:0;
-}
-.s-arr{
-  font-size:13px;width:24px;height:24px;border-radius:3px;
-  display:flex;align-items:center;justify-content:center;
-  border:1.5px solid rgba(255,255,255,0.15);flex-shrink:0;
-  background:rgba(84,110,122,0.25);
-}
-.s-icon{font-size:13px;line-height:1;}
-.s-name{
-  font-family:"Cinzel",serif;font-size:6.5px;
-  text-align:center;line-height:1.2;max-width:46px;
-  letter-spacing:0.02em;padding:0 1px;
-}
-.s-lv{
-  position:absolute;bottom:1px;right:2px;
-  font-family:"Cinzel",serif;font-size:6px;
-  background:rgba(0,0,0,0.6);border-radius:2px;padding:1px 2px;
-  color:rgba(255,255,255,0.4);
-}
-.s-lock{position:absolute;top:1px;right:2px;font-size:9px;opacity:0.5;}
+/* CONTEXT BAR */
+.hb-context{padding:6px 12px;font-size:11px;font-style:italic;color:rgba(255,255,255,0.5);border-top:1px solid rgba(255,255,255,0.05);}
 
-/* ================================================================
-   INFO DRAWER
-   ================================================================ */
-.info-drawer{
-  position:fixed;bottom:56px;left:0;right:0;
-  background:rgba(7,14,30,0.98);
-  border-top:2px solid rgba(201,168,76,0.5);
-  z-index:90;transform:translateY(100%);
-  transition:transform 0.25s ease;
-  max-height:52vh;overflow-y:auto;
-}
+/* LAYOUT SWITCH NOTE */
+.layout-note{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.25);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.6;}
+.layout-note-title{font-family:"Cinzel",serif;font-size:10px;color:var(--gold);letter-spacing:0.08em;margin-bottom:5px;}
+
+/* ERGO EXPLANATION */
+.ergo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.ergo-item{background:rgba(13,25,50,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:10px 12px;}
+.ergo-title{font-family:"Cinzel",serif;font-size:10px;letter-spacing:0.06em;margin-bottom:5px;}
+.ergo-text{font-size:12px;color:var(--text-muted);line-height:1.5;}
+
+/* HOW TO CONFIG */
+.config-steps{list-style:none;}
+.config-step{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5;}
+.config-step:last-child{border-bottom:none;}
+.cs-num{background:var(--gold);color:var(--blue-deep);font-family:"Cinzel",serif;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+/* INFO DRAWER */
+.info-drawer{position:fixed;bottom:56px;left:0;right:0;background:rgba(7,14,30,0.98);border-top:2px solid rgba(201,168,76,0.5);z-index:90;transform:translateY(100%);transition:transform 0.25s ease;max-height:50vh;overflow-y:auto;}
 .info-drawer.open{transform:translateY(0);}
-.drawer-inner{max-width:900px;margin:0 auto;padding:14px 16px 16px;}
-.drawer-close{
-  position:absolute;top:10px;right:14px;
-  background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);
-  border-radius:50%;width:28px;height:28px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:14px;color:var(--gold);z-index:1;
-}
-.drawer-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-right:32px;}
-.d-ps-btn{
-  width:44px;height:44px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:"Cinzel",serif;font-size:18px;font-weight:900;
-  border:2px solid rgba(255,255,255,0.3);
-}
-.d-ps-arr{
-  width:44px;height:44px;border-radius:6px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;border:2px solid rgba(255,255,255,0.2);
-  background:rgba(84,110,122,0.4);
-}
-.d-head{flex:1;}
+.drawer-inner{max-width:920px;margin:0 auto;padding:14px 16px 16px;}
+.drawer-close{position:absolute;top:10px;right:14px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--gold);z-index:1;}
+.d-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-right:32px;}
+.d-ps-btn{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:"Cinzel",serif;font-size:18px;font-weight:900;border:2px solid rgba(255,255,255,0.3);}
+.d-ps-arr{width:44px;height:44px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid rgba(255,255,255,0.2);background:rgba(84,110,122,0.4);}
+.d-info{flex:1;}
 .d-combo{font-family:"Cinzel",serif;font-size:10px;color:var(--text-muted);letter-spacing:0.08em;}
 .d-skill{font-family:"Cinzel",serif;font-size:17px;font-weight:700;margin:2px 0;}
 .d-type{font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;display:inline-block;}
-.d-swap-note{
-  background:rgba(255,220,50,0.08);border:1px solid rgba(255,220,50,0.3);
-  border-radius:5px;padding:7px 12px;margin-bottom:10px;
-  font-size:12px;color:rgba(255,220,50,0.9);
-  display:flex;gap:8px;align-items:center;
-}
+.d-swap{background:rgba(255,220,50,0.08);border:1px solid rgba(255,220,50,0.3);border-radius:5px;padding:7px 12px;margin-bottom:10px;font-size:12px;color:rgba(255,220,50,0.9);display:flex;gap:8px;align-items:flex-start;}
 .d-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .d-section{background:rgba(0,0,0,0.3);border-radius:6px;padding:10px 12px;}
 .d-stitle{font-family:"Cinzel",serif;font-size:10px;letter-spacing:0.06em;margin-bottom:5px;}
 .d-stext{font-size:13px;line-height:1.6;color:var(--text-muted);}
 .d-locked{background:rgba(239,83,80,0.08);border:1px solid rgba(239,83,80,0.3);border-radius:5px;padding:10px 12px;font-size:13px;color:#ef9a9a;display:flex;gap:8px;align-items:center;}
 .d-empty{text-align:center;padding:16px;color:var(--text-muted);font-style:italic;font-size:13px;}
+.d-free{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:5px;padding:10px 12px;font-size:13px;color:var(--gold-light);}
 
-/* SECTION HEADER */
-.section-header{display:flex;align-items:center;gap:12px;margin:18px 0 12px;}
-.section-icon{font-size:20px;}
-.section-title{font-family:"Cinzel",serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
-.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+/* TIP / WARN */
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:10px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+.warn-box{background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.35);border-radius:6px;padding:10px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-text{font-size:13px;line-height:1.6;color:#ffe082;}
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
@@ -173,10 +134,10 @@ body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(c
 .nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
 footer{text-align:center;padding:24px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:20px;}
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
-@media(max-width:480px){
-  .xhb-cross{grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px);}
-  .s-btn{width:20px;height:20px;font-size:10px;}
-  .s-name{font-size:6px;}
+@media(max-width:560px){
+  .dual-hotbar{grid-template-columns:1fr;}
+  .xhb-cross{grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px);}
+  .ergo-grid{grid-template-columns:1fr;}
   .d-grid{grid-template-columns:1fr;}
 }
 </style>
@@ -186,10 +147,11 @@ footer{text-align:center;padding:24px 16px;font-size:11px;color:var(--text-muted
   <a href="index.html" class="nav-back">← Volver al Hub</a>
   <div class="page-header">
     <div class="module-badge">MÓDULO 14</div>
-    <h1 class="page-title">🕹️ Cross Hotbar — Memoria Muscular</h1>
-    <p class="page-sub">El hotbar evoluciona con tu nivel. Cada slot muestra la skill correcta para tu rotación actual. Toca cualquier botón para ver por qué está ahí.</p>
+    <h1 class="page-title">🕹️ Cross Hotbar — Configuración Óptima</h1>
+    <p class="page-sub">Pon tu nivel, valida las skills que tienes, y configura el hotbar exactamente como la guía lo recomienda para tu rotación actual.</p>
   </div>
 
+  <!-- FILTER -->
   <div class="filter-bar">
     <span class="filter-label">🎚️ TU NIVEL:</span>
     <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="1">
@@ -197,20 +159,97 @@ footer{text-align:center;padding:24px 16px;font-size:11px;color:var(--text-muted
     <button class="filter-btn" onclick="jumpToMyLevel()">MI NIVEL</button>
   </div>
 
-  <div class="legend-row">
-    <div class="leg-item"><div class="leg-dot" style="background:#1e4080"></div><span style="color:#93c5fd">BASE</span></div>
-    <div class="leg-item"><div class="leg-dot" style="background:#6d28d9"></div><span style="color:#c4b5fd">R2 HOLD</span></div>
-    <div class="leg-item"><div class="leg-dot" style="background:#3b0764"></div><span style="color:#a78bfa">R2×2</span></div>
-    <div class="leg-item"><div class="leg-dot" style="background:#065f46"></div><span style="color:#6ee7b7">L2 HOLD</span></div>
-    <div class="leg-item"><div class="leg-dot" style="background:#022c22"></div><span style="color:#34d399">L2×2</span></div>
-    <div class="leg-item"><div class="leg-dot" style="background:rgba(255,220,50,0.6)"></div><span style="color:rgba(255,220,50,0.9)">↑ skill cambió</span></div>
+  <!-- ERGONOMICS QUICK GUIDE -->
+  <div class="section-header">
+    <span class="section-icon">🤲</span>
+    <span class="section-title">Regla de Velocidad</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="ergo-grid">
+    <div class="ergo-item">
+      <div class="ergo-title" style="color:#93c5fd">⚡ R2 + Cara (△○□✕) — MÁXIMA VELOCIDAD</div>
+      <div class="ergo-text">Anular derecho sostiene R2, pulgar derecho presiona la cara. <strong style="color:var(--text-main)">Misma mano — cero delay.</strong> Solo para skills del combo principal que no requieren pensar.</div>
+    </div>
+    <div class="ergo-item">
+      <div class="ergo-title" style="color:#7dd3fc">🎯 R2 + Cruz (↑↓←→) — RÁPIDO CON VENTANA</div>
+      <div class="ergo-text">Anular derecho en R2, pulgar izquierdo en cruz. <strong style="color:var(--text-main)">Manos cruzadas — hay medio segundo.</strong> oGCDs frecuentes que no son combo encadenado.</div>
+    </div>
+    <div class="ergo-item">
+      <div class="ergo-title" style="color:#6ee7b7">🕐 L2 + Cara (△○□✕) — PLANIFICADO</div>
+      <div class="ergo-text">Anular izquierdo en L2, pulgar derecho en cara. <strong style="color:var(--text-main)">Manos separadas.</strong> Cooldowns largos del burst window que se planifican.</div>
+    </div>
+    <div class="ergo-item">
+      <div class="ergo-title" style="color:#34d399">💡 L2 + Cruz (↑↓←→) — SITUACIONAL</div>
+      <div class="ergo-text">Anular y pulgar izquierdo. <strong style="color:var(--text-main)">Misma mano izquierda.</strong> AoE combo y utilities que no necesitan velocidad de ms.</div>
+    </div>
   </div>
 
-  <div id="hotbarsContainer"></div>
+  <!-- LAYOUT TOGGLE -->
+  <div class="section-header">
+    <span class="section-icon">🎮</span>
+    <span class="section-title">Tu Hotbar</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="layout-toggle">
+    <button class="lt-btn active-a" id="btnA" onclick="setLayout('A')">
+      <span>LAYOUT A</span>
+      <span class="lt-sub">Combate activo · R1 default</span>
+    </button>
+    <div class="lt-divider"></div>
+    <button class="lt-btn inactive-b" id="btnB" onclick="setLayout('B')">
+      <span>LAYOUT B</span>
+      <span class="lt-sub">Skills secundarias · R1 toggle</span>
+    </button>
+  </div>
+
+  <!-- LAYOUT NOTE -->
+  <div class="layout-note" id="layoutNote">
+    <div class="layout-note-title">ℹ️ LAYOUT A — CUÁNDO USARLO</div>
+    <div id="layoutNoteText">Tu layout por defecto. Contiene el combo principal, los oGCDs del burst window y el AoE combo completo. El 95% del combate ocurre aquí.</div>
+  </div>
+
+  <!-- DUAL HOTBAR -->
+  <div class="dual-hotbar" id="dualHotbar"></div>
+
+  <!-- WHAT GOES IN LAYOUT B -->
+  <div id="layoutBNote" style="display:none" class="warn-box">
+    <span style="font-size:16px;flex-shrink:0">🔄</span>
+    <span class="warn-text" id="layoutBText">Presiona R1 para acceder a estas skills.</span>
+  </div>
+
+  <!-- SKILL VALIDATION -->
+  <div class="section-header">
+    <span class="section-icon">✅</span>
+    <span class="section-title">Skills Disponibles a Tu Nivel</span>
+    <div class="section-line"></div>
+  </div>
+  <div id="skillValidation"></div>
+
+  <!-- HOW TO CONFIGURE -->
+  <div class="section-header">
+    <span class="section-icon">⚙️</span>
+    <span class="section-title">Cómo Configurarlo en PS5</span>
+    <div class="section-line"></div>
+  </div>
+  <div style="background:rgba(13,25,50,0.7);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:18px;margin-bottom:16px;">
+    <ul class="config-steps">
+      <li class="config-step"><div class="cs-num">1</div><div>Abre el menú principal → <strong>System</strong> → <strong>Character Configuration</strong> → <strong>Hotbar Settings</strong> → <strong>Cross</strong></div></li>
+      <li class="config-step"><div class="cs-num">2</div><div>Activa <strong>"Enable Cross Hotbar"</strong> si no está activado. Asegúrate de tener activado <strong>"Enable expanded cross hotbar"</strong> para acceder al segundo set con R1.</div></li>
+      <li class="config-step"><div class="cs-num">3</div><div>Cierra el menú. Sostén <strong>R2</strong> — aparece el hotbar R2 en pantalla. Arrastra las skills desde tu lista de habilidades (Actions & Traits) a cada slot según la guía.</div></li>
+      <li class="config-step"><div class="cs-num">4</div><div>Haz lo mismo con <strong>L2</strong> para el hotbar L2.</div></li>
+      <li class="config-step"><div class="cs-num">5</div><div>Presiona <strong>R1</strong> para cambiar al Layout B. Repite el proceso para asignar las skills del Layout B en R2 y L2.</div></li>
+      <li class="config-step"><div class="cs-num">6</div><div>Para editar el hotbar desde el HUD: mantén presionado el botón <strong>Options</strong> durante el juego → entra al modo de edición del HUD → arrastra los slots.</div></li>
+    </ul>
+    <div class="tip-box" style="margin-top:10px">
+      <span style="font-size:14px;flex-shrink:0">💡</span>
+      <span class="tip-text"><strong>Tip:</strong> Configura primero solo los slots que tienes disponibles a tu nivel actual. Cuando llegues a un nivel nuevo y desbloquees una skill, vuelve a este módulo, pon tu nivel en el slider, y ve exactamente dónde agregarla.</span>
+    </div>
+  </div>
 
   <footer>
     <div style="font-size:20px;margin-bottom:5px">🕹️</div>
-    Cross Hotbar · Patch 7.5 · R1 cambia entre layouts guardados
+    Cross Hotbar · Patch 7.5 · R1 alterna entre Layout A y Layout B
   </footer>
 </div>
 
@@ -229,9 +268,9 @@ footer{text-align:center;padding:24px 16px;font-size:11px;color:var(--text-muted
 </nav>
 
 <script>
-// ============================================================
-// PS BUTTON CONFIG
-// ============================================================
+/* ============================================================
+   PS BUTTON CONFIG
+   ============================================================ */
 var PS = {
   tri:{sym:"△",col:"#4CAF7D",dark:"#1a5e35",isDpad:false},
   cir:{sym:"○",col:"#E84B4B",dark:"#7f0000",isDpad:false},
@@ -243,559 +282,600 @@ var PS = {
   right:{sym:"→",col:"#78909c",dark:"#37474f",isDpad:true}
 };
 
-// ============================================================
-// SKILL VERSIONS — each slot is an array sorted by minLvl
-// The active version is the last one where minLvl <= current level
-// ============================================================
-var EMPTY = {minLvl:0, skill:"—", icon:"—", type:"—", why:"", combat:"", swapNote:""};
-
+/* ============================================================
+   SLOT DATA — versioned by minLvl
+   Each slot = array of versions. Active = last where minLvl <= lvl
+   ============================================================ */
 var SLOTS = {
-
-  /* ====== BASE HOTBAR ====== */
-  "base_tri":[
-    {minLvl:1,  skill:"True Thrust",    icon:"🗡️",type:"GCD", lvlReq:1,
-     why:"△ es el botón más natural para el pulgar derecho. Va arriba. Inicio de TODOS los combos sin excepción — tu dedo lo memorizará primero.",
-     combat:"Siempre el primero. No existe rotación sin este botón."},
-    {minLvl:76, skill:"Raiden Thrust",  icon:"🗡️",type:"GCD", lvlReq:76,
-     swapNote:"Upgradea True Thrust automáticamente en Lv76. Mismo botón — tu músculo no cambia.",
-     why:"Mismo botón △ — el upgrade es automático. No necesitas reaprender nada.",
-     combat:"Exactamente igual que True Thrust. El juego lo cambia solo."}
+  /* ===== LAYOUT A — R2 + CARA ===== */
+  "A_r2_tri":[
+    {minLvl:1,  name:"True Thrust",     icon:"🗡️",type:"GCD", req:1,
+     why:"△ es el botón más natural del pulgar derecho. Inicio de TODOS los combos — sin excepción. Tu dedo aprende esto primero.",
+     combat:"Siempre el primero. Si dudas qué hacer, presiona △."},
+    {minLvl:76, name:"Raiden Thrust",   icon:"🗡️",type:"GCD", req:76,
+     swap:"Upgradea True Thrust en Lv76. Mismo botón — tu músculo no cambia.",
+     why:"Mismo △. El juego cambia el nombre automáticamente.",
+     combat:"Exactamente igual que True Thrust. Sin cambio muscular."}
   ],
-  "base_cir":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:18, skill:"Disembowel",     icon:"🔥",type:"GCD", lvlReq:18,
-     why:"○ a la derecha de △ — movimiento horizontal natural del pulgar. Combo A que activa Power Surge.",
-     combat:"Después de △. Mantén el buff activo siempre — es tu prioridad #1."},
-    {minLvl:96, skill:"Spiral Blow",    icon:"🔥",type:"GCD", lvlReq:96,
-     swapNote:"Upgradea Disembowel en Lv96. Mismo botón.",
-     why:"Mismo ○ — upgrade automático en Lv96.",
-     combat:"Mismo rol que Disembowel. Activa Power Surge."}
+  "A_r2_cir":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:18, name:"Disembowel",      icon:"🔥",type:"GCD", req:18,
+     why:"○ a la derecha de △ — movimiento horizontal natural. Combo A que activa Power Surge +10% daño.",
+     combat:"Después de △ en combo A. Mantén este buff activo siempre — prioridad #1."},
+    {minLvl:96, name:"Spiral Blow",     icon:"🔥",type:"GCD", req:96,
+     swap:"Upgradea Disembowel en Lv96. Mismo ○.",
+     why:"Mismo ○ — upgrade automático.",
+     combat:"Mismo rol. Activa Power Surge."}
   ],
-  "base_sq":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:26, skill:"Full Thrust",    icon:"💥",type:"GCD", lvlReq:26,
-     why:"□ en línea horizontal con △ — movimiento limpio del pulgar. Finisher del combo B de mayor daño.",
-     combat:"Tercer hit del combo B (△→✕→□). Usa Life Surge justo antes."},
-    {minLvl:86, skill:"Heavens' Thrust",icon:"💥",type:"GCD", lvlReq:86,
-     swapNote:"Upgradea Full Thrust en Lv86. Mismo botón.",
-     why:"Mismo □ — mayor potencia, mismo movimiento.",
-     combat:"Finisher combo B con más daño. Patrón idéntico."}
+  "A_r2_sq":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:26, name:"Full Thrust",     icon:"💥",type:"GCD", req:26,
+     why:"□ en línea horizontal con △ — movimiento limpio del pulgar. Finisher de alto daño del combo B.",
+     combat:"Tercer hit combo B (△→✕→□). Life Surge justo antes para crítico."},
+    {minLvl:86, name:"Heavens' Thrust", icon:"💥",type:"GCD", req:86,
+     swap:"Upgradea Full Thrust en Lv86. Mismo □.",
+     why:"Mismo □ — mayor potencia.",
+     combat:"Finisher combo B mejorado. Mismo patrón."}
   ],
-  "base_x":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:4,  skill:"Vorpal Thrust",  icon:"⚡",type:"GCD", lvlReq:4,
-     why:"✕ abajo de △ — fluye bajando para llegar al finisher □. 2do hit del combo B.",
-     combat:"2do hit del combo B después de △. Prepara el finisher."},
-    {minLvl:96, skill:"Lance Barrage",  icon:"⚡",type:"GCD", lvlReq:96,
-     swapNote:"Upgradea Vorpal Thrust en Lv96. Mismo botón.",
+  "A_r2_x":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:4,  name:"Vorpal Thrust",   icon:"⚡",type:"GCD", req:4,
+     why:"✕ abajo de △ — fluye bajando hacia □. 2do hit del combo B.",
+     combat:"Segundo hit combo B después de △. Prepara el finisher."},
+    {minLvl:96, name:"Lance Barrage",   icon:"⚡",type:"GCD", req:96,
+     swap:"Upgradea Vorpal Thrust en Lv96. Mismo ✕.",
      why:"Mismo ✕ — upgrade automático.",
-     combat:"Mismo rol que Vorpal Thrust."}
+     combat:"Mismo 2do hit combo B."}
   ],
-  "base_up":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:40, skill:"Doom Spike",     icon:"💢",type:"GCD", lvlReq:40,
-     why:"Cruz ↑ — pulgar izquierdo totalmente independiente del combo de mano derecha. Cambias de modo AoE sin confundir los dedos.",
-     combat:"Con 3+ enemigos. Inicio del combo AoE: ↑→↓→→"},
-    {minLvl:92, skill:"Draconian Fury", icon:"💢",type:"GCD", lvlReq:92,
-     swapNote:"Upgradea Doom Spike en Lv92. Mismo botón.",
-     why:"Mismo ↑ — upgrade automático para el AoE de Lv92+.",
-     combat:"Mismo inicio del combo AoE."}
-  ],
-  "base_down":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:62, skill:"Sonic Thrust",   icon:"🌊",type:"GCD", lvlReq:62,
-     why:"Cruz ↓ — segundo hit del combo AoE. Fluye ↑→↓ verticalmente. Pulgar izquierdo.",
-     combat:"2do hit del combo AoE después de ↑ con 3+ enemigos."}
-  ],
-  "base_left":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:15, skill:"Piercing Talon", icon:"🎯",type:"GCD", lvlReq:15,
-     why:"Cruz ← — posición de bajo acceso intencional para skill poco frecuente.",
-     combat:"Solo cuando estás lejos y no puedes llegar al boss a tiempo."},
-    {minLvl:35, skill:"Elusive Jump",   icon:"↩️",type:"oGCD",lvlReq:35,
-     swapNote:"Reemplaza Piercing Talon en Lv35. Movilidad > distancia.",
-     why:"Cruz ← — movilidad situacional. Pulgar izquierdo no interfiere con combo derecho.",
-     combat:"Para escapar AoEs del suelo. No lo gastes en combate normal."}
-  ],
-  "base_right":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:72, skill:"Coerthan Torment",icon:"❄️",type:"GCD",lvlReq:72,
-     why:"Cruz → — 3er hit del combo AoE. Completa el loop ↑→↓→→ con pulgar izquierdo.",
-     combat:"3er hit del combo AoE (Lv72+). Fluye desde ↑ y ↓."}
-  ],
-
-  /* ====== R2 HOLD ====== */
-  "r2h_tri":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:30, skill:"Jump",           icon:"🦘",type:"oGCD",lvlReq:30,
-     why:"R2+△ misma mano derecha — anular sostiene R2, pulgar presiona △. Máxima velocidad. Es el oGCD más frecuente del Dragoon.",
+  /* ===== LAYOUT A — R2 + CRUZ ===== */
+  "A_r2_up":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:30, name:"Jump",            icon:"🦘",type:"oGCD",req:30,
+     why:"R2+↑ — el weave más frecuente del Dragoon. R2 ya sostenido, pulgar izquierdo presiona ↑. Hay ventana de 1 GCD para ejecutarlo.",
      combat:"Entre cada 2 GCDs constantemente. En cuanto esté disponible."},
-    {minLvl:74, skill:"High Jump",      icon:"🦘",type:"oGCD",lvlReq:74,
-     swapNote:"Upgradea Jump en Lv74. Mismo botón R2+△.",
-     why:"Mismo R2+△ — tu músculo ya está entrenado. Mayor potencia.",
-     combat:"Exactamente igual que Jump. Más daño."}
+    {minLvl:74, name:"High Jump",       icon:"🦘",type:"oGCD",req:74,
+     swap:"Upgradea Jump en Lv74. Mismo R2+↑.",
+     why:"Mismo R2+↑ — tu músculo ya está entrenado. Mayor potencia.",
+     combat:"Igual que Jump. Sin cambio en el botón."}
   ],
-  "r2h_cir":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:68, skill:"Mirage Dive",    icon:"👁️",type:"oGCD",lvlReq:68,
-     why:"R2+○ — R2 ya sostenido del Jump anterior. Pulgar derecho se mueve △→○ sin soltar R2.",
+  "A_r2_down":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:68, name:"Mirage Dive",     icon:"👁️",type:"oGCD",req:68,
+     why:"R2+↓ — tras High Jump hay 1 GCD de margen. R2 sostenido, pulgar izquierdo ↓.",
      combat:"Inmediatamente después de High Jump. Llena Gaze para Dragon Gauge."}
   ],
-  "r2h_sq":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:60, skill:"Geirskogul",     icon:"🐲",type:"oGCD",lvlReq:60,
-     why:"R2+□ — bloque R2 con △○□✕. Activa el Dragon Gauge.",
+  "A_r2_left":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:70, name:"Nastrond",        icon:"⚡",type:"oGCD",req:70,
+     why:"R2+← — x3 en burst window. No es combo encadenado, hay ventana entre cada uno. R2 sostenido, pulgar izquierdo ←.",
+     combat:"x3 dentro de Life of the Dragon. Presiona ← tres veces con R2 sostenido."}
+  ],
+  "A_r2_right":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:60, name:"Geirskogul",      icon:"🐲",type:"oGCD",req:60,
+     why:"R2+→ — 60s CD, se planifica. Hay tiempo para ejecutarlo en la cruz.",
      combat:"Úsalo disponible. Con 2 Gaze stacks activa Life of the Dragon directamente."}
   ],
-  "r2h_x":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:6,  skill:"Life Surge",     icon:"💚",type:"oGCD",lvlReq:6,
-     why:"R2+✕ misma mano derecha. Antes del finisher — anular R2, pulgar ✕.",
-     combat:"Justo antes de Full Thrust □ para garantizar crítico."},
-    {minLvl:70, skill:"Nastrond",       icon:"⚡",type:"oGCD",lvlReq:70,
-     swapNote:"Life Surge se mueve a R2×2+△ en Lv70. Nastrond toma esta posición — necesita velocidad máxima (x3 en burst).",
-     why:"R2+✕ — Nastrond se usa 3 veces seguidas en burst. R2 sostenido, presiona ✕ tres veces. Máxima velocidad necesaria.",
-     combat:"x3 dentro de Life of the Dragon. R2 sostenido, ✕ tres veces rápido."}
-  ],
-  "r2h_up":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:80, skill:"Stardiver",      icon:"🌠",type:"oGCD",lvlReq:80,
-     why:"R2+↑ — R2 sostenido, pulgar izquierdo en ↑. Natural después de Nastrond (R2+✕ mano derecha) — alternancia der→izq.",
-     combat:"1 vez por Life of the Dragon. Después de Nastrond x3."}
-  ],
-  "r2h_down":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:90, skill:"Wyrmwind Thrust",icon:"🌀",type:"oGCD",lvlReq:90,
-     why:"R2+↓ — 2 Firstminds stacks. Cruz con R2, no necesita ms de precisión.",
-     combat:"Apenas tengas 2 stacks. No retener."}
-  ],
-  "r2h_left":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:50, skill:"Dragonfire Dive",icon:"🔥",type:"oGCD",lvlReq:50,
-     why:"R2+← AoE circular 120s CD. Cruz con R2 sostenido, pulgar izquierdo.",
-     combat:"En burst window o packs de enemigos. 120s CD — no desperdiciar."}
-  ],
-  "r2h_right":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:45, skill:"Winged Glide",   icon:"🌪️",type:"oGCD",lvlReq:45,
-     why:"R2+→ — gap closer. Cruz R2, movilidad con velocidad.",
-     combat:"Para cerrar distancia rápido al boss durante mecánicas."}
-  ],
-
-  /* ====== R2 DOUBLE TAP ====== */
-  "r2dt_tri":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:70, skill:"Life Surge",     icon:"💚",type:"oGCD",lvlReq:6,
-     swapNote:"Life Surge se mueve aquí desde R2+✕ en Lv70 cuando Nastrond toma esa posición.",
-     why:"R2×2+△ — doble tap da tiempo de planificar. Life Surge no necesita ms de precisión desde Lv70.",
-     combat:"Activa, luego presiona □ (Heavens' Thrust) para crítico garantizado."}
-  ],
-  "r2dt_cir":[{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Cruz libre — sugerido para macros.",combat:""}],
-  "r2dt_sq":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:56, skill:"Fang and Claw",  icon:"🐾",type:"GCD", lvlReq:56,
-     why:"R2×2+□ — 4to hit combo B. Doble tap tolerable porque es parte del flujo del combo, no reacción de ms.",
-     combat:"Después de Full Thrust en combo Heavens' Thrust path. Positional flanco."},
-    {minLvl:96, skill:"Drakesbane",     icon:"🐉",type:"GCD", lvlReq:96,
-     swapNote:"Reemplaza Fang and Claw en Lv96 como finisher único de ambos combos.",
-     why:"R2×2+□ — finisher único desde Lv96. Mismo botón que Fang and Claw.",
-     combat:"Finisher de cualquiera de los dos combos. Mismo patrón."}
-  ],
-  "r2dt_x":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:58, skill:"Wheeling Thrust",icon:"🌀",type:"GCD", lvlReq:58,
-     why:"R2×2+✕ — 4to hit combo A (Chaotic Spring path). Mismo principio que Fang and Claw.",
-     combat:"Después de Chaos Thrust. Positional trasero."},
-    {minLvl:96, skill:"—",icon:"—",type:"—",lvlReq:99,
-     swapNote:"Wheeling Thrust reemplazado por Drakesbane como finisher único en R2×2+□.",
-     why:"Slot liberado en Lv96.",combat:""}
-  ],
-  "r2dt_up":  [{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre para macros o emotes.",combat:""}],
-  "r2dt_down":[{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre.",combat:""}],
-  "r2dt_left":[{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre.",combat:""}],
-  "r2dt_right":[{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre.",combat:""}],
-
-  /* ====== L2 HOLD ====== */
-  "l2h_tri":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:64, skill:"Lance Charge",   icon:"⚡",type:"BUFF",lvlReq:64,
-     why:"L2+△ — PRIMER botón del burst window. Manos separadas: anular izquierdo L2, pulgar derecho △.",
+  /* ===== LAYOUT A — L2 + CARA ===== */
+  "A_l2_tri":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:64, name:"Lance Charge",    icon:"⚡",type:"BUFF",req:64,
+     why:"L2+△ — PRIMER botón del burst window. 60s CD, se planifica. Manos separadas — anular izquierdo L2, pulgar derecho △.",
      combat:"Abre el burst window cada 60s. Primero este, luego L2+○ sin soltar L2."}
   ],
-  "l2h_cir":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:52, skill:"Battle Litany",  icon:"✨",type:"BUFF",lvlReq:52,
-     why:"L2+○ — raid buff. L2 ya sostenido de Lance Charge, pulgar derecho se mueve △→○ natural.",
+  "A_l2_cir":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:52, name:"Battle Litany",   icon:"✨",type:"BUFF",req:52,
+     why:"L2+○ — raid buff 120s. L2 ya sostenido de Lance Charge, pulgar derecho △→○. Flujo natural.",
      combat:"Inmediatamente después de Lance Charge. +10% Crit para todo el grupo."}
   ],
-  "l2h_sq":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:22, skill:"Feint",          icon:"🛡️",type:"ROLE",lvlReq:22,
-     why:"L2+□ — mitigation del boss. Manos separadas evita presionarlo accidentalmente en el combo.",
-     combat:"Antes del tankbuster del boss. -10% físico y -5% mágico por 10-15s."}
+  "A_l2_sq":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:80, name:"Stardiver",       icon:"🌠",type:"oGCD",req:80,
+     why:"L2+□ — 1 uso por burst, hay margen después de Nastrond x3. Manos separadas para no confundir con combo.",
+     combat:"Después de Nastrond x3 dentro de Life of the Dragon. Solo una vez por burst."}
   ],
-  "l2h_x":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:8,  skill:"Second Wind",    icon:"💚",type:"ROLE",lvlReq:8,
+  "A_l2_x":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:8,  name:"Second Wind",     icon:"💚",type:"ROLE",req:8,
      why:"L2+✕ — emergencia HP. Posición con doble modificador: difícil de presionar accidentalmente.",
-     combat:"Cuando HP baja peligrosamente. No esperes a estar casi muerto."},
-    {minLvl:100,skill:"Starcross",      icon:"💫",type:"oGCD",lvlReq:100,
-     swapNote:"Second Wind se mueve a L2+← en Lv100. Starcross toma esta posición — cierra el burst con mano izquierda.",
-     why:"L2+✕ — FINISHER del burst. El loop cierra: R2+↑(Stardiver)→L2+✕(Starcross). Ambas manos alternan.",
-     combat:"Inmediatamente después de Stardiver. Solo disponible dentro de Life of the Dragon."}
+     combat:"Cuando HP baja peligrosamente antes de una mecánica de daño."},
+    {minLvl:100,name:"Starcross",       icon:"💫",type:"oGCD",req:100,
+     swap:"Second Wind se mueve a Layout B L2+↑ en Lv100. Starcross cierra el burst con mano izquierda.",
+     why:"L2+✕ — finisher del burst. El loop cierra: L2+□(Stardiver)→L2+✕(Starcross). Misma mano.",
+     combat:"Inmediatamente después de Stardiver. Solo en Life of the Dragon."}
   ],
-  "l2h_up":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:50, skill:"True North",     icon:"🧭",type:"ROLE",lvlReq:50,
-     why:"L2+↑ — se planifica ANTES de la mecánica. Cruz con L2, el pulgar izquierdo tiene tiempo.",
-     combat:"Cuando el boss va a rotar o mecánica te aleja del positional. 2 cargas — guardar."}
+  /* ===== LAYOUT A — L2 + CRUZ ===== */
+  "A_l2_up":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:40, name:"Doom Spike",      icon:"💢",type:"GCD", req:40,
+     why:"L2+↑ — AoE con pulgar izquierdo. Independiente del combo de mano derecha. Cambias de modo sin confundir los dedos.",
+     combat:"Con 3+ enemigos agrupados. Inicio del combo AoE: ↑→↓→→"},
+    {minLvl:92, name:"Draconian Fury",  icon:"💢",type:"GCD", req:92,
+     swap:"Upgradea Doom Spike en Lv92. Mismo L2+↑.",
+     why:"Mismo L2+↑ — upgrade automático.",
+     combat:"Mismo inicio del combo AoE."}
   ],
-  "l2h_down":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:12, skill:"Bloodbath",      icon:"🩸",type:"ROLE",lvlReq:12,
-     why:"L2+↓ — absorbe daño como HP. Cruz con L2, no necesita urgencia.",
+  "A_l2_down":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:62, name:"Sonic Thrust",    icon:"🌊",type:"GCD", req:62,
+     why:"L2+↓ — AoE combo paso 2. Fluye ↑→↓ verticalmente con pulgar izquierdo.",
+     combat:"Segundo hit del combo AoE después de ↑."}
+  ],
+  "A_l2_left":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:50, name:"Dragonfire Dive", icon:"🔥",type:"oGCD",req:50,
+     why:"L2+← — AoE circular 120s CD. Cruz L2, no requiere velocidad de ms.",
+     combat:"En burst window o packs de enemigos. 120s CD — no desperdiciar."}
+  ],
+  "A_l2_right":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:6,  name:"Life Surge",      icon:"💚",type:"oGCD",req:6,
+     why:"L2+→ — se planifica antes del finisher □. Cruz L2, hay tiempo de ejecutarlo.",
+     combat:"Actívalo, luego presiona R2+□ (Heavens' Thrust) para crítico garantizado."}
+  ],
+
+  /* ===== LAYOUT B — R2 + CARA ===== */
+  "B_r2_tri":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:56, name:"Fang and Claw",   icon:"🐾",type:"GCD", req:56,
+     why:"Layout B R2+△ — 4to hit del combo Heavens' Thrust path. Requiere velocidad de cara.",
+     combat:"4to hit después de Full Thrust en combo B. Positional flanco."},
+    {minLvl:96, name:"Drakesbane",      icon:"🐉",type:"GCD", req:96,
+     swap:"Drakesbane reemplaza Fang/Wheeling como finisher único de ambos combos en Lv96.",
+     why:"Mismo Layout B R2+△ — finisher único desde Lv96.",
+     combat:"Finisher de cualquier combo. Mismo botón que antes."}
+  ],
+  "B_r2_cir":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:58, name:"Wheeling Thrust", icon:"🌀",type:"GCD", req:58,
+     why:"Layout B R2+○ — 4to hit del combo Chaotic Spring path. Velocidad de cara.",
+     combat:"4to hit después de Chaos Thrust en combo A. Positional trasero."},
+    {minLvl:96, name:"Drakesbane",      icon:"🐉",type:"GCD", req:96,
+     swap:"Drakesbane reemplaza Wheeling Thrust. Mismo botón Layout B R2+○.",
+     why:"Mismo R2+○ — finisher único desde Lv96.",
+     combat:"Igual que el △ — Drakesbane cierra ambos combos."}
+  ],
+  "B_r2_sq":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:90, name:"Wyrmwind Thrust", icon:"🌀",type:"oGCD",req:90,
+     why:"Layout B R2+□ — 2 Firstminds stacks. Necesita cara porque la velocidad importa al acumularse.",
+     combat:"Apenas tengas 2 stacks. No retener — úsalo inmediatamente."}
+  ],
+  "B_r2_x":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:45, name:"Winged Glide",    icon:"🌪️",type:"oGCD",req:45,
+     why:"Layout B R2+✕ — gap closer situacional. En cara para ejecutarlo rápido cuando necesitas cerrar distancia.",
+     combat:"Para cerrar distancia al boss durante mecánicas. Situacional."}
+  ],
+  /* ===== LAYOUT B — R2 + CRUZ ===== */
+  "B_r2_up":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:72, name:"Coerthan Torment",icon:"❄️",type:"GCD", req:72,
+     why:"Layout B R2+↑ — 3er hit del combo AoE. Cruz porque hay pausa natural en el combo.",
+     combat:"3er hit del combo AoE después de ↑(Layout A)→↓(Layout A) → cambias a B → ↑."}
+  ],
+  "B_r2_down":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:35, name:"Elusive Jump",    icon:"↩️",type:"oGCD",req:35,
+     why:"Layout B R2+↓ — movilidad situacional. Cruz con tiempo de reacción.",
+     combat:"Para escapar AoEs del suelo o reposicionarte sin urgencia extrema."}
+  ],
+  "B_r2_left":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:15, name:"Piercing Talon",  icon:"🎯",type:"GCD", req:15,
+     why:"Layout B R2+← — ataque a distancia. Muy poco frecuente, posición de bajo acceso.",
+     combat:"Solo cuando estás lejos del boss y no puedes llegar en tiempo."}
+  ],
+  "B_r2_right":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,
+     why:"Slot libre — sugerido para macros o Limit Break.",combat:""}
+  ],
+  /* ===== LAYOUT B — L2 + CARA ===== */
+  "B_l2_tri":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:22, name:"Feint",           icon:"🛡️",type:"ROLE",req:22,
+     why:"Layout B L2+△ — se activa ANTES del tankbuster. Hay tiempo para cambiar a B y ejecutarlo.",
+     combat:"Antes del tankbuster del boss. -10% daño físico y -5% mágico por 10-15s."}
+  ],
+  "B_l2_cir":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:50, name:"True North",      icon:"🧭",type:"ROLE",req:50,
+     why:"Layout B L2+○ — se planifica ANTES de la mecánica. Tiempo de sobra para cambiar a B.",
+     combat:"Cuando el boss va a rotar o hay mecánica que te aleja del positional. 2 cargas."}
+  ],
+  "B_l2_sq":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:32, name:"Arm's Length",    icon:"✋",type:"ROLE",req:32,
+     why:"Layout B L2+□ — se activa ANTES del knockback conocido. Tiempo para cambiar a B.",
+     combat:"Actívalo antes de mecánicas de knockback del boss."}
+  ],
+  "B_l2_x":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:12, name:"Bloodbath",       icon:"🩸",type:"ROLE",req:12,
+     why:"Layout B L2+✕ — absorbe HP durante el burst. Hay tiempo para cambiar a B y activarlo.",
      combat:"Durante el burst window para maximizar la cura pasiva."}
   ],
-  "l2h_left":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:8,  skill:"Second Wind",    icon:"💚",type:"ROLE",lvlReq:8,
-     why:"L2+← posición alternativa para Second Wind.",
-     combat:"Emergencia HP cuando L2+✕ está ocupado por Starcross (Lv100+)."},
+  /* ===== LAYOUT B — L2 + CRUZ ===== */
+  "B_l2_up":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:8,  name:"Second Wind",     icon:"💚",type:"ROLE",req:8,
+     why:"Layout B L2+↑ desde Lv100 cuando Starcross toma L2+✕ en Layout A.",
+     combat:"Emergencia HP. Cambia a Layout B y presiona L2+↑."}
   ],
-  "l2h_right":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:32, skill:"Arm's Length",   icon:"✋",type:"ROLE",lvlReq:32,
-     why:"L2+→ — se activa ANTES del knockback conocido. Cruz con L2.",
-     combat:"Antes de mecánicas de knockback del boss. No cancela knockbacks absolutos."}
-  ],
-
-  /* ====== L2 DOUBLE TAP ====== */
-  "l2dt_up":  [{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre — sugerido para Mount.",combat:""}],
-  "l2dt_down":[{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre — macro útil.",combat:""}],
-  "l2dt_left":[
-    {minLvl:0,  skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:""},
-    {minLvl:10, skill:"Leg Sweep",      icon:"🦵",type:"ROLE",lvlReq:10,
-     why:"L2×2+← — stun situacional. Doble tap da tiempo. Solo en dungeons con adds.",
+  "B_l2_down":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,why:"",combat:""},
+    {minLvl:10, name:"Leg Sweep",       icon:"🦵",type:"ROLE",req:10,
+     why:"Layout B L2+↓ — stun situacional. Solo en dungeons, tiempo de sobra.",
      combat:"Stun de adds en dungeons. No funciona en bosses."}
   ],
-  "l2dt_right":[{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre — sugerido para Sprint.",combat:""}],
-  "l2dt_tri": [{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre.",combat:""}],
-  "l2dt_cir": [{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre.",combat:""}],
-  "l2dt_sq":  [{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre.",combat:""}],
-  "l2dt_x":   [{minLvl:0,skill:"—",icon:"—",type:"—",lvlReq:99,why:"Libre.",combat:""}]
+  "B_l2_left":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,
+     why:"Slot libre — sugerido para Sprint.",combat:""}
+  ],
+  "B_l2_right":[
+    {minLvl:0,  name:"—",icon:"—",type:"—",req:99,
+     why:"Slot libre.",combat:""}
+  ]
 };
 
-// ============================================================
-// HOTBAR CONFIG
-// ============================================================
-var HOTBARS = [
-  {
-    id:"base", label:"BASE", mod:"Sin modificador",
-    style:{bg:"rgba(14,28,65,0.9)",border:"rgba(75,143,232,0.45)",chipBg:"rgba(30,64,128,0.4)",chipBorder:"rgba(75,143,232,0.6)",chipCol:"#93c5fd"},
-    slotOrder:{dpad:["up","left","right","down"],face:["tri","cir","sq","x"]},
-    prefix:"base_",
-    context:[
-      {minLvl:1,  text:"Solo True Thrust activo — un botón, un movimiento. Aprende △ antes que nada."},
-      {minLvl:4,  text:"Combo parcial △→✕. Dos botones, mano derecha. Practica la secuencia."},
-      {minLvl:18, text:"○ se activa (Disembowel). Alterna combos A y B: △→○ para el buff, △→✕→□ para el daño."},
-      {minLvl:26, text:"Combo base completo en los 4 botones de cara. △→✕→□ es tu secuencia principal."},
-      {minLvl:30, text:"Dragoon activo. Los oGCDs aparecen en R2 HOLD — baja al siguiente hotbar."},
-      {minLvl:35, text:"Elusive Jump en ← reemplaza Piercing Talon. Movilidad disponible."},
-      {minLvl:40, text:"Primera AoE en Cruz ↑ (Doom Spike). Con 3+ enemigos: ↑ en lugar de △."},
-      {minLvl:62, text:"Combo AoE completo en Cruz: ↑→↓→→ con el pulgar izquierdo."},
-      {minLvl:76, text:"Raiden Thrust upgradea True Thrust automáticamente — mismo botón △."},
-      {minLvl:86, text:"Heavens' Thrust upgradea Full Thrust — mismo □. El patrón muscular no cambia."},
-      {minLvl:92, text:"Draconian Fury upgradea el inicio del combo AoE — mismo ↑."}
-    ]
+/* ============================================================
+   HOTBAR CONFIG
+   ============================================================ */
+var HOTBARS = {
+  A:{
+    r2:{
+      id:"A_r2", mod:"R2", label:"R2",
+      style:{bg:"rgba(14,28,65,0.95)",border:"rgba(75,143,232,0.5)",chipBg:"rgba(30,58,138,0.5)",chipBorder:"rgba(75,143,232,0.7)",chipCol:"#93c5fd"},
+      contexts:[
+        {min:1,  text:"Solo △. Aprende True Thrust primero."},
+        {min:4,  text:"△ y ✕. Combo parcial de 2 hits."},
+        {min:18, text:"Suma ○ (Disembowel). Combo A activo."},
+        {min:26, text:"Combo B completo: △→✕→□. Los 4 botones activos."},
+        {min:30, text:"Cruz ↑ activa (Jump). Primer weave entre GCDs."},
+        {min:60, text:"Dragon Gauge: R2+→ (Geirskogul) activo."},
+        {min:68, text:"R2+↓ (Mirage Dive). Bloque R2 cruz casi completo."},
+        {min:70, text:"R2+← (Nastrond) activo. Burst window real."},
+        {min:74, text:"High Jump upgradea Jump — mismo R2+↑."},
+        {min:96, text:"Upgrades automáticos: Raiden, Spiral Blow, Heavens', Lance Barrage."}
+      ]
+    },
+    l2:{
+      id:"A_l2", mod:"L2", label:"L2",
+      style:{bg:"rgba(5,40,25,0.95)",border:"rgba(52,211,153,0.4)",chipBg:"rgba(5,100,60,0.5)",chipBorder:"rgba(52,211,153,0.6)",chipCol:"#6ee7b7"},
+      contexts:[
+        {min:1,  text:"Vacío. Se activa desde Lv6 con Life Surge en Cruz →."},
+        {min:6,  text:"L2+→ (Life Surge). Antes de Full Thrust."},
+        {min:40, text:"Cruz ↑ (Doom Spike). Primera AoE disponible."},
+        {min:52, text:"L2+○ (Battle Litany). Tu raid buff activo."},
+        {min:62, text:"Cruz ↓ (Sonic Thrust). Combo AoE paso 2."},
+        {min:64, text:"L2+△ (Lance Charge). Burst window: △→○→R2+→"},
+        {min:80, text:"L2+□ (Stardiver). Burst completo."},
+        {min:92, text:"Cruz ↑ upgradea a Draconian Fury — mismo botón."},
+        {min:100,text:"L2+✕ cambia a Starcross. Second Wind se mueve a Layout B."}
+      ]
+    }
   },
-  {
-    id:"r2h", label:"R2 HOLD", mod:"Sostén R2",
-    style:{bg:"rgba(40,10,90,0.6)",border:"rgba(139,92,246,0.45)",chipBg:"rgba(109,40,217,0.3)",chipBorder:"rgba(139,92,246,0.6)",chipCol:"#c4b5fd"},
-    slotOrder:{dpad:["up","left","right","down"],face:["tri","cir","sq","x"]},
-    prefix:"r2h_",
-    context:[
-      {minLvl:1,  text:"Vacío por ahora — activa con Life Surge en Lv6."},
-      {minLvl:6,  text:"Life Surge en R2+✕. Antes de Full Thrust para crítico garantizado."},
-      {minLvl:30, text:"Jump en R2+△ — el weave más frecuente del Dragoon. Entre cada 2 GCDs."},
-      {minLvl:50, text:"Dragonfire Dive en R2+←. AoE de 120s disponible."},
-      {minLvl:60, text:"Geirskogul en R2+□ — activa el Dragon Gauge. Blood of the Dragon +10% daño."},
-      {minLvl:68, text:"Mirage Dive en R2+○ — tras Jump. Los 4 botones de cara están activos."},
-      {minLvl:70, text:"SWAP: Nastrond toma R2+✕. Life Surge se mueve a R2×2+△. Burst window real."},
-      {minLvl:74, text:"High Jump upgradea Jump — mismo R2+△. Tu músculo ya está entrenado."},
-      {minLvl:80, text:"Stardiver en R2+↑. Burst completo: △→○→□→✕(x3)→↑"},
-      {minLvl:90, text:"Wyrmwind Thrust en R2+↓. Cruz R2 completa: ↑Stardiver ↓Wyrmwind ←Dragonfire →Winged"}
-    ]
-  },
-  {
-    id:"r2dt", label:"R2 × 2", mod:"Doble tap R2",
-    style:{bg:"rgba(20,5,60,0.6)",border:"rgba(109,40,217,0.3)",chipBg:"rgba(76,29,149,0.3)",chipBorder:"rgba(109,40,217,0.5)",chipCol:"#a78bfa"},
-    slotOrder:{dpad:["up","left","right","down"],face:["tri","cir","sq","x"]},
-    prefix:"r2dt_",
-    context:[
-      {minLvl:1,  text:"Vacío. El doble tap R2 da ~3s de acceso libre — para skills que no necesitan ms de precisión."},
-      {minLvl:56, text:"Fang and Claw en R2×2+□. 4to hit del combo Heavens' Thrust path."},
-      {minLvl:58, text:"Wheeling Thrust en R2×2+✕. 4to hit del combo Chaotic Spring path."},
-      {minLvl:70, text:"Life Surge se mueve aquí (R2×2+△) desde R2+✕ — liberada para Nastrond."},
-      {minLvl:96, text:"Drakesbane en R2×2+□ reemplaza Fang and Claw. Finisher único de ambos combos."}
-    ]
-  },
-  {
-    id:"l2h", label:"L2 HOLD", mod:"Sostén L2",
-    style:{bg:"rgba(3,40,28,0.6)",border:"rgba(52,211,153,0.4)",chipBg:"rgba(5,150,105,0.3)",chipBorder:"rgba(52,211,153,0.5)",chipCol:"#6ee7b7"},
-    slotOrder:{dpad:["up","left","right","down"],face:["tri","cir","sq","x"]},
-    prefix:"l2h_",
-    context:[
-      {minLvl:1,  text:"Vacío — activa con Second Wind en Lv8 y Bloodbath en Lv12."},
-      {minLvl:8,  text:"Second Wind en L2+✕ y Bloodbath en L2+↓. Survival básico disponible."},
-      {minLvl:22, text:"Feint en L2+□. Mitigation para el tank activa."},
-      {minLvl:32, text:"Arm's Length en L2+→. Anti-knockback disponible."},
-      {minLvl:50, text:"True North en L2+↑. Positionals garantizados con planificación."},
-      {minLvl:52, text:"Battle Litany en L2+○ — tu raid buff. El grupo lo siente."},
-      {minLvl:64, text:"Lance Charge en L2+△. Burst window: L2+△ → L2+○ → R2+□."},
-      {minLvl:100,text:"SWAP: Starcross toma L2+✕. Second Wind se mueve a L2+←. El burst cierra con mano izquierda."}
-    ]
-  },
-  {
-    id:"l2dt", label:"L2 × 2", mod:"Doble tap L2",
-    style:{bg:"rgba(1,25,17,0.6)",border:"rgba(16,185,129,0.25)",chipBg:"rgba(6,78,59,0.3)",chipBorder:"rgba(16,185,129,0.4)",chipCol:"#34d399"},
-    slotOrder:{dpad:["up","left","right","down"],face:["tri","cir","sq","x"]},
-    prefix:"l2dt_",
-    context:[
-      {minLvl:1,  text:"Casi vacío — Leg Sweep en Lv10. El resto libre para mounts, Sprint y macros personales."},
-      {minLvl:10, text:"Leg Sweep en L2×2+←. Stun para adds en dungeons."}
-    ]
+  B:{
+    r2:{
+      id:"B_r2", mod:"R2", label:"R2",
+      style:{bg:"rgba(40,8,90,0.95)",border:"rgba(139,92,246,0.45)",chipBg:"rgba(109,40,217,0.4)",chipBorder:"rgba(139,92,246,0.6)",chipCol:"#c4b5fd"},
+      contexts:[
+        {min:1,  text:"Vacío hasta Lv35 (Elusive Jump)."},
+        {min:35, text:"Elusive Jump en Cruz ↓. Movilidad disponible."},
+        {min:45, text:"Winged Glide en ✕. Gap closer disponible."},
+        {min:56, text:"Fang and Claw en △. 4to hit combo B activo."},
+        {min:58, text:"Wheeling Thrust en ○. 4to hit combo A activo."},
+        {min:72, text:"Coerthan Torment en Cruz ↑. AoE combo completo."},
+        {min:90, text:"Wyrmwind Thrust en □. 2 stacks → presiona inmediatamente."},
+        {min:96, text:"Drakesbane reemplaza Fang/Wheeling — mismo △ y ○."}
+      ]
+    },
+    l2:{
+      id:"B_l2", mod:"L2", label:"L2",
+      style:{bg:"rgba(15,10,8,0.95)",border:"rgba(120,90,60,0.4)",chipBg:"rgba(50,30,10,0.5)",chipBorder:"rgba(120,90,60,0.5)",chipCol:"#d4a574"},
+      contexts:[
+        {min:1,  text:"Vacío hasta Lv8 (Second Wind — emergencia HP)."},
+        {min:8,  text:"Second Wind en Cruz ↑. Emergencia HP disponible."},
+        {min:10, text:"Leg Sweep en Cruz ↓. Stun para dungeons."},
+        {min:12, text:"Bloodbath en ✕. Absorbe HP durante combate."},
+        {min:22, text:"Feint en △. Mitigation para el tank."},
+        {min:32, text:"Arm's Length en □. Anti-knockback activo."},
+        {min:50, text:"True North en ○. Positionals garantizados con tiempo."},
+        {min:100,text:"Second Wind se mueve aquí desde Layout A cuando Starcross toma L2+✕."}
+      ]
+    }
   }
-];
+};
 
-// ============================================================
-// RESOLVE SLOT for a given level
-// ============================================================
-function resolveSlot(slotKey, lvl) {
-  var versions = SLOTS[slotKey];
-  if (!versions) return {skill:"—",icon:"—",type:"—",lvlReq:99,why:"",combat:"",swapNote:""};
+/* ============================================================
+   LAYOUT NOTES
+   ============================================================ */
+var LAYOUT_NOTES = {
+  A:[
+    {min:1,  text:"Layout A por defecto. Combo principal en R2+Cara. Skills van apareciendo a medida que subes."},
+    {min:30, text:"Ahora usas R2 Cruz para los oGCDs. El combo sigue en R2+Cara — tu mano derecha hace todo."},
+    {min:52, text:"L2 se activa para buffs importantes. El burst window es: L2+△ → L2+○ → R2+→ → oGCDs."},
+    {min:80, text:"Layout A completo. Burst window endgame: L2+△ → L2+○ → R2+→(Geirskogul) → R2+←(Nastrond x3) → L2+□(Stardiver) → L2+✕(Starcross Lv100)."}
+  ],
+  B:[
+    {min:1,  text:"Layout B con R1. Vacío al inicio. Se llena progresivamente con role actions y combo extendido."},
+    {min:56, text:"A partir de Lv56 usas Layout B para el 4to hit de cada combo: R2+△ (Fang and Claw) y R2+○ (Wheeling Thrust)."},
+    {min:72, text:"AoE combo completo necesita Layout B para el 3er hit (Coerthan Torment en R2+↑)."},
+    {min:96, text:"Drakesbane reemplaza Fang y Wheeling — mismo botón. Layout B se simplifica en endgame."}
+  ]
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+var currentLayout = "A";
+
+/* ============================================================
+   RESOLVE SLOT VERSION
+   ============================================================ */
+function resolve(key, lvl) {
+  var versions = SLOTS[key];
+  if (!versions) return {name:"—",icon:"—",type:"—",req:99,why:"",combat:""};
   var active = versions[0];
-  var prevSkill = null;
+  var prev = null;
   for (var i = 0; i < versions.length; i++) {
     if (lvl >= versions[i].minLvl) {
-      if (active && active.skill !== "—" && versions[i].skill !== active.skill) {
-        prevSkill = active.skill;
-      }
+      if (active.name !== "—" && versions[i].name !== active.name) prev = active.name;
       active = versions[i];
     }
   }
-  var result = Object.assign({}, active);
-  // Mark as swapped if this version just became active at this level range
-  result.isSwap = !!(result.swapNote && prevSkill && prevSkill !== result.skill);
-  return result;
+  var r = Object.assign({}, active);
+  r.isSwap = !!(r.swap && prev && prev !== r.name);
+  return r;
 }
 
-// ============================================================
-// RESOLVE CONTEXT for a given level
-// ============================================================
-function resolveContext(hb, lvl) {
-  var ctx = hb.context[0].text;
-  for (var i = 0; i < hb.context.length; i++) {
-    if (lvl >= hb.context[i].minLvl) ctx = hb.context[i].text;
+function resolveCtx(list, lvl) {
+  var t = list[0].text;
+  for (var i = 0; i < list.length; i++) {
+    if (lvl >= list[i].min) t = list[i].text;
   }
-  return ctx;
+  return t;
 }
 
-// ============================================================
-// BUILD SLOT HTML
-// ============================================================
-function buildSlot(hbId, rawKey, lvl) {
-  var slotKey = HOTBARS.find(function(h){return h.id===hbId;}).prefix + rawKey;
-  var slot = resolveSlot(slotKey, lvl);
+/* ============================================================
+   BUILD SLOT HTML
+   ============================================================ */
+function buildSlot(fullKey, rawKey, lvl) {
+  var slot = resolve(fullKey, lvl);
   var ps = PS[rawKey];
-  var isEmpty = slot.skill === "—";
-  var locked = !isEmpty && slot.lvlReq > lvl;
+  var isEmpty = slot.name === "—";
+  var locked = !isEmpty && slot.req > lvl;
 
   if (isEmpty) {
-    return '<div class="xhb-slot s-empty" title="—"><div style="color:rgba(255,255,255,0.06);font-size:16px">—</div></div>';
+    return '<div class="xhb-slot s-empty"><div style="color:rgba(255,255,255,0.05);font-size:14px">—</div></div>';
   }
 
-  var bgCol = locked ? "rgba(8,16,32,0.9)" : ps.dark;
-  var borderCol = locked ? "rgba(30,50,70,0.5)" : ps.col + "55";
-  var symCol = locked ? "#2a3a50" : ps.col;
-  var nameCol = locked ? "#2a3a50" : "rgba(255,255,255,0.82)";
-
+  var bg = locked ? "rgba(8,14,28,0.9)" : ps.dark;
+  var bc = locked ? "rgba(20,35,55,0.5)" : ps.col + "55";
+  var sc = locked ? "#1e3050" : ps.col;
+  var nc = locked ? "#1e3050" : "rgba(255,255,255,0.82)";
   var swapClass = (!locked && slot.isSwap) ? " s-swapped" : "";
 
-  var html = '<div class="xhb-slot s-active' + (locked?" s-locked":"") + swapClass + '"'
-    + ' id="slot-'+hbId+'-'+rawKey+'"'
-    + ' style="background:'+bgCol+';border-color:'+borderCol+'"'
-    + ' onclick="openSlot(\''+hbId+'\',\''+rawKey+'\','+lvl+')">';
+  var html = '<div class="xhb-slot s-active'+(locked?" s-locked":"")+swapClass+'"'
+    +' id="slot-'+fullKey+'"'
+    +' style="background:'+bg+';border-color:'+bc+'"'
+    +' onclick="openSlot(\''+fullKey+'\',\''+rawKey+'\','+lvl+')">';
 
   if (locked) html += '<span class="s-lock">🔒</span>';
-
   if (ps.isDpad) {
-    html += '<div class="s-arr" style="border-color:'+symCol+';color:'+symCol+'">'+ps.sym+'</div>';
+    html += '<div class="s-arr" style="border-color:'+sc+';color:'+sc+'">'+ps.sym+'</div>';
   } else {
-    html += '<div class="s-btn" style="background:'+ps.dark+';border-color:'+symCol+';color:'+symCol+'">'+ps.sym+'</div>';
+    html += '<div class="s-btn" style="background:'+ps.dark+';border-color:'+sc+';color:'+sc+'">'+ps.sym+'</div>';
   }
-
   html += '<div class="s-icon">'+(locked?'':slot.icon)+'</div>';
-
-  var short = slot.skill.split('/')[0].split('(')[0].trim();
-  if (short.length > 11) short = short.substring(0,10)+'…';
-  html += '<div class="s-name" style="color:'+nameCol+'">'+short+'</div>';
-
-  if (locked) html += '<div class="s-lv">Lv'+slot.lvlReq+'</div>';
-
+  var short = slot.name.split('/')[0].split('(')[0].trim();
+  if (short.length > 10) short = short.substring(0,9)+'…';
+  html += '<div class="s-name" style="color:'+nc+'">'+short+'</div>';
+  if (locked) html += '<div class="s-lv">Lv'+slot.req+'</div>';
   html += '</div>';
   return html;
 }
 
-// ============================================================
-// BUILD CENTER CELL (empty grid slot)
-// ============================================================
 function buildCenter() {
   return '<div class="xhb-slot s-center"></div>';
 }
 
-// ============================================================
-// RENDER ONE HOTBAR
-// ============================================================
-function renderHotbar(hb, lvl) {
-  var st = hb.style;
-  var ctx = resolveContext(hb, lvl);
-
-  // Count active (unlocked) slots
+/* ============================================================
+   RENDER ONE HOTBAR WIDGET
+   ============================================================ */
+function renderHotbarWidget(hbCfg, layout, mod, lvl) {
+  var st = hbCfg.style;
+  var prefix = layout + "_" + mod + "_";
+  var keys = ["tri","cir","sq","x","up","down","left","right"];
   var activeCount = 0;
-  var allKeys = hb.slotOrder.dpad.concat(hb.slotOrder.face);
-  allKeys.forEach(function(k){
-    var slot = resolveSlot(hb.prefix + k, lvl);
-    if (slot.skill !== "—" && slot.lvlReq <= lvl) activeCount++;
+  keys.forEach(function(k){
+    var s = resolve(prefix+k, lvl);
+    if (s.name !== "—" && s.req <= lvl) activeCount++;
+  });
+  var ctx = resolveCtx(hbCfg.contexts, lvl);
+
+  var html = '<div class="hb-widget">';
+  html += '<div class="hb-header" style="background:'+st.bg+';border:1px solid '+st.border+';border-bottom:none;border-radius:8px 8px 0 0">';
+  html += '<span class="hb-mod-chip" style="background:'+st.chipBg+';border-color:'+st.chipBorder+';color:'+st.chipCol+'">'+hbCfg.mod+'</span>';
+  html += '<span class="hb-label" style="color:'+st.chipCol+'">'+hbCfg.label+'</span>';
+  html += '<span class="hb-count">'+activeCount+'/8</span>';
+  html += '</div>';
+
+  html += '<div class="hb-body" style="background:'+st.bg+';border:1px solid '+st.border+';border-top:none;border-bottom:none">';
+
+  // D-PAD cross
+  html += '<div class="xhb-cross">';
+  html += buildCenter();
+  html += buildSlot(prefix+"up",   "up",   lvl);
+  html += buildCenter();
+  html += buildSlot(prefix+"left", "left", lvl);
+  html += buildCenter();
+  html += buildSlot(prefix+"right","right",lvl);
+  html += buildCenter();
+  html += buildSlot(prefix+"down", "down", lvl);
+  html += buildCenter();
+  html += '</div>';
+
+  html += '<div class="hb-divider-v"></div>';
+
+  // FACE cross: △ top, □ left, ○ right, ✕ bottom
+  html += '<div class="xhb-cross">';
+  html += buildCenter();
+  html += buildSlot(prefix+"tri","tri",lvl);
+  html += buildCenter();
+  html += buildSlot(prefix+"sq", "sq", lvl);
+  html += buildCenter();
+  html += buildSlot(prefix+"cir","cir",lvl);
+  html += buildCenter();
+  html += buildSlot(prefix+"x",  "x",  lvl);
+  html += buildCenter();
+  html += '</div>';
+
+  html += '</div>';
+  html += '<div class="hb-context" style="background:'+st.bg+';border:1px solid '+st.border+';border-top:none;border-radius:0 0 8px 8px">'+ctx+'</div>';
+  html += '</div>';
+  return html;
+}
+
+/* ============================================================
+   RENDER SKILL VALIDATION
+   ============================================================ */
+function renderValidation(lvl) {
+  var allSlots = Object.keys(SLOTS);
+  var have = [], soon = [], locked = [];
+
+  allSlots.forEach(function(key){
+    var s = resolve(key, lvl);
+    if (s.name === "—") return;
+    // Only show current layout relevant slots
+    if (key.startsWith(currentLayout+"_")) {
+      if (s.req <= lvl) have.push(s.name);
+      else if (s.req - lvl <= 8) soon.push({name:s.name, req:s.req});
+    }
   });
 
-  var html = '<div class="xhb-wrapper">';
+  // Deduplicate
+  have = have.filter(function(v,i,a){return a.indexOf(v)===i;});
 
-  // Header
-  html += '<div class="xhb-header" style="background:'+st.bg+';border-color:'+st.border+'">';
-  html += '<span class="xhb-mod-chip" style="background:'+st.chipBg+';border-color:'+st.chipBorder+';color:'+st.chipCol+'">'+hb.mod+'</span>';
-  html += '<span class="xhb-title" style="color:'+st.chipCol+'">'+hb.label+'</span>';
-  html += '<span class="xhb-count">'+activeCount+' / 8 activos</span>';
+  var html = '<div style="background:rgba(13,25,50,0.7);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:14px;margin-bottom:14px;">';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+
+  html += '<div>';
+  html += '<div style="font-family:Cinzel,serif;font-size:11px;color:#81c784;letter-spacing:0.06em;margin-bottom:8px;">✅ TIENES (Lv'+lvl+') — '+have.length+' skills</div>';
+  if (have.length === 0) {
+    html += '<div style="font-size:12px;color:var(--text-muted);font-style:italic">Ninguna todavía. Empieza a subir nivel.</div>';
+  } else {
+    have.forEach(function(name){
+      html += '<div style="font-size:12px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text-main)">'+name+'</div>';
+    });
+  }
   html += '</div>';
 
-  // Context
-  html += '<div class="xhb-context" style="border-color:'+st.border+';background:'+st.bg+'">'+ctx+'</div>';
-
-  // Body
-  html += '<div class="xhb-body" style="border-color:'+st.border+';background:'+st.bg+'">';
-
-  // LEFT CROSS — D-Pad
-  // Grid positions: [center, ↑, center, ←, center, →, center, ↓, center]
-  html += '<div class="xhb-cross">';
-  html += buildCenter();
-  html += buildSlot(hb.id, "up",    lvl);
-  html += buildCenter();
-  html += buildSlot(hb.id, "left",  lvl);
-  html += buildCenter();
-  html += buildSlot(hb.id, "right", lvl);
-  html += buildCenter();
-  html += buildSlot(hb.id, "down",  lvl);
-  html += buildCenter();
-  html += '</div>';
-
-  html += '<div class="xhb-divider"></div>';
-
-  // RIGHT CROSS — Face buttons
-  // Grid positions: [center, △, center, □, center, ○, center, ✕, center]
-  html += '<div class="xhb-cross">';
-  html += buildCenter();
-  html += buildSlot(hb.id, "tri", lvl);
-  html += buildCenter();
-  html += buildSlot(hb.id, "sq",  lvl);
-  html += buildCenter();
-  html += buildSlot(hb.id, "cir", lvl);
-  html += buildCenter();
-  html += buildSlot(hb.id, "x",   lvl);
-  html += buildCenter();
+  html += '<div>';
+  html += '<div style="font-family:Cinzel,serif;font-size:11px;color:var(--gold);letter-spacing:0.06em;margin-bottom:8px;">🔓 PRÓXIMAS (≤8 niveles)</div>';
+  if (soon.length === 0) {
+    html += '<div style="font-size:12px;color:var(--text-muted);font-style:italic">Ninguna próxima en este rango.</div>';
+  } else {
+    soon.forEach(function(s){
+      html += '<div style="font-size:12px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--gold-light)">Lv'+s.req+' — '+s.name+'</div>';
+    });
+  }
   html += '</div>';
 
   html += '</div></div>';
   return html;
 }
 
-// ============================================================
-// OPEN SLOT DRAWER
-// ============================================================
-function openSlot(hbId, rawKey, lvl) {
-  var hb = HOTBARS.find(function(h){return h.id===hbId;});
-  var slotKey = hb.prefix + rawKey;
-  var slot = resolveSlot(slotKey, lvl);
-  var ps = PS[rawKey];
-  var st = hb.style;
+/* ============================================================
+   RENDER ALL
+   ============================================================ */
+function renderAll() {
+  var lvl = parseInt(document.getElementById("filterSlider").value);
+  document.getElementById("filterDisplay").textContent = "Lv"+lvl;
 
-  // Visual selection
+  var hbConfig = HOTBARS[currentLayout];
+
+  // Dual hotbar
+  var html = '';
+  html += renderHotbarWidget(hbConfig.r2, currentLayout, "r2", lvl);
+  html += renderHotbarWidget(hbConfig.l2, currentLayout, "l2", lvl);
+  document.getElementById("dualHotbar").innerHTML = html;
+
+  // Layout note
+  var noteList = currentLayout === "A" ? LAYOUT_NOTES.A : LAYOUT_NOTES.B;
+  var noteText = noteList[0].text;
+  for (var i = 0; i < noteList.length; i++) {
+    if (lvl >= noteList[i].min) noteText = noteList[i].text;
+  }
+  var noteTitle = currentLayout === "A"
+    ? "ℹ️ LAYOUT A — Combate activo (R1 default)"
+    : "🔄 LAYOUT B — Skills secundarias (R1 toggle)";
+  document.getElementById("layoutNoteText").textContent = noteText;
+  document.querySelector(".layout-note-title").textContent = noteTitle;
+  document.getElementById("layoutBNote").style.display = currentLayout === "B" ? "flex" : "none";
+
+  // Validation
+  document.getElementById("skillValidation").innerHTML = renderValidation(lvl);
+
+  closeDrawer();
+}
+
+/* ============================================================
+   OPEN SLOT DRAWER
+   ============================================================ */
+function openSlot(fullKey, rawKey, lvl) {
+  var slot = resolve(fullKey, lvl);
+  var ps = PS[rawKey];
+  var isEmpty = slot.name === "—";
+  var locked = !isEmpty && slot.req > lvl;
+
   document.querySelectorAll(".xhb-slot.s-selected").forEach(function(s){s.classList.remove("s-selected");});
-  var el = document.getElementById("slot-"+hbId+"-"+rawKey);
+  var el = document.getElementById("slot-"+fullKey);
   if (el) el.classList.add("s-selected");
 
-  var modLabel = hb.mod === "Sin modificador" ? "" : hb.mod + " + ";
-  var comboLabel = modLabel + ps.sym;
-  var locked = slot.skill !== "—" && slot.lvlReq > lvl;
-  var isEmpty = slot.skill === "—";
-
-  var content = "";
-
-  // PS button visual
-  var btnHTML = ps.isDpad
-    ? '<div class="d-ps-arr">'+ps.sym+'</div>'
-    : '<div class="d-ps-btn" style="background:'+ps.dark+';border-color:'+ps.col+';color:'+ps.col+'">'+ps.sym+'</div>';
+  // Build label
+  var layout = fullKey.startsWith("A_") ? "Layout A" : "Layout B";
+  var modStr = fullKey.indexOf("_r2_") > -1 ? "R2" : "L2";
+  var comboLabel = modStr + " + " + ps.sym + " · " + layout;
 
   var typeStyles = {
-    GCD: "background:rgba(79,195,247,0.15);color:#b3e5fc;border:1px solid rgba(79,195,247,0.4)",
+    GCD:"background:rgba(79,195,247,0.15);color:#b3e5fc;border:1px solid rgba(79,195,247,0.4)",
     oGCD:"background:rgba(179,157,219,0.15);color:#ede7f6;border:1px solid rgba(179,157,219,0.4)",
     BUFF:"background:rgba(129,199,132,0.15);color:#c8e6c9;border:1px solid rgba(129,199,132,0.4)",
     ROLE:"background:rgba(239,154,154,0.15);color:#ffcdd2;border:1px solid rgba(239,154,154,0.4)"
   };
   var typeStyle = typeStyles[slot.type] || "background:rgba(50,50,70,0.2);color:#555";
 
+  var btnHTML = ps.isDpad
+    ? '<div class="d-ps-arr">'+ps.sym+'</div>'
+    : '<div class="d-ps-btn" style="background:'+ps.dark+';border-color:'+ps.col+';color:'+ps.col+'">'+ps.sym+'</div>';
+
+  var content = '<div class="d-header">'+btnHTML+'<div class="d-info">'
+    +'<div class="d-combo">'+comboLabel+'</div>';
+
   if (isEmpty) {
-    content = btnHTML.replace('d-ps-btn','d-ps-btn" style="background:#0a121e;border-color:#1e3050;color:#1e3050')
-      + '<div class="d-head"><div class="d-combo">'+comboLabel+'</div>'
-      + '<div class="d-skill" style="color:#2a3a50">— Sin asignar</div></div>';
-    content = '<div class="drawer-header">'+content+'</div>'
-      + '<div class="d-empty">Slot libre. '+slot.why+'</div>';
+    content += '<div class="d-skill" style="color:#2a3a50">— Slot libre</div></div></div>'
+      +'<div class="d-free">'+slot.why+'</div>';
   } else if (locked) {
-    content = '<div class="drawer-header">'+btnHTML
-      + '<div class="d-head">'
-      + '<div class="d-combo">'+comboLabel+' · '+hb.label+'</div>'
-      + '<div class="d-skill" style="color:'+ps.col+'">'+slot.icon+' '+slot.skill+'</div>'
-      + '<div class="d-type" style="'+typeStyle+'">'+slot.type+' · Lv'+slot.lvlReq+'</div>'
-      + '</div></div>'
-      + '<div class="d-locked">🔒 Se desbloquea en Lv'+slot.lvlReq
-      + (slot.type==="ROLE"?" — automático al subir nivel"
-        :slot.type==="BUFF"||slot.type==="oGCD"?" — puede requerir job quest"
-        :" — automático")
+    content += '<div class="d-skill" style="color:'+ps.col+'">'+slot.icon+' '+slot.name+'</div>'
+      +'<div class="d-type" style="'+typeStyle+'">'+slot.type+' · Lv'+slot.req+'</div>'
+      +'</div></div>'
+      +'<div class="d-locked">🔒 Se desbloquea en Lv'+slot.req
+      +(slot.type==="ROLE"?" — automático al subir nivel":" — puede requerir job quest")
       +'</div>';
   } else {
-    content = '<div class="drawer-header">'+btnHTML
-      + '<div class="d-head">'
-      + '<div class="d-combo">'+comboLabel+' · '+hb.label+'</div>'
-      + '<div class="d-skill" style="color:'+ps.col+'">'+slot.icon+' '+slot.skill+'</div>'
-      + '<div class="d-type" style="'+typeStyle+'">'+slot.type+(slot.lvlReq<99?' · Lv'+slot.lvlReq:'')+'</div>'
-      + '</div></div>';
-
-    if (slot.swapNote) {
-      content += '<div class="d-swap-note">⚡ '+slot.swapNote+'</div>';
+    content += '<div class="d-skill" style="color:'+ps.col+'">'+slot.icon+' '+slot.name+'</div>'
+      +'<div class="d-type" style="'+typeStyle+'">'+slot.type+(slot.req<99?' · Lv'+slot.req:'')+'</div>'
+      +'</div></div>';
+    if (slot.swap) {
+      content += '<div class="d-swap">⚡ '+slot.swap+'</div>';
     }
-
     if (slot.why || slot.combat) {
       content += '<div class="d-grid">';
-      if (slot.why) {
-        content += '<div class="d-section">'
-          + '<div class="d-stitle" style="color:#a855f7">🤲 POR QUÉ AQUÍ</div>'
-          + '<div class="d-stext">'+slot.why+'</div>'
-          + '</div>';
-      }
-      if (slot.combat) {
-        content += '<div class="d-section">'
-          + '<div class="d-stitle" style="color:#4fc3f7">⚔️ EN COMBATE</div>'
-          + '<div class="d-stext">'+slot.combat+'</div>'
-          + '</div>';
-      }
+      if (slot.why) content += '<div class="d-section"><div class="d-stitle" style="color:#a855f7">🤲 POR QUÉ AQUÍ</div><div class="d-stext">'+slot.why+'</div></div>';
+      if (slot.combat) content += '<div class="d-section"><div class="d-stitle" style="color:#4fc3f7">⚔️ EN COMBATE</div><div class="d-stext">'+slot.combat+'</div></div>';
       content += '</div>';
     }
   }
@@ -809,16 +889,14 @@ function closeDrawer() {
   document.querySelectorAll(".xhb-slot.s-selected").forEach(function(s){s.classList.remove("s-selected");});
 }
 
-// ============================================================
-// RENDER ALL
-// ============================================================
-function renderAll() {
-  var lvl = parseInt(document.getElementById("filterSlider").value);
-  document.getElementById("filterDisplay").textContent = "Lv"+lvl;
-  var html = "";
-  HOTBARS.forEach(function(hb){html += renderHotbar(hb, lvl);});
-  document.getElementById("hotbarsContainer").innerHTML = html;
-  closeDrawer();
+/* ============================================================
+   LAYOUT TOGGLE
+   ============================================================ */
+function setLayout(l) {
+  currentLayout = l;
+  document.getElementById("btnA").className = "lt-btn " + (l==="A" ? "active-a" : "inactive-a");
+  document.getElementById("btnB").className = "lt-btn " + (l==="B" ? "active-b" : "inactive-b");
+  renderAll();
 }
 
 function jumpToMyLevel() {
