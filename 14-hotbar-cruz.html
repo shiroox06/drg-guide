@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DRG · Módulo 14 — Hotbar en Cruz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#c9a84c;--gold-light:#f0d080;--blue-deep:#0d1f3c;--blue-mid:#162d50;
+  --cyan:#4fc3f7;--green:#81c784;--purple:#b39ddb;--red:#ef9a9a;--orange:#ffcc80;
+  --text-main:#e8dfc8;--text-muted:#a09880;--card-bg:rgba(22,45,80,0.85);
+  --border-glow:rgba(201,168,76,0.4);
+  /* Ergonomic color scheme */
+  --col-gcd:#1565c0;       /* Base buttons - GCD */
+  --col-gcd-light:#42a5f5;
+  --col-r2:#6a1b9a;        /* R2 + button - oGCD frequent */
+  --col-r2-light:#ab47bc;
+  --col-l2:#1b5e20;        /* L2 + button - long CD */
+  --col-l2-light:#66bb6a;
+  --col-dpad:#b71c1c;      /* D-pad - AoE/utility */
+  --col-dpad-light:#ef5350;
+  --col-r1:#e65100;        /* R1 + button - secondary */
+  --col-r1-light:#ff9800;
+  --col-inactive:#1a2a40;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:"Crimson Pro",Georgia,serif;background:var(--blue-deep);color:var(--text-main);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(79,195,247,0.06) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(124,77,255,0.06) 0%,transparent 50%);pointer-events:none;z-index:0;}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.3;}
+.container{max-width:900px;margin:0 auto;padding:0 16px 110px;position:relative;z-index:1;}
+.nav-back{display:inline-flex;align-items:center;gap:8px;margin:24px 0;color:var(--gold);font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.08em;text-decoration:none;opacity:0.7;}
+.page-header{padding:20px 0 24px;border-bottom:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.module-badge{display:inline-block;background:rgba(79,195,247,0.1);border:1px solid var(--cyan);border-radius:4px;padding:3px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--cyan);letter-spacing:0.1em;margin-bottom:10px;}
+.page-title{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,36px);font-weight:900;color:var(--gold);letter-spacing:0.1em;}
+.page-sub{font-size:14px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+
+/* FILTER */
+.filter-bar{background:rgba(13,31,60,0.8);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.filter-label{font-family:"Cinzel",serif;font-size:11px;color:var(--cyan);letter-spacing:0.08em;flex-shrink:0;}
+.filter-slider{flex:1;min-width:160px;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--blue-mid);outline:none;cursor:pointer;}
+.filter-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cyan);cursor:pointer;border:2px solid var(--blue-deep);box-shadow:0 0 8px rgba(79,195,247,0.5);}
+.filter-lvl{font-family:"Cinzel",serif;font-size:15px;font-weight:700;color:var(--cyan);min-width:44px;text-align:right;}
+.filter-btn{background:rgba(201,168,76,0.15);border:1px solid var(--gold);border-radius:4px;padding:5px 10px;font-family:"Cinzel",serif;font-size:10px;color:var(--gold);cursor:pointer;letter-spacing:0.06em;}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;gap:14px;margin:28px 0 14px;}
+.section-icon{font-size:22px;}
+.section-title{font-family:"Cinzel",serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.4;}
+
+/* LEGEND */
+.ergo-legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.el-item{display:flex;align-items:center;gap:6px;font-size:11px;font-family:"Cinzel",serif;letter-spacing:0.04em;}
+.el-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+
+/* CONTROLLER LAYOUT */
+.controller-wrap{background:rgba(13,31,60,0.9);border:1px solid rgba(79,195,247,0.2);border-radius:12px;padding:24px 16px;margin:14px 0;}
+.controller-title{font-family:"Cinzel",serif;font-size:12px;color:var(--cyan);letter-spacing:0.08em;margin-bottom:20px;text-align:center;}
+
+/* MAIN CONTROLLER GRID */
+.ctrl-layout{display:grid;grid-template-columns:1fr 120px 1fr;gap:16px;align-items:start;max-width:700px;margin:0 auto;}
+
+/* SHOULDER BUTTONS */
+.shoulder-group{display:flex;flex-direction:column;gap:8px;}
+.shoulder-row{display:flex;gap:8px;justify-content:center;}
+.shoulder-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+.sbtn{width:80px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:"Cinzel",serif;font-size:11px;font-weight:700;letter-spacing:0.04em;transition:all 0.2s;cursor:pointer;border:2px solid transparent;}
+.sbtn:active,.sbtn.lit{transform:scale(0.95);filter:brightness(1.3);}
+.btn-label-sm{font-size:10px;font-family:"Cinzel",serif;color:var(--text-muted);text-align:center;}
+
+/* CENTER (PS button area) */
+.ctrl-center{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.ctrl-center-top{font-family:"Cinzel",serif;font-size:10px;color:var(--text-muted);text-align:center;}
+
+/* LEFT SIDE — D-PAD */
+.ctrl-left{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.dpad-wrap{position:relative;width:110px;height:110px;}
+.dpad-btn{position:absolute;width:34px;height:34px;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all 0.2s;border:2px solid transparent;}
+.dpad-btn:active,.dpad-btn.lit{transform:scale(0.92);filter:brightness(1.3);}
+.dpad-up{top:0;left:50%;transform:translateX(-50%);border-radius:4px 4px 0 0;}
+.dpad-down{bottom:0;left:50%;transform:translateX(-50%);border-radius:0 0 4px 4px;}
+.dpad-left{left:0;top:50%;transform:translateY(-50%);border-radius:4px 0 0 4px;}
+.dpad-right{right:0;top:50%;transform:translateY(-50%);border-radius:0 4px 4px 0;}
+.dpad-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);}
+
+/* RIGHT SIDE — FACE BUTTONS */
+.ctrl-right{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.face-wrap{position:relative;width:110px;height:110px;}
+.face-btn{position:absolute;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Cinzel",serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;border:2px solid transparent;}
+.face-btn:active,.face-btn.lit{transform:scale(0.92);filter:brightness(1.4);}
+.face-tri{top:0;left:50%;transform:translateX(-50%);}
+.face-cir{right:0;top:50%;transform:translateY(-50%);}
+.face-sq{left:0;top:50%;transform:translateY(-50%);}
+.face-x{bottom:0;left:50%;transform:translateX(-50%);}
+
+/* SKILL INFO PANEL */
+.skill-info-panel{background:rgba(13,31,60,0.95);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:16px;margin-top:16px;min-height:100px;transition:all 0.3s;}
+.sip-combo{font-family:"Cinzel",serif;font-size:11px;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:6px;}
+.sip-skill{font-family:"Cinzel",serif;font-size:18px;font-weight:700;color:var(--text-main);margin-bottom:4px;}
+.sip-type{display:inline-block;font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;margin-bottom:8px;}
+.sip-desc{font-size:13px;line-height:1.6;color:var(--text-muted);}
+.sip-why{font-size:12px;line-height:1.5;margin-top:8px;padding:8px 10px;background:rgba(79,195,247,0.06);border-left:3px solid var(--cyan);color:#b3e5fc;}
+
+/* STAGE TABS */
+.stage-tabs{display:flex;gap:0;border-radius:6px 6px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,0.08);border-bottom:none;margin-top:20px;}
+.stage-tab{flex:1;padding:9px 6px;font-family:"Cinzel",serif;font-size:10px;letter-spacing:0.04em;text-align:center;cursor:pointer;background:rgba(0,0,0,0.3);color:var(--text-muted);border:none;transition:all 0.2s;}
+.stage-tab.active{background:rgba(201,168,76,0.1);color:var(--gold);}
+.stage-panel{display:none;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:0 0 6px 6px;padding:16px;}
+.stage-panel.active{display:block;}
+
+/* ROTATION SEQUENCE */
+.rot-sequence{display:flex;flex-direction:column;gap:4px;margin:12px 0;}
+.rs-step{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.2s;}
+.rs-step:hover,.rs-step.active-step{border-color:rgba(201,168,76,0.5);background:rgba(201,168,76,0.08);}
+.rs-num{font-family:"Cinzel",serif;font-size:11px;font-weight:700;min-width:24px;text-align:center;color:var(--text-muted);}
+.rs-combo{font-family:"Cinzel",serif;font-size:12px;font-weight:700;min-width:120px;}
+.rs-skill{font-size:13px;flex:1;}
+.rs-hand{font-family:"Cinzel",serif;font-size:10px;padding:2px 8px;border-radius:3px;white-space:nowrap;}
+.rh-right{background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.4);color:#b3e5fc;}
+.rh-left{background:rgba(129,199,132,0.15);border:1px solid rgba(129,199,132,0.4);color:#c8e6c9;}
+.rh-both{background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);}
+
+/* ERGO NOTE */
+.ergo-note{background:rgba(13,31,60,0.7);border:1px solid rgba(201,168,76,0.2);border-radius:6px;padding:12px 14px;margin-top:10px;font-size:13px;line-height:1.6;}
+.ergo-note strong{color:var(--gold);}
+
+/* TIP/WARN */
+.tip-box{background:rgba(79,195,247,0.06);border:1px solid rgba(79,195,247,0.3);border-radius:6px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-text{font-size:13px;line-height:1.6;color:#b3e5fc;}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(13,31,60,0.97);border-top:1px solid rgba(201,168,76,0.3);z-index:100;backdrop-filter:blur(8px);}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:14px 8px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-decoration:none;transition:background 0.2s;text-align:center;}
+.nav-btn:active{background:rgba(201,168,76,0.15);}
+.nav-home{border-left:1px solid rgba(201,168,76,0.2);border-right:1px solid rgba(201,168,76,0.2);color:var(--cyan);}
+footer{text-align:center;padding:30px 16px;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:30px;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--blue-deep);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+@media(max-width:600px){
+  .ctrl-layout{grid-template-columns:1fr 80px 1fr;gap:8px;}
+  .sbtn{width:64px;font-size:10px;}
+  .dpad-btn,.face-btn{width:28px;height:28px;}
+  .dpad-wrap,.face-wrap{width:90px;height:90px;}
+  .stage-tab{font-size:9px;padding:7px 3px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="nav-back">← Volver al Hub</a>
+  <div class="page-header">
+    <div class="module-badge">MÓDULO 14</div>
+    <h1 class="page-title">🎮 Hotbar en Cruz — Memoria Muscular</h1>
+    <p class="page-sub">Layout de botones diseñado para flujo natural de manos. Cada skill está donde los dedos van naturalmente — no donde se ve lógico en pantalla.</p>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">🎚️ TU NIVEL:</span>
+    <input type="range" class="filter-slider" id="filterSlider" min="1" max="100" value="1">
+    <span class="filter-lvl" id="filterDisplay">Lv1</span>
+    <button class="filter-btn" onclick="jumpToMyLevel()">MI NIVEL</button>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="ergo-legend">
+    <div class="el-item"><div class="el-dot" style="background:#1565c0"></div><span style="color:#42a5f5">△○□✕ base — Mano derecha sola (máxima velocidad)</span></div>
+    <div class="el-item"><div class="el-dot" style="background:#6a1b9a"></div><span style="color:#ab47bc">R2 + △○□✕ — Mano derecha (oGCDs frecuentes)</span></div>
+    <div class="el-item"><div class="el-dot" style="background:#1b5e20"></div><span style="color:#66bb6a">L2 + △○□✕ — Manos separadas (cooldowns largos)</span></div>
+    <div class="el-item"><div class="el-dot" style="background:#b71c1c"></div><span style="color:#ef5350">Cruz — Mano izquierda sola (AoE / utility)</span></div>
+    <div class="el-item"><div class="el-dot" style="background:#333"></div><span style="color:#666">Sin asignar a este nivel</span></div>
+  </div>
+
+  <!-- ERGONOMICS EXPLANATION -->
+  <div class="section-header">
+    <span class="section-icon">🤲</span>
+    <span class="section-title">Por Qué Importa la Ergonomía</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="background:var(--card-bg);border:1px solid var(--border-glow);border-radius:8px;padding:20px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <div style="font-family:Cinzel,serif;font-size:12px;color:var(--cyan);margin-bottom:8px;">🖐 MANO DERECHA</div>
+      <p style="font-size:13px;line-height:1.6;color:var(--text-muted);">El pulgar derecho controla △○□✕. El anular/meñique derecho sostiene R2. <strong style="color:var(--text-main)">Misma mano = máxima velocidad</strong> — ideal para el weaving de oGCDs frecuentes como Jump y Nastrond que van entre cada GCD.</p>
+    </div>
+    <div>
+      <div style="font-family:Cinzel,serif;font-size:12px;color:var(--green);margin-bottom:8px;">🤚 MANO IZQUIERDA</div>
+      <p style="font-size:13px;line-height:1.6;color:var(--text-muted);">El pulgar izquierdo controla la Cruz. El anular/meñique izquierdo sostiene L2. <strong style="color:var(--text-main)">Cruz independiente</strong> = AoE y utilities sin interferir con los combos de la mano derecha.</p>
+    </div>
+    <div style="grid-column:1/-1;">
+      <div style="font-family:Cinzel,serif;font-size:12px;color:var(--gold);margin-bottom:8px;">⚡ EL PATRÓN DEL BURST WINDOW</div>
+      <p style="font-size:13px;line-height:1.5;color:var(--text-muted);">L2+△ Lance Charge <span style="color:#66bb6a">(izq)</span> → L2+○ Battle Litany <span style="color:#66bb6a">(izq)</span> → R2+□ Geirskogul <span style="color:#ab47bc">(der)</span> → combos base <span style="color:#42a5f5">(der)</span> → Cruz↑ Stardiver <span style="color:#ef5350">(izq)</span>. <strong style="color:var(--text-main)">El patrón izq → der → izq crea un flujo rítmico que el músculo memoriza más rápido que una secuencia random.</strong></p>
+    </div>
+  </div>
+
+  <!-- STAGE TABS -->
+  <div class="section-header">
+    <span class="section-icon">🎯</span>
+    <span class="section-title">Layout por Etapa de Nivel</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="stage-tabs" id="stageTabs">
+    <button class="stage-tab active" onclick="switchStage(0)">Lv1–29</button>
+    <button class="stage-tab" onclick="switchStage(1)">Lv30–51</button>
+    <button class="stage-tab" onclick="switchStage(2)">Lv52–69</button>
+    <button class="stage-tab" onclick="switchStage(3)">Lv70–89</button>
+    <button class="stage-tab" onclick="switchStage(4)">Lv100</button>
+  </div>
+
+  <div id="stageContent">
+    <!-- Rendered by JS -->
+  </div>
+
+  <footer>
+    <div style="font-size:22px;margin-bottom:6px">🎮</div>
+    Módulo 14 · Hotbar en Cruz · Patch 7.5
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="13-recursos.html" class="nav-btn">◀ Anterior</a>
+  <a href="index.html" class="nav-btn nav-home">🏠 Hub</a>
+  <a href="index.html" class="nav-btn">🏠 Inicio</a>
+</nav>
+
+<script>
+// ============================================================
+// DATA — Layout by stage
+// ============================================================
+var STAGES = [
+  // STAGE 0: Lv1-29
+  {
+    label: "Lv1–29 · Lancer Base",
+    range: [1, 29],
+    note: "Solo 4 GCDs base más Life Surge. El combo completo cabe en los 4 botones principales. Sin modificadores necesarios.",
+    buttons: {
+      tri:   {skill:"True Thrust",    type:"GCD",  col:"gcd",  lvl:1,  icon:"🗡️", why:"Inicio de TODOS los combos. El botón más presionado — va en △ porque es el más natural para el pulgar derecho."},
+      cir:   {skill:"Disembowel",     type:"GCD",  col:"gcd",  lvl:18, icon:"🔥", why:"Combo A (buff). ○ queda natural después de △ — mismo pulgar, movimiento mínimo."},
+      sq:    {skill:"Full Thrust",    type:"GCD",  col:"gcd",  lvl:26, icon:"💥", why:"Finisher de alto daño. □ en la misma línea horizontal que △ y ○ para no perder el flow."},
+      x:     {skill:"Vorpal Thrust",  type:"GCD",  col:"gcd",  lvl:4,  icon:"⚡", why:"2do hit del combo B. ✕ abajo, se presiona cuando ya vienes de △ hacia el finisher."},
+      r2tri: {skill:"Life Surge",     type:"oGCD", col:"r2",   lvl:6,  icon:"💚", why:"R2+△ — misma mano derecha. Life Surge se usa antes de Full Thrust (□), así que fluye natural: R2+△ → □."},
+      r2cir: {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      r2sq:  {skill:"Piercing Talon", type:"GCD",  col:"r2",   lvl:15, icon:"🎯", why:"R2+□ — ataque a distancia. Raramente usado, no necesita posición prime."},
+      r2x:   {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      l2tri: {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      l2cir: {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      l2sq:  {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      l2x:   {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      dup:   {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      ddown: {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      dleft: {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+      dright:{skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Sin asignar a este nivel."},
+    },
+    rotation: [
+      {n:"1", combo:"△",         skill:"True Thrust",    hand:"right", note:"Inicio de combo — siempre primero"},
+      {n:"2", combo:"○",         skill:"Disembowel 🔥",  hand:"right", note:"Activa Power Surge +10% daño"},
+      {n:"3", combo:"△",         skill:"True Thrust",    hand:"right", note:"Reinicia para combo B"},
+      {n:"4", combo:"✕",         skill:"Vorpal Thrust",  hand:"right", note:""},
+      {n:"5", combo:"R2+△→□",   skill:"[Life Surge] → Full Thrust 💥", hand:"right", note:"R2+△ activa Life Surge, luego □ golpea con crítico garantizado"},
+    ]
+  },
+
+  // STAGE 1: Lv30-51
+  {
+    label: "Lv30–51 · Dragoon + Jump",
+    range: [30, 51],
+    note: "Jump entra como oGCD frecuente — va en R2+△ para weavearlo entre GCDs sin cambiar de mano. AoE aparece en la Cruz.",
+    buttons: {
+      tri:   {skill:"True Thrust",    type:"GCD",  col:"gcd",  lvl:1,  icon:"🗡️", why:"Sin cambio — inicio de combo."},
+      cir:   {skill:"Disembowel",     type:"GCD",  col:"gcd",  lvl:18, icon:"🔥", why:"Sin cambio — combo A buff."},
+      sq:    {skill:"Full Thrust",    type:"GCD",  col:"gcd",  lvl:26, icon:"💥", why:"Sin cambio — finisher combo B."},
+      x:     {skill:"Vorpal Thrust",  type:"GCD",  col:"gcd",  lvl:4,  icon:"⚡", why:"Sin cambio — 2do hit combo B."},
+      r2tri: {skill:"Jump / High Jump",type:"oGCD",col:"r2",   lvl:30, icon:"🦘", why:"R2+△ — la combinación de oGCD más frecuente del Dragoon. R2 con anular derecho, △ con pulgar derecho. Velocidad máxima para weavear entre cada GCD."},
+      r2cir: {skill:"Mirage Dive",    type:"oGCD", col:"r2",   lvl:68, icon:"👁️", why:"R2+○ — va después de R2+△ (Jump). Fluye natural: R2+△ → R2+○ sin soltar R2."},
+      r2sq:  {skill:"Geirskogul",     type:"oGCD", col:"r2",   lvl:60, icon:"🐲", why:"R2+□ — activa Dragon Gauge. Mismo bloque R2 que Jump y Mirage Dive."},
+      r2x:   {skill:"Life Surge",     type:"oGCD", col:"r2",   lvl:6,  icon:"💚", why:"R2+✕ — se mueve aquí para dejar R2+△ libre para Jump."},
+      l2tri: {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Aún vacío — se llena en Lv52."},
+      l2cir: {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Aún vacío."},
+      l2sq:  {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Aún vacío."},
+      l2x:   {skill:"—",              type:"—",    col:"off",  lvl:99, icon:"—",  why:"Aún vacío."},
+      dup:   {skill:"Doom Spike",     type:"GCD",  col:"dpad", lvl:40, icon:"💢", why:"Cruz ↑ — AoE con pulgar izquierdo. Totalmente separado del combo de mano derecha. Cambias de modo AoE/ST sin confundir los dedos."},
+      ddown: {skill:"Sonic Thrust",   type:"GCD",  col:"dpad", lvl:62, icon:"🌊", why:"Cruz ↓ — paso 2 del combo AoE. Fluye: ↑ → ↓ verticalmente."},
+      dleft: {skill:"Piercing Talon", type:"GCD",  col:"dpad", lvl:15, icon:"🎯", why:"Cruz ← — ataque a distancia, situacional."},
+      dright:{skill:"Elusive Jump",   type:"oGCD", col:"dpad", lvl:35, icon:"↩️", why:"Cruz → — movilidad situacional. Pulgar izquierdo no interfiere con combo."},
+    },
+    rotation: [
+      {n:"1", combo:"△",      skill:"True Thrust",     hand:"right", note:""},
+      {n:"2", combo:"R2+△",   skill:"Jump 🦘",          hand:"right", note:"oGCD — misma mano, sin interrumpir combo"},
+      {n:"3", combo:"○",      skill:"Disembowel 🔥",    hand:"right", note:"Power Surge activo"},
+      {n:"4", combo:"△",      skill:"True Thrust",      hand:"right", note:"Reinicia combo B"},
+      {n:"5", combo:"✕",      skill:"Vorpal Thrust",    hand:"right", note:""},
+      {n:"6", combo:"R2+✕",   skill:"Life Surge 💚",    hand:"right", note:"oGCD — antes del finisher"},
+      {n:"7", combo:"□",      skill:"Full Thrust 💥",   hand:"right", note:"Crítico garantizado por Life Surge"},
+    ]
+  },
+
+  // STAGE 2: Lv52-69
+  {
+    label: "Lv52–69 · Buffs + Dragon Gauge",
+    range: [52, 69],
+    note: "L2 se activa para cooldowns largos (Battle Litany, Lance Charge). El burst window usa el patrón izq→der→izq que crea memoria muscular rítmica.",
+    buttons: {
+      tri:   {skill:"True Thrust",    type:"GCD",  col:"gcd",  lvl:1,  icon:"🗡️", why:"Sin cambio."},
+      cir:   {skill:"Disembowel →\nSpiral Blow", type:"GCD", col:"gcd", lvl:18, icon:"🔥", why:"Sin cambio. En Lv96 se upgradea automáticamente — mismo botón."},
+      sq:    {skill:"Full Thrust →\nHeavens' Thrust", type:"GCD", col:"gcd", lvl:26, icon:"💥", why:"Sin cambio. Upgradea en Lv86 — mismo botón."},
+      x:     {skill:"Vorpal Thrust →\nLance Barrage", type:"GCD", col:"gcd", lvl:4, icon:"⚡", why:"Sin cambio. Upgradea en Lv96 — mismo botón."},
+      r2tri: {skill:"High Jump",      type:"oGCD", col:"r2",   lvl:74, icon:"🦘", why:"Sin cambio."},
+      r2cir: {skill:"Mirage Dive",    type:"oGCD", col:"r2",   lvl:68, icon:"👁️", why:"Sin cambio."},
+      r2sq:  {skill:"Geirskogul",     type:"oGCD", col:"r2",   lvl:60, icon:"🐲", why:"Sin cambio — activa Dragon Gauge."},
+      r2x:   {skill:"Life Surge",     type:"oGCD", col:"r2",   lvl:6,  icon:"💚", why:"Sin cambio."},
+      l2tri: {skill:"Lance Charge",   type:"BUFF", col:"l2",   lvl:64, icon:"⚡", why:"L2+△ — 60s CD personal. L2 con anular izquierdo + △ con pulgar derecho. Manos separadas = no hay riesgo de presionarlo accidentalmente durante el combo."},
+      l2cir: {skill:"Battle Litany",  type:"BUFF", col:"l2",   lvl:52, icon:"✨", why:"L2+○ — 120s CD raid buff. Al lado de Lance Charge — el burst window se activa: L2+△ → L2+○ (mismo modificador, pulgar se mueve △→○)."},
+      l2sq:  {skill:"Feint",          type:"ROLE", col:"l2",   lvl:22, icon:"🛡️", why:"L2+□ — mitigation. No forma parte del combo, va en L2 para evitar presionarlo accidentalmente."},
+      l2x:   {skill:"Second Wind",    type:"ROLE", col:"l2",   lvl:8,  icon:"💚", why:"L2+✕ — autocura de emergencia. Mismo bloque que Feint."},
+      dup:   {skill:"Doom Spike",     type:"GCD",  col:"dpad", lvl:40, icon:"💢", why:"Sin cambio — AoE combo inicio."},
+      ddown: {skill:"Sonic Thrust",   type:"GCD",  col:"dpad", lvl:62, icon:"🌊", why:"Sin cambio — AoE combo 2."},
+      dleft: {skill:"Dragonfire Dive",type:"oGCD", col:"dpad", lvl:50, icon:"🔥", why:"Cruz ← — AoE circular, cooldown largo. Pulgar izquierdo, no interfiere con combo."},
+      dright:{skill:"True North",     type:"ROLE", col:"dpad", lvl:50, icon:"🧭", why:"Cruz → — utility situacional para positionals. Pulgar izquierdo, se usa poco."},
+    },
+    rotation: [
+      {n:"1", combo:"L2+△",   skill:"Lance Charge ⚡",   hand:"left",  note:"Buff personal — mano izquierda activa el burst"},
+      {n:"2", combo:"△",      skill:"True Thrust",        hand:"right", note:""},
+      {n:"3", combo:"L2+○",   skill:"Battle Litany ✨",   hand:"left",  note:"Raid buff — izq → izq flujo natural"},
+      {n:"4", combo:"R2+□",   skill:"Geirskogul 🐲",      hand:"right", note:"Dragon Gauge ON — der activa después de izq"},
+      {n:"5", combo:"○",      skill:"Spiral Blow 🔥",     hand:"right", note:"Power Surge"},
+      {n:"6", combo:"R2+△",   skill:"High Jump 🦘",       hand:"right", note:"oGCD — misma mano derecha"},
+      {n:"7", combo:"□",      skill:"Chaos Thrust",       hand:"right", note:"Positional trasero"},
+      {n:"8", combo:"R2+○",   skill:"Mirage Dive 👁️",     hand:"right", note:"Tras High Jump — R2 ya sostenido"},
+      {n:"9", combo:"✕",      skill:"Wheeling Thrust",    hand:"right", note:"Positional trasero"},
+    ]
+  },
+
+  // STAGE 3: Lv70-89
+  {
+    label: "Lv70–89 · Life of the Dragon",
+    range: [70, 89],
+    note: "Nastrond y Stardiver se agregan al bloque R2 y Cruz. El burst window completo usa el patrón rítmico izq→der→izq→der.",
+    buttons: {
+      tri:   {skill:"True / Raiden Thrust", type:"GCD", col:"gcd", lvl:1,  icon:"🗡️", why:"Sin cambio. Raiden Thrust upgradea automáticamente en Lv76."},
+      cir:   {skill:"Spiral Blow",   type:"GCD",  col:"gcd",  lvl:18, icon:"🔥", why:"Sin cambio."},
+      sq:    {skill:"Heavens' Thrust",type:"GCD", col:"gcd",  lvl:26, icon:"💥", why:"Sin cambio."},
+      x:     {skill:"Lance Barrage", type:"GCD",  col:"gcd",  lvl:4,  icon:"⚡", why:"Sin cambio."},
+      r2tri: {skill:"High Jump",     type:"oGCD", col:"r2",   lvl:74, icon:"🦘", why:"Sin cambio."},
+      r2cir: {skill:"Mirage Dive",   type:"oGCD", col:"r2",   lvl:68, icon:"👁️", why:"Sin cambio."},
+      r2sq:  {skill:"Geirskogul",    type:"oGCD", col:"r2",   lvl:60, icon:"🐲", why:"Sin cambio."},
+      r2x:   {skill:"Nastrond",      type:"oGCD", col:"r2",   lvl:70, icon:"⚡", why:"R2+✕ — 3 cargas en Life of the Dragon. Mismo bloque R2 que los otros oGCDs. Durante el burst solo necesitas R2 sostenido y alternar △○□✕."},
+      l2tri: {skill:"Lance Charge",  type:"BUFF", col:"l2",   lvl:64, icon:"⚡", why:"Sin cambio."},
+      l2cir: {skill:"Battle Litany", type:"BUFF", col:"l2",   lvl:52, icon:"✨", why:"Sin cambio."},
+      l2sq:  {skill:"Feint",         type:"ROLE", col:"l2",   lvl:22, icon:"🛡️", why:"Sin cambio."},
+      l2x:   {skill:"Second Wind",   type:"ROLE", col:"l2",   lvl:8,  icon:"💚", why:"Sin cambio."},
+      dup:   {skill:"Stardiver",     type:"oGCD", col:"dpad", lvl:80, icon:"🌠", why:"Cruz ↑ — 1 uso por Life of the Dragon. Pulgar izquierdo lo presiona cuando Nastrond (R2+✕) ya terminó — alternancia natural izq/der."},
+      ddown: {skill:"Doom Spike / Sonic Thrust", type:"GCD", col:"dpad", lvl:40, icon:"💢", why:"AoE combos bajan a ↓ y ←."},
+      dleft: {skill:"Dragonfire Dive",type:"oGCD",col:"dpad", lvl:50, icon:"🔥", why:"Sin cambio."},
+      dright:{skill:"Wyrmwind Thrust",type:"oGCD",col:"dpad", lvl:90, icon:"🌀", why:"Cruz → — Lv90, 2 Firstminds stacks. Pulgar izquierdo, se usa cuando los stacks se completan."},
+    },
+    rotation: [
+      {n:"1", combo:"L2+△",   skill:"Lance Charge ⚡",    hand:"left",  note:"BURST INICIA — mano izquierda"},
+      {n:"2", combo:"△",      skill:"Raiden Thrust",       hand:"right", note:"GCD base"},
+      {n:"3", combo:"L2+○",   skill:"Battle Litany ✨",    hand:"left",  note:"Raid buff"},
+      {n:"4", combo:"R2+□",   skill:"Geirskogul 🐲",       hand:"right", note:"Activa Life of the Dragon con 2 Gaze"},
+      {n:"5", combo:"○",      skill:"Spiral Blow",         hand:"right", note:""},
+      {n:"6", combo:"R2+△",   skill:"High Jump 🦘",        hand:"right", note:""},
+      {n:"7", combo:"□",      skill:"Chaotic Spring",      hand:"right", note:"Positional trasero"},
+      {n:"8", combo:"R2+○",   skill:"Mirage Dive 👁️",      hand:"right", note:""},
+      {n:"9", combo:"R2+✕",   skill:"Nastrond ⚡",          hand:"right", note:"x3 — R2 sostenido, alternar ✕"},
+      {n:"10",combo:"Cruz ↑", skill:"Stardiver 🌠",         hand:"left",  note:"Mano izquierda — alterna con der"},
+    ]
+  },
+
+  // STAGE 4: Lv100
+  {
+    label: "Lv100 · Kit Completo",
+    range: [90, 100],
+    note: "Layout final. Starcross en L2+✕ — el finisher del burst va en mano izquierda para cerrar el loop izq→der→izq→der→izq.",
+    buttons: {
+      tri:   {skill:"Raiden Thrust",  type:"GCD",  col:"gcd",  lvl:76, icon:"🗡️", why:"Sin cambio — inicio de combo."},
+      cir:   {skill:"Spiral Blow",    type:"GCD",  col:"gcd",  lvl:96, icon:"🔥", why:"Sin cambio — combo A buff."},
+      sq:    {skill:"Heavens' Thrust",type:"GCD",  col:"gcd",  lvl:86, icon:"💥", why:"Sin cambio — finisher combo B."},
+      x:     {skill:"Lance Barrage",  type:"GCD",  col:"gcd",  lvl:96, icon:"⚡", why:"Sin cambio — 2do hit combo B."},
+      r2tri: {skill:"High Jump",      type:"oGCD", col:"r2",   lvl:74, icon:"🦘", why:"Sin cambio — oGCD más frecuente."},
+      r2cir: {skill:"Mirage Dive",    type:"oGCD", col:"r2",   lvl:68, icon:"👁️", why:"Sin cambio."},
+      r2sq:  {skill:"Geirskogul",     type:"oGCD", col:"r2",   lvl:60, icon:"🐲", why:"Sin cambio."},
+      r2x:   {skill:"Nastrond",       type:"oGCD", col:"r2",   lvl:70, icon:"⚡", why:"Sin cambio."},
+      l2tri: {skill:"Lance Charge",   type:"BUFF", col:"l2",   lvl:64, icon:"⚡", why:"Sin cambio."},
+      l2cir: {skill:"Battle Litany",  type:"BUFF", col:"l2",   lvl:52, icon:"✨", why:"Sin cambio."},
+      l2sq:  {skill:"Feint",          type:"ROLE", col:"l2",   lvl:22, icon:"🛡️", why:"Sin cambio."},
+      l2x:   {skill:"Starcross",      type:"oGCD", col:"l2",   lvl:100,icon:"💫", why:"L2+✕ — FINISHER del burst. Reemplaza Second Wind (que sube a R1+algo). El burst termina con mano izquierda: Cruz↑ Stardiver → L2+✕ Starcross. Patrón cerrado izq→izq."},
+      dup:   {skill:"Stardiver",      type:"oGCD", col:"dpad", lvl:80, icon:"🌠", why:"Sin cambio."},
+      ddown: {skill:"Doom Spike / Draconian Fury", type:"GCD", col:"dpad", lvl:40, icon:"💢", why:"AoE inicio de combo."},
+      dleft: {skill:"Dragonfire Dive",type:"oGCD", col:"dpad", lvl:50, icon:"🔥", why:"Sin cambio."},
+      dright:{skill:"Wyrmwind Thrust",type:"oGCD", col:"dpad", lvl:90, icon:"🌀", why:"Sin cambio."},
+    },
+    rotation: [
+      {n:"1", combo:"L2+△",   skill:"Lance Charge ⚡",    hand:"left",  note:"BURST — mano izq inicia"},
+      {n:"2", combo:"△",      skill:"Raiden Thrust",       hand:"right", note:""},
+      {n:"3", combo:"L2+○",   skill:"Battle Litany ✨",    hand:"left",  note:"izq → izq natural"},
+      {n:"4", combo:"R2+□",   skill:"Geirskogul 🐲",       hand:"right", note:"der activa después de izq"},
+      {n:"5", combo:"○",      skill:"Spiral Blow",         hand:"right", note:""},
+      {n:"6", combo:"R2+△",   skill:"High Jump 🦘",        hand:"right", note:""},
+      {n:"7", combo:"□",      skill:"Chaotic Spring",      hand:"right", note:"Positional trasero"},
+      {n:"8", combo:"R2+○",   skill:"Mirage Dive 👁️",      hand:"right", note:""},
+      {n:"9", combo:"R2+✕",   skill:"Nastrond x3 ⚡",      hand:"right", note:"R2 sostenido, presiona ✕ tres veces"},
+      {n:"10",combo:"Cruz ↑", skill:"Stardiver 🌠",         hand:"left",  note:"izq — alterna con der"},
+      {n:"11",combo:"L2+✕",   skill:"Starcross 💫",         hand:"left",  note:"FINISHER — izq cierra el loop"},
+    ]
+  }
+];
+
+// ============================================================
+// COLORS
+// ============================================================
+var COLS = {
+  gcd:  {bg:"#1565c0",border:"#42a5f5",text:"#e3f2fd"},
+  r2:   {bg:"#6a1b9a",border:"#ab47bc",text:"#f3e5f5"},
+  l2:   {bg:"#1b5e20",border:"#66bb6a",text:"#e8f5e9"},
+  dpad: {bg:"#b71c1c",border:"#ef5350",text:"#ffebee"},
+  off:  {bg:"#1a2a40",border:"#2a3a50",text:"#445"},
+};
+var HAND_COLS = {right:"rh-right", left:"rh-left", both:"rh-both"};
+
+var currentStage = 0;
+var selectedBtn = null;
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderStage(idx) {
+  var s = STAGES[idx];
+  var lvl = parseInt(document.getElementById("filterSlider").value);
+
+  var html = '<div class="controller-wrap">';
+  html += '<div class="controller-title">🎮 ' + s.label + '</div>';
+
+  // SHOULDER BUTTONS TOP
+  html += '<div style="max-width:700px;margin:0 auto;">';
+
+  // LEFT SHOULDER
+  html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">';
+
+  // L1/L2
+  html += '<div class="shoulder-group"><div class="shoulder-row">';
+  html += renderShoulder("L1","—","off",idx);
+  html += renderShoulder("L2","—","off",idx);
+  html += '</div></div>';
+
+  // R1/R2
+  html += '<div class="shoulder-group"><div class="shoulder-row">';
+  html += renderShoulder("R1","—","off",idx);
+  html += renderShoulder("R2","R2\noGCDs","r2",idx);
+  html += '</div></div>';
+  html += '</div>';
+
+  // MAIN AREA
+  html += '<div class="ctrl-layout">';
+
+  // LEFT — DPAD
+  html += '<div class="ctrl-left">';
+  html += '<div style="font-family:Cinzel,serif;font-size:10px;color:#66bb6a;text-align:center;margin-bottom:6px;">MANO IZQUIERDA<br>Pulgar en Cruz</div>';
+  html += renderDpad(s, lvl);
+  html += '</div>';
+
+  // CENTER
+  html += '<div class="ctrl-center">';
+  html += '<div style="width:40px;height:40px;border-radius:50%;background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto;">🎮</div>';
+  html += '</div>';
+
+  // RIGHT — FACE
+  html += '<div class="ctrl-right">';
+  html += '<div style="font-family:Cinzel,serif;font-size:10px;color:#42a5f5;text-align:center;margin-bottom:6px;">MANO DERECHA<br>Pulgar en △○□✕</div>';
+  html += renderFace(s, lvl);
+  html += '</div>';
+
+  html += '</div>'; // ctrl-layout
+
+  // L2 MODIFIER ROW
+  html += '<div style="margin-top:12px;background:rgba(27,94,32,0.15);border:1px solid rgba(102,187,106,0.3);border-radius:6px;padding:12px;">';
+  html += '<div style="font-family:Cinzel,serif;font-size:10px;color:#66bb6a;margin-bottom:8px;letter-spacing:0.06em;">L2 + △○□✕ — Mano izquierda sostiene L2, pulgar derecho presiona botón</div>';
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  var l2keys = ["l2tri","l2cir","l2sq","l2x"];
+  var l2labels = ["L2+△","L2+○","L2+□","L2+✕"];
+  l2keys.forEach(function(k,i){
+    var b = s.buttons[k];
+    var c = COLS[b.col] || COLS.off;
+    var locked = b.lvl > lvl;
+    html += '<div onclick="showBtnInfo(\''+k+'\','+idx+')" style="flex:1;min-width:100px;background:'+(locked?'rgba(26,42,64,0.8)':c.bg+40)+';border:1px solid '+(locked?'#2a3a50':c.border)+';border-radius:5px;padding:8px;text-align:center;cursor:pointer;opacity:'+(locked?0.35:1)+';transition:all 0.2s;">';
+    html += '<div style="font-family:Cinzel,serif;font-size:9px;color:'+(locked?'#445':c.border)+';margin-bottom:3px;">'+l2labels[i]+'</div>';
+    html += '<div style="font-size:16px">'+b.icon+'</div>';
+    html += '<div style="font-size:10px;font-family:Cinzel,serif;color:'+(locked?'#445':c.text)+';margin-top:2px">'+b.skill.split('\n')[0].substring(0,14)+'</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  html += '</div>'; // max-width wrapper
+
+  // SKILL INFO
+  html += '<div class="skill-info-panel" id="skillInfo">';
+  html += '<div class="sip-combo" id="sipCombo">Toca un botón para ver por qué está ahí</div>';
+  html += '<div class="sip-skill" id="sipSkill">—</div>';
+  html += '<div class="sip-desc" id="sipDesc">La posición de cada skill está pensada para el flujo natural de tus dedos en combate.</div>';
+  html += '<div class="sip-why" id="sipWhy" style="display:none"></div>';
+  html += '</div>';
+
+  html += '</div>'; // controller-wrap
+
+  // ROTATION SEQUENCE
+  html += '<div style="margin-top:20px;">';
+  html += '<div style="font-family:Cinzel,serif;font-size:13px;color:var(--gold);letter-spacing:0.08em;margin-bottom:12px;">🔄 SECUENCIA DE ROTACIÓN — Flujo de manos</div>';
+  html += '<div class="rot-sequence">';
+  s.rotation.forEach(function(step) {
+    html += '<div class="rs-step" onclick="highlightStep(this)">';
+    html += '<span class="rs-num">'+step.n+'</span>';
+    html += '<span class="rs-combo" style="color:'+(step.hand==='left'?'#66bb6a':step.hand==='right'?'#42a5f5':'var(--gold)')+'">'+step.combo+'</span>';
+    html += '<span class="rs-skill">'+step.skill+(step.note?'<br><span style="font-size:11px;color:var(--text-muted)">'+step.note+'</span>':'')+'</span>';
+    html += '<span class="rs-hand '+(HAND_COLS[step.hand]||'rh-right')+'">'+step.hand.toUpperCase()+'</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Ergo note for this stage
+  html += '<div class="ergo-note" style="margin-top:12px">';
+  html += '💡 <strong>Nota ergonómica:</strong> ' + s.note;
+  html += '</div>';
+  html += '</div>';
+
+  document.getElementById("stageContent").innerHTML = html;
+}
+
+function renderShoulder(label, skill, col, idx) {
+  var c = COLS[col] || COLS.off;
+  return '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">'
+    + '<div style="width:72px;height:28px;background:'+c.bg+';border:1px solid '+c.border+';border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:Cinzel,serif;font-size:10px;color:'+c.text+';letter-spacing:0.04em;">'+label+'</div>'
+    + '</div>';
+}
+
+function renderDpad(s, lvl) {
+  var b = s.buttons;
+  var keys = {dup:"↑",ddown:"↓",dleft:"←",dright:"→"};
+  var positions = {
+    dup:   "top:0;left:50%;transform:translateX(-50%)",
+    ddown: "bottom:0;left:50%;transform:translateX(-50%)",
+    dleft: "left:0;top:50%;transform:translateY(-50%)",
+    dright:"right:0;top:50%;transform:translateY(-50%)"
+  };
+  var html = '<div class="dpad-wrap">';
+  Object.keys(keys).forEach(function(k){
+    var btn = b[k];
+    var c = COLS[btn.col] || COLS.off;
+    var locked = btn.lvl > lvl;
+    html += '<div class="dpad-btn" style="position:absolute;'+positions[k]+';background:'+(locked?'#1a2a40':c.bg)+';border-color:'+(locked?'#2a3a50':c.border)+';opacity:'+(locked?0.3:1)+'" onclick="showBtnInfo(\''+k+'\','+STAGES.indexOf(s)+')">';
+    html += '<span style="font-size:12px">'+btn.icon+'</span>';
+    html += '</div>';
+  });
+  html += '<div class="dpad-center"></div>';
+  html += '</div>';
+  // Labels below
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;width:110px;">';
+  [{k:"dup",l:"↑"},{k:"ddown",l:"↓"},{k:"dleft",l:"←"},{k:"dright",l:"→"}].forEach(function(item){
+    var btn = b[item.k];
+    var locked = btn.lvl > lvl;
+    html += '<div style="font-size:9px;font-family:Cinzel,serif;color:'+(locked?'#445':'var(--text-muted)')+';text-align:center;line-height:1.2;">'+item.l+' '+btn.skill.split('\n')[0].substring(0,10)+'</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderFace(s, lvl) {
+  var b = s.buttons;
+  var faceKeys = {
+    tri:{k:"tri",  cls:"face-tri",  lbl:"△", r2k:"r2tri"},
+    cir:{k:"cir",  cls:"face-cir",  lbl:"○", r2k:"r2cir"},
+    sq: {k:"sq",   cls:"face-sq",   lbl:"□", r2k:"r2sq"},
+    x:  {k:"x",    cls:"face-x",    lbl:"✕", r2k:"r2x"}
+  };
+  var html = '<div>';
+  // Base buttons
+  html += '<div style="font-family:Cinzel,serif;font-size:9px;color:#42a5f5;text-align:center;margin-bottom:4px;">△○□✕ base</div>';
+  html += '<div class="face-wrap">';
+  Object.values(faceKeys).forEach(function(f){
+    var btn = b[f.k];
+    var c = COLS[btn.col] || COLS.off;
+    var locked = btn.lvl > lvl;
+    html += '<div class="face-btn '+f.cls+'" style="background:'+(locked?'#1a2a40':c.bg)+';border-color:'+(locked?'#2a3a50':c.border)+';opacity:'+(locked?0.3:1)+'" onclick="showBtnInfo(\''+f.k+'\','+STAGES.indexOf(s)+')">';
+    html += '<span>'+b[f.k].icon+'</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+  // R2 buttons below
+  html += '<div style="font-family:Cinzel,serif;font-size:9px;color:#ab47bc;text-align:center;margin-top:8px;margin-bottom:4px;">R2 + △○□✕</div>';
+  html += '<div class="face-wrap">';
+  Object.values(faceKeys).forEach(function(f){
+    var btn = b[f.r2k];
+    var c = COLS[btn.col] || COLS.off;
+    var locked = btn.lvl > lvl;
+    html += '<div class="face-btn '+f.cls+'" style="background:'+(locked?'#1a2a40':c.bg)+';border-color:'+(locked?'#2a3a50':c.border)+';opacity:'+(locked?0.3:1)+';width:28px;height:28px;" onclick="showBtnInfo(\''+f.r2k+'\','+STAGES.indexOf(s)+')">';
+    html += '<span style="font-size:12px">'+btn.icon+'</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function showBtnInfo(key, stageIdx) {
+  var s = STAGES[stageIdx];
+  var b = s.buttons[key];
+  if (!b || b.skill === "—") return;
+  var c = COLS[b.col] || COLS.off;
+  var combo = key.startsWith("r2") ? "R2 + " + key.slice(2).toUpperCase().replace("TRI","△").replace("CIR","○").replace("SQ","□").replace("X","✕")
+    : key.startsWith("l2") ? "L2 + " + key.slice(2).toUpperCase().replace("TRI","△").replace("CIR","○").replace("SQ","□").replace("X","✕")
+    : key.startsWith("d") ? "Cruz " + key.slice(1).toUpperCase().replace("IGHT","→").replace("EFT","←").replace("OWN","↓").replace("P","↑")
+    : key.toUpperCase().replace("TRI","△").replace("CIR","○").replace("SQ","□");
+  document.getElementById("sipCombo").textContent = combo;
+  document.getElementById("sipSkill").textContent = b.icon + " " + b.skill.replace("\n"," → ");
+  document.getElementById("sipSkill").style.color = c.border;
+  document.getElementById("sipDesc").textContent = b.type + (b.lvl < 99 ? " · Lv" + b.lvl : "");
+  var why = document.getElementById("sipWhy");
+  why.textContent = b.why;
+  why.style.display = "block";
+}
+
+function highlightStep(el) {
+  document.querySelectorAll(".rs-step").forEach(function(s){ s.classList.remove("active-step"); });
+  el.classList.add("active-step");
+}
+
+function switchStage(idx) {
+  currentStage = idx;
+  document.querySelectorAll(".stage-tab").forEach(function(t,i){ t.classList.toggle("active", i===idx); });
+  renderStage(idx);
+}
+
+function jumpToMyLevel() {
+  var lvl = parseInt(sessionStorage.getItem("drg_lvl") || 1);
+  document.getElementById("filterSlider").value = lvl;
+  document.getElementById("filterDisplay").textContent = "Lv" + lvl;
+  // Find appropriate stage
+  var stageIdx = 0;
+  if (lvl >= 90) stageIdx = 4;
+  else if (lvl >= 70) stageIdx = 3;
+  else if (lvl >= 52) stageIdx = 2;
+  else if (lvl >= 30) stageIdx = 1;
+  switchStage(stageIdx);
+}
+
+function applyFilter(lvl) {
+  document.getElementById("filterSlider").value = lvl;
+  document.getElementById("filterDisplay").textContent = "Lv" + lvl;
+  renderStage(currentStage);
+}
+
+document.getElementById("filterSlider").addEventListener("input", function(){ applyFilter(this.value); });
+
+// Init
+var savedLvl = sessionStorage.getItem("drg_lvl");
+if (savedLvl) {
+  document.getElementById("filterSlider").value = savedLvl;
+  document.getElementById("filterDisplay").textContent = "Lv" + savedLvl;
+  var initLvl = parseInt(savedLvl);
+  if (initLvl >= 90) currentStage = 4;
+  else if (initLvl >= 70) currentStage = 3;
+  else if (initLvl >= 52) currentStage = 2;
+  else if (initLvl >= 30) currentStage = 1;
+  document.querySelectorAll(".stage-tab").forEach(function(t,i){ t.classList.toggle("active", i===currentStage); });
+}
+renderStage(currentStage);
+</script>
+</body>
+</html>

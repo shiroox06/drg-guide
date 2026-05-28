@@ -322,7 +322,8 @@ var SKILLS = [
   {lvl:86, name:"Heavens Thrust",    icon:"💥", tags:["COMBO"],          how:"Auto Lv86 (upgradea Full Thrust)",                      desc:"Upgradea Full Thrust. Mayor potencia raw."},
   {lvl:90, name:"Wyrmwind Thrust",   icon:"🌀", tags:[],                 how:"Auto Lv90",                                             desc:"2 Firstminds stacks = disparo dracónico. No retener."},
   {lvl:92, name:"Draconian Fury",    icon:"💢", tags:["AOE"],            how:"Auto Lv92 (upgradea Doom Spike AoE)",                   desc:"Upgradea el inicio del combo AoE."},
-    {lvl:96, name:"Lance Barrage", icon:"⚡", tags:["COMBO"],        how:"Auto Lv96 (upgradea Vorpal Thrust)", desc:"Upgradea Vorpal Thrust. Mayor potencia en combo A."},
+    {lvl:76, name:"Raiden Thrust",      icon:"⚡", tags:["COMBO"],          how:"Auto Lv76 (upgradea True Thrust)",                      desc:"Upgradea True Thrust. Inicio del combo con mayor potencia. Solo activa tras combo completo correcto."},
+  {lvl:96, name:"Lance Barrage", icon:"⚡", tags:["COMBO"],        how:"Auto Lv96 (upgradea Vorpal Thrust)", desc:"Upgradea Vorpal Thrust. Mayor potencia en combo A."},
   {lvl:96, name:"Spiral Blow",   icon:"🌀", tags:["COMBO","BUFF"], how:"Auto Lv96 (upgradea Disembowel)",   desc:"Upgradea Disembowel. Aplica Power Surge +10% daño."},
   {lvl:96, name:"Drakesbane",        icon:"🐉", tags:["COMBO"],          how:"Auto Lv96",                                             desc:"Finisher de ambos combos de 5 hits."},
   {lvl:100,name:"Starcross",         icon:"💫", tags:[],                 how:"Auto Lv100",                                            desc:"Finisher tras Stardiver en Life of the Dragon. Kit completo."}
@@ -339,7 +340,7 @@ var QUESTS = [
   {lvl:25, name:"Gored and Gored Again",    npc:"Ywain",    reward:"Progresion hacia Lv30",           loc:"Old Gridania · Lancers Guild",    type:"lancer"},
   {lvl:30, name:"Proof of Might",           npc:"Ywain",    reward:"Completa clase Lancer — habilita Eye of the Dragon", loc:"Old Gridania · Lancers Guild", type:"lancer"},
   // DRAGOON JOB QUESTS
-  {lvl:30, name:"Eye of the Dragon",        npc:"Ywain → Alberic", reward:"Job Stone + Jump",         loc:"Old Gridania → Coerthas Central", type:"dragoon"},
+  {lvl:30, name:"Eye of the Dragon",        npc:"Ywain → Alberic", reward:"Job Stone + Jump",         loc:"Old Gridania → Coerthas Central", type:"dragoon", note:"Requiere MSQ: Sylph-management completada + Proof of Might completada"},
   {lvl:35, name:"Lance of Fury",            npc:"Alberic",  reward:"Elusive Jump",                    loc:"Coerthas Central",               type:"dragoon"},
   {lvl:40, name:"Unfading Skies",           npc:"Alberic",  reward:"Doom Spike (primera AoE)",        loc:"Coerthas Central",               type:"dragoon"},
   {lvl:45, name:"Double Dragoon",           npc:"Alberic",  reward:"Drachen Armor set gratis",        loc:"Coerthas Central",               type:"dragoon"},
@@ -401,6 +402,7 @@ function buildQuests() {
       '<div class="quest-info">' +
         '<div class="quest-name locked" id="qname_'+i+'">Lv'+q.lvl+' — '+q.name+'</div>' +
         '<div class="quest-meta">📍 '+q.loc+' · NPC: '+q.npc+'</div>' +
+        (q.note ? '<div style="font-size:11px;color:var(--orange);margin-top:3px;">⚠️ '+q.note+'</div>' : '') +
         '<span class="quest-reward" style="background:'+typeColor+'">🎁 '+q.reward+'</span>' +
       '</div>';
     ul.appendChild(li);
